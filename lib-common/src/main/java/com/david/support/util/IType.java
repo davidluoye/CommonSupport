@@ -79,6 +79,36 @@ public class IType {
         return null;
     }
 
+    public static Method getStaticMethod(Class<?> clzz, String name, Class<?>[] parameterTypes) {
+        try {
+            Method m = clzz.getDeclaredMethod(name, parameterTypes);
+            if (m != null) {
+                m.setAccessible(true);
+            }
+            return m;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /** reflect a static function and get the return value. */
+    public static <T> T callStatic(Method method, Object[] parameters, Class<T> returnType) {
+        try {
+            if (method != null) {
+                method.setAccessible(true);
+                Object value = method.invoke(null, parameters);
+                if (returnType == null) {
+                    return null;
+                }
+                return translate(value);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /** for translate object translate a special type. */
     public static <T extends Object> T translate(Object obj) {
         if (obj == null) {
