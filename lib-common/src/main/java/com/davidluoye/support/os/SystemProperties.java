@@ -1,6 +1,6 @@
-package com.david.support.os;
+package com.davidluoye.support.os;
 
-import com.david.support.util.IType;
+import com.davidluoye.support.util.IType;
 
 import java.lang.reflect.Method;
 

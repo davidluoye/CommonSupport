@@ -1,5 +1,5 @@
 
-package com.david.support.model;
+package com.davidluoye.support.model;
 
 import android.app.Fragment;
 import android.content.Intent;

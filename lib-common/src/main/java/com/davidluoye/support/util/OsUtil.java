@@ -1,4 +1,4 @@
-package com.david.support.util;
+package com.davidluoye.support.util;
 
 import android.app.Activity;
 import android.app.ActivityManager;

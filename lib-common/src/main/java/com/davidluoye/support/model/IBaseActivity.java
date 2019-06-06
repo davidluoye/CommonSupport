@@ -1,5 +1,5 @@
 
-package com.david.support.model;
+package com.davidluoye.support.model;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -10,7 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.david.support.util.ILogger;
+import com.davidluoye.support.util.ILogger;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;

@@ -1,5 +1,5 @@
 
-package com.david.support.model;
+package com.davidluoye.support.model;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;

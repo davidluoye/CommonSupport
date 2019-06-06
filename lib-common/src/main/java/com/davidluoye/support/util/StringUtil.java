@@ -1,4 +1,4 @@
-package com.david.support.util;
+package com.davidluoye.support.util;
 
 public class StringUtil {
     private static final ILogger LOGGER = ILogger.logger(StringUtil.class);
