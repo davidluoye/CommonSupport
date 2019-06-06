@@ -1,4 +1,4 @@
-package com.david.remoteservice;
+package com.davidluoye.support.ipc;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

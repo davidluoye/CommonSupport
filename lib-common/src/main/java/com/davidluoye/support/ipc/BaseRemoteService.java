@@ -1,4 +1,4 @@
-package com.david.remoteservice;
+package com.davidluoye.support.ipc;
 
 import android.content.Context;
 import android.os.Binder;
