@@ -1,10 +1,10 @@
-package com.david.support.os;
+package com.davidluoye.support.os;
 
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.david.support.util.IType;
+import com.davidluoye.support.util.IType;
 
 import java.lang.reflect.Method;
 

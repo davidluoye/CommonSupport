@@ -1,5 +1,5 @@
 
-package com.david.support.exception;
+package com.davidluoye.support.exception;
 
 public class IllegalCallerException extends RuntimeException {
 

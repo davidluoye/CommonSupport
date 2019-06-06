@@ -1,5 +1,5 @@
 
-package com.david.support.util;
+package com.davidluoye.support.util;
 
 import android.os.Build;
 import android.util.Log;
