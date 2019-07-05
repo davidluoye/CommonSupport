@@ -11,6 +11,9 @@ buildscript {
         classpath 'com.novoda:bintray-release:0.8.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+
+        // add for unit test report
+        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
     }
 }
 
@@ -20,6 +23,35 @@ allprojects {
         jcenter()
     }
 }
+
+ext {
+
+    versions = [
+        'supportLib'      : "27.1.0",
+
+        'junit'           : "4.12",
+        'mockito'         : "1.10.19",
+        'robolectric'     : "4.0.2",
+        'androidxTest'    : "1.0.0",
+        'jacoco'          : "0.7.9",
+    ]
+
+    deps = [
+        'support' : [
+             'appcompat'       : "com.android.support:appcompat-v7:${versions.supportLib}"
+        ],
+
+        'test' : [
+            'junit'            : "junit:junit:$versions.junit",
+            'mockitoCore'      : "org.mockito:mockito-core:${versions.mockito}",
+            'robolectric'      : "org.robolectric:robolectric:${versions.robolectric}",
+            'androidxTest'     : "androidx.test:core:${versions.androidxTest}",
+            'jacoco'           : "org.jacoco:org.jacoco.agent:${versions.jacoco}:runtime",
+        ]
+    ]
+
+}
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

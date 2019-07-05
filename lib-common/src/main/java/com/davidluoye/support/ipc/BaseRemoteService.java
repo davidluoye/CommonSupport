@@ -30,14 +30,14 @@ public abstract class BaseRemoteService extends ContentService {
 
     @Nullable
     @Override
-    public final Bundle call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras) {
+    public final Bundle call(@NonNull String serviceName, @Nullable String callerPackage, @Nullable Bundle extras) {
         final int callerPid = Binder.getCallingPid();
         final int callerUid = Binder.getCallingUid();
         final long identity = Binder.clearCallingIdentity();
         try {
-            boolean allow = allowBindService(callerPid, callerUid);
+            boolean allow = allowBindService(callerPackage, callerPid, callerUid);
             if (allow) {
-                return call(method);
+                return call(serviceName);
             }
         } finally {
             Binder.restoreCallingIdentity(identity);
@@ -80,7 +80,7 @@ public abstract class BaseRemoteService extends ContentService {
     @BinderThread
     public abstract IBinder onBind(@NonNull String name);
 
-    public boolean allowBindService(int callerPid, int callerUid) {
+    public boolean allowBindService(String callerPackage, int callerPid, int callerUid) {
         return true;
     }
 }

@@ -10,7 +10,11 @@ import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public abstract class ContentService extends ContentProvider {
+/**
+ * we should package this class instead of public. any other user should to override {@link BaseRemoteService} to use remote service api.
+ *
+ */
+/*public*/ abstract class ContentService extends ContentProvider {
     public static final String KEY_REMOTE = "service";
 
     @Nullable

@@ -113,9 +113,10 @@ public abstract class BaseRemoteManager<T extends IInterface> {
         Uri uri = Uri.parse("content://" + authority);
         Bundle bundle = null;
 
+        String callerPackage= context.getPackageName();
         try {
             String method = name == null ? "" : name;
-            bundle = cr.call(uri, method, null, null);
+            bundle = cr.call(uri, method, callerPackage, null);
         } catch (IllegalArgumentException e) {
             final String msg = "Can not find authority:" + authority;
             if (!handleAuthorityNotFoundException(msg)) {
