@@ -1,38 +1,28 @@
 
-package com.davidluoye.support.util;
+package com.davidluoye.support.log;
 
 import android.os.Build;
 import android.util.Log;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import com.davidluoye.support.util.LogUtil;
 
 /** A logcat utils */
 public class ILogger {
-    private static final String APP = "ILib";
 
     public static final boolean DEBUG = "userdebug".equals(Build.TYPE);
 
     public static final int DEFULT_LEVEL = DEBUG ? Log.VERBOSE : Log.DEBUG;
 
-    public static ILogger logger(Object owner) {
-        return logger(owner.getClass());
-    }
-
-    public static ILogger logger(Class<?> owner) {
-        return logger(owner.getSimpleName());
+    public static ILogger logger() {
+        return logger(null, DEFULT_LEVEL);
     }
 
     public static ILogger logger(String owner) {
         return logger(owner, DEFULT_LEVEL);
     }
 
-    public static ILogger logger(Object owner, int level) {
-        return logger(owner.getClass(), level);
-    }
-
-    public static ILogger logger(Class<?> owner, int level) {
-        return logger(owner.getSimpleName(), level);
+    public static ILogger logger(Class<?> owner) {
+        return logger(owner.getSimpleName(), DEFULT_LEVEL);
     }
 
     public static ILogger logger(String owner, int level) {
@@ -40,37 +30,39 @@ public class ILogger {
         return LOG;
     }
 
-    private String mTag;
-    private int mLogLevel = DEFULT_LEVEL;
+    private String owner;
+    private int level;
 
-    public ILogger(String owner) {
+    private ILogger(String owner) {
         this(owner, DEFULT_LEVEL);
     }
 
-    public ILogger(String owner, int level) {
-        mLogLevel = level;
-        if (owner == null) {
-            mTag = APP;
-        } else {
-            mTag = String.format("%s[%s]", APP, owner);
-        }
+    private ILogger(String owner, int level) {
+        this.owner = owner;
+        this.level = level;
     }
 
     public int getLogLevel() {
-        return mLogLevel;
+        return level;
     }
 
-    public void setLogLevel(int level) {
-        mLogLevel = level;
+    public ILogger setLogLevel(int level) {
+        this.level = level;
+        return this;
     }
 
     public boolean canLog(int level) {
-        return mLogLevel <= level;
+        if (this.level <= level) {
+            return true;
+        } else if (owner != null) {
+            return Log.isLoggable(owner, level);
+        }
+        return false;
     }
 
     public void v(String msg) {
         if (canLog(Log.VERBOSE)) {
-            Log.d(mTag, msg);
+            writeLog(Log.DEBUG, msg);
         }
     }
 
@@ -82,7 +74,7 @@ public class ILogger {
 
     public void d(String msg) {
         if (canLog(Log.DEBUG) || DEBUG) {
-            Log.d(mTag, msg);
+            writeLog(Log.DEBUG, msg);
         }
     }
 
@@ -94,7 +86,7 @@ public class ILogger {
 
     public void w(String msg) {
         if (canLog(Log.WARN) || DEBUG) {
-            Log.w(mTag, msg);
+            writeLog(Log.WARN, msg);
         }
     }
 
@@ -106,13 +98,13 @@ public class ILogger {
 
     public void w(Throwable tr) {
         if (canLog(Log.WARN) || DEBUG) {
-            Log.w(mTag, tr);
+            writeLog(Log.INFO, "", tr);
         }
     }
 
     public void w(Throwable tr, String msg) {
         if (canLog(Log.WARN) || DEBUG) {
-            Log.w(mTag, msg, tr);
+            writeLog(Log.WARN, msg, tr);
         }
     }
 
@@ -124,7 +116,7 @@ public class ILogger {
 
     public void i(String msg) {
         if (canLog(Log.INFO) || DEBUG) {
-            Log.i(mTag, msg);
+            writeLog(Log.INFO, msg);
         }
     }
 
@@ -136,7 +128,7 @@ public class ILogger {
 
     public void i(Throwable tr, String msg) {
         if (canLog(Log.INFO) || DEBUG) {
-            Log.i(mTag, msg, tr);
+            writeLog(Log.INFO, msg, tr);
         }
     }
 
@@ -148,7 +140,7 @@ public class ILogger {
 
     public void e(String msg) {
         if (canLog(Log.ERROR) || DEBUG) {
-            Log.e(mTag, msg);
+            writeLog(Log.ERROR, msg);
         }
     }
 
@@ -160,7 +152,7 @@ public class ILogger {
 
     public void e(Throwable tr, String msg) {
         if (canLog(Log.ERROR) || DEBUG) {
-            Log.e(mTag, msg, tr);
+            writeLog(Log.ERROR, msg, tr);
         }
     }
 
@@ -170,11 +162,33 @@ public class ILogger {
         }
     }
 
-    /** dump caller trace */
-    public static String dumpTrace(String msg) {
-        Throwable throwable = new Throwable(msg);
-        StringWriter sw = new StringWriter();
-        throwable.printStackTrace(new PrintWriter(sw));
-        return sw.toString();
+    private void writeLog(int targetLevel, String msg, Throwable tr) {
+        writeLog(targetLevel,msg + "\n" + LogUtil.getStackTraceString(tr));
+    }
+
+    private void writeLog(int targetLevel, String msg) {
+        Configuration configuration = Configuration.get();
+
+        String appTag = null;
+        if (configuration == null || configuration.appTag == null) {
+            appTag = Configuration.APP_TAG;
+        } else {
+            appTag = configuration.appTag;
+        }
+
+        String tag = appTag;
+        if (owner != null) {
+            tag = String.format("%s: [%s]", tag, owner);
+        }
+
+        if (configuration != null && configuration.logger != null) {
+            IFileLogger logger = configuration.logger;
+            logger.write(tag, LogUtil.translateLevel(targetLevel), msg);
+            if(!configuration.alwaysPrint) {
+                return;
+            }
+        }
+
+        Log.println(targetLevel, tag, msg);
     }
 }

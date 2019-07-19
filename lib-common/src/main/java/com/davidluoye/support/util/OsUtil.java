@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
+import com.davidluoye.support.log.ILogger;
+
 import java.util.List;
 
 public class OsUtil {

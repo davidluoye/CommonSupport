@@ -10,7 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.davidluoye.support.util.ILogger;
+import com.davidluoye.support.log.ILogger;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;

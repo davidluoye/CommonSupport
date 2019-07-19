@@ -3,9 +3,11 @@ package com.davidluoye.support.util;
 import android.support.annotation.NonNull;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Writer;
 
 public class IoUtil {
     private static final int IO_BUF_SIZE = 1024 * 16; // 16KB
@@ -17,6 +19,16 @@ public class IoUtil {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static final void flush(Flushable flushable) {
+        if (flushable != null) {
+            try {
+                flushable.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

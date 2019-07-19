@@ -1,5 +1,7 @@
 package com.davidluoye.support.util;
 
+import com.davidluoye.support.log.ILogger;
+
 public class StringUtil {
     private static final ILogger LOGGER = ILogger.logger(StringUtil.class);
     private static final String DEFAULT_SEPARATOR = ",";
