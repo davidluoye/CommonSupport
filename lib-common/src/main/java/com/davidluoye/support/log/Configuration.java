@@ -1,8 +1,11 @@
 package com.davidluoye.support.log;
 
 import android.Manifest;
+import android.content.Context;
 import android.os.Environment;
+import android.os.Process;
 
+import com.davidluoye.support.annotation.NotReady;
 import com.davidluoye.support.app.AppGlobals;
 import com.davidluoye.support.app.Permission;
 
@@ -28,6 +31,11 @@ public class Configuration {
     public final boolean alwaysPrint;
 
     private Configuration(File directory, String appTag, boolean compress, boolean alwaysPrint) {
+        if (sInstance != null) {
+            throw new IllegalStateException("has already build configuration.");
+        }
+        sInstance = this;
+
         this.directory = directory != null ? directory : getFilePath();
         this.name = sTimeFormat.format(new Date());
         this.appTag = appTag == null ? APP_TAG : appTag;
@@ -40,11 +48,6 @@ public class Configuration {
         }
         this.logger = logger;
         this.alwaysPrint = alwaysPrint;
-
-        if (sInstance != null) {
-            throw new IllegalStateException("has already build configuration.");
-        }
-        sInstance = this;
     }
 
     public static class Builder {
@@ -63,6 +66,7 @@ public class Configuration {
             return this;
         }
 
+        @NotReady
         public Builder compress() {
             this.compress = true;
             return this;
@@ -87,8 +91,11 @@ public class Configuration {
         File root = null;
         if (Permission.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
             root = Environment.getExternalStorageDirectory();
-        } else {
+        } else if (Process.myUid() == Process.SYSTEM_UID){
             root = Environment.getDataDirectory();
+        } else {
+            Context context = AppGlobals.getApplication();
+            root = context.getCacheDir();
         }
         File logPath = new File(root, PATH_BASE);
         File appLog = new File(logPath, AppGlobals.getPackageName());

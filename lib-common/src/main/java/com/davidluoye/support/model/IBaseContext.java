@@ -105,7 +105,7 @@ public abstract class IBaseContext implements IContext {
 
     @Override
     public void runOnUiThread(Runnable action, long delayMillis) {
-        ThreadUtil.postDelay(action, delayMillis);
+        ThreadUtil.post(action, delayMillis);
     }
 
     @Override
@@ -115,7 +115,7 @@ public abstract class IBaseContext implements IContext {
 
     @Override
     public void runOnBgThread(Runnable action, long delayMillis) {
-        ThreadUtil.executeDelay(action, delayMillis);
+        ThreadUtil.execute(action, delayMillis);
     }
 
     @Override

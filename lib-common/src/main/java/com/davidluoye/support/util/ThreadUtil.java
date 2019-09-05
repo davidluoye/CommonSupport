@@ -2,6 +2,7 @@ package com.davidluoye.support.util;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
 import java.util.concurrent.BlockingQueue;
@@ -13,13 +14,33 @@ import java.util.concurrent.TimeUnit;
 
 public class ThreadUtil {
 
+    public static void wait(Object obj) {
+        synchronized (obj) {
+            try {
+                obj.wait();
+            } catch (Exception e) {}
+        }
+    }
+
+    public static void notify(Object obj) {
+        synchronized (obj) {
+            try {
+                obj.notifyAll();
+            } catch (Exception e) {}
+        }
+    }
+
+    public static void sleep(long ms) {
+        SystemClock.sleep(ms);
+    }
+
     /** post an runnable action in ui thread */
     public static void post(Runnable action) {
         ThreadHolder.sUiThreadHandler.post(action);
     }
 
     /** post an delay runnable action in ui thread */
-    public static void postDelay(Runnable action, long delay) {
+    public static void post(Runnable action, long delay) {
         ThreadHolder.sUiThreadHandler.postDelayed(action, delay);
     }
 
@@ -34,7 +55,7 @@ public class ThreadUtil {
     }
 
     /** execute an delay runnable action in non-ui-thread */
-    public static void executeDelay(Runnable action, long delay) {
+    public static void execute(Runnable action, long delay) {
         ThreadHolder.sBgThreadHandler.postDelayed(action, delay);
     }
 

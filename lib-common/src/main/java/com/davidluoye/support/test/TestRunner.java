@@ -23,11 +23,12 @@ public class TestRunner {
         private String filterPackage;
         private CaseResult result;
         public CasesExecutor(String filterPackage, CaseResult result) {
-            if (result == null) {
-                result = new CaseResult();
-            }
-            this.filterPackage = filterPackage;
             this.result = result;
+            if (this.result == null) {
+                this.result = new CaseResult();
+            }
+
+            this.filterPackage = filterPackage;
         }
 
         @Override
@@ -76,11 +77,11 @@ public class TestRunner {
                         index++;
                         LOGGER.i(" %s start %s#%s", index, clazz, child);
                         method.invoke(instance);
-                        LOGGER.i("   success case: %s", child);
+                        LOGGER.i(" >> success case: %s", child);
                         tCase.setSuccess(true);
                     } catch (Exception e) {
                         tCase.setSuccess(false);
-                        LOGGER.i("   fail case: %s", child);
+                        LOGGER.i(" >> fail case: %s", child);
                         e.printStackTrace();
                     }
                 }

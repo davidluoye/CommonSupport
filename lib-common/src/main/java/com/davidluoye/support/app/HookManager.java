@@ -9,16 +9,18 @@ import java.lang.Thread.UncaughtExceptionHandler;
 public class HookManager {
     private static final ILogger LOGGER = ILogger.logger("HookManager");
 
-    public static void hookCrash(CrashHooker hooker) {
+    public static UncaughtExceptionHandler hookCrash(CrashHooker hooker) {
         UncaughtExceptionHandler oldHandler = Thread.getDefaultUncaughtExceptionHandler();
         hooker.attachHandler(oldHandler);
         Thread.setDefaultUncaughtExceptionHandler(hooker);
+        return oldHandler;
     }
 
-    public static void hookInstrumentation(InstrumentationHooker hooker) {
+    public static Instrumentation hookInstrumentation(InstrumentationHooker hooker) {
         Instrumentation oldInstrumentation = AppGlobals.getInstrumentation();
         hooker.attachInstrumentation(oldInstrumentation);
         AppGlobals.setInstrumentation(hooker);
+        return oldInstrumentation;
     }
 
     public static abstract class CrashHooker implements UncaughtExceptionHandler {

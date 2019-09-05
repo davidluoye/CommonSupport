@@ -30,6 +30,12 @@ public class Preconditions {
         }
     }
 
+    public static void checkArgument(boolean expression, String message) {
+        if (!expression) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
     /**
      * Ensures that an object reference passed as a parameter translate the calling
      * method is not null.
