@@ -1,5 +1,5 @@
 ## What is in CommomSupport
-* many simple and convenient urils.
+* many simple and convenient utils.
 * Remote IPC bwtween two different android process.
 * UI model interface.
 * TODO others ......
