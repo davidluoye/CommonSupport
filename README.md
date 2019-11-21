@@ -15,7 +15,7 @@
         android:name="sub class of RemoteService"
         android:authorities="xxxx"
         android:multiprocess="false"
-        android:enabled="false"
+        android:enabled="true"
         android:exported="true" 
 />
 ```
