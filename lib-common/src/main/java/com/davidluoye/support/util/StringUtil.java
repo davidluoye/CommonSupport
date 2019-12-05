@@ -1,16 +1,13 @@
 package com.davidluoye.support.util;
 
-import com.davidluoye.support.log.ILogger;
-
 public class StringUtil {
-    private static final ILogger LOGGER = ILogger.logger(StringUtil.class);
     private static final String DEFAULT_SEPARATOR = ",";
 
-    public static <T extends Object> String join(T[] array){
-        return join(array, DEFAULT_SEPARATOR);
+    public static <T> String join(T... param){
+        return join(DEFAULT_SEPARATOR, param);
     }
 
-    public static <T extends Object> String join(T[] array, String separator) {
+    public static <T> String join(String separator, T... array) {
         if (array == null || array.length == 0) {
             return null;
         }

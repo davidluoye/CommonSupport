@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="com.david.demo"
+            android:name="DemoService"
+            android:multiprocess="false"
+            android:enabled="true"
+            android:exported="true" >
+        </provider>
     </application>
 
 </manifest>

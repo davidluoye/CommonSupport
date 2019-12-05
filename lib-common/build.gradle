@@ -19,7 +19,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation deps.support.appcompat
 }
 
 publish{
@@ -27,7 +26,7 @@ publish{
     userOrg = 'davidluoye'
     groupId = 'com.davidluoye.support'
     artifactId = 'lib-common'
-    publishVersion = '2.2.0'
+    publishVersion = '2.3'
     website = 'https://bintray.com/davidluoye/CommonSupport'
 }
 

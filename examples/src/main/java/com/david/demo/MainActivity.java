@@ -2,12 +2,10 @@ package com.david.demo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
-import com.davidluoye.support.log.Configuration;
 import com.davidluoye.support.log.ILogger;
-import com.davidluoye.support.test.CaseResult;
-import com.davidluoye.support.test.TestRunner;
 
 public class MainActivity extends Activity {
     private static final ILogger LOGGER = ILogger.logger();
@@ -21,18 +19,13 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mResultView = findViewById(R.id.test_result);
 
-        Configuration.Builder builder = new Configuration.Builder();
-        builder.alwaysPrint();
-//        builder.compress();
-        builder.appTag("TestRunner");
-        builder.directory(getFilesDir());
-        builder.build();
+        DemoManager manager = new DemoManager(this);
+        String result = manager.action("aaaaa");
+        Log.d("david-UI", result);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        CaseResult result = new CaseResult();
-        TestRunner.execute(getPackageName(), result);
     }
 }

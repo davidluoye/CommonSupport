@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Environment;
 import android.os.Process;
 
-import com.davidluoye.support.annotation.NotReady;
 import com.davidluoye.support.app.AppGlobals;
 import com.davidluoye.support.app.Permission;
 
@@ -66,7 +65,6 @@ public class Configuration {
             return this;
         }
 
-        @NotReady
         public Builder compress() {
             this.compress = true;
             return this;

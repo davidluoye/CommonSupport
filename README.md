@@ -5,7 +5,7 @@
 * TODO others ......
 
 
-### How to use IPC api
+### How to use binder api
 
 #### 1. TODO in server
   If app want to publish service as a remote server, it can declare a subclass of BaseRemoteService in AndroidManifest.xml,

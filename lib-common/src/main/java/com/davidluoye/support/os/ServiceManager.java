@@ -1,8 +1,6 @@
 package com.davidluoye.support.os;
 
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.davidluoye.support.util.IType;
 
@@ -35,8 +33,7 @@ public class ServiceManager {
      * @param name the name of the service to get
      * @return a reference to the service, or <code>null</code> if the service doesn't exist
      */
-    @Nullable
-    public static IBinder getService(@NonNull String name) {
+    public static IBinder getService(String name) {
         if (s_getService == null) {
             final String functionName = "getService";
             final Class<String>[] types = new Class[]{String.class};
@@ -50,8 +47,7 @@ public class ServiceManager {
      * Retrieve an existing service called @a name from the
      * service manager.  Non-blocking.
      */
-    @Nullable
-    public static IBinder checkService(@NonNull String name) {
+    public static IBinder checkService(String name) {
         if (s_checkService == null) {
             final String functionName = "checkService";
             final Class<String>[] types = new Class[]{String.class};
@@ -69,7 +65,7 @@ public class ServiceManager {
      * @param name the name of the new service
      * @param service the service object
      */
-    public static void addService(@NonNull String name, @NonNull IBinder service) {
+    public static void addService(String name, IBinder service) {
         if (s_addService == null) {
             final String functionName = "checkService";
             final Class<String>[] types = new Class[]{String.class, IBinder.class};
@@ -82,7 +78,6 @@ public class ServiceManager {
     /**
      * Return a list of all currently running services.
      */
-    @Nullable
     public static String[] listServices() {
         if (s_listServices == null) {
             final String functionName = "listServices";

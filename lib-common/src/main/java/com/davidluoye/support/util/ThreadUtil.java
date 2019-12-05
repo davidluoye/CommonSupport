@@ -3,7 +3,6 @@ package com.davidluoye.support.util;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -81,7 +80,7 @@ public class ThreadUtil {
         private ExecutorPool(final int size) {
             ThreadFactory factory = new ThreadFactory() {
                 @Override
-                public Thread newThread(@NonNull Runnable r) {
+                public Thread newThread(Runnable r) {
                     return new Thread(r, String.format("thread-pools-%s", size));
                 }
             };

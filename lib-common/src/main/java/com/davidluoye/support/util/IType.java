@@ -13,7 +13,7 @@ public class IType {
     }
 
     /** reflect a field and get the value. */
-    public <T> T getField(String name, Class<T> type) {
+    public <T> T getField(String name) {
         try {
             Field f = mInstance.getClass().getDeclaredField(name);
             if (f != null) {

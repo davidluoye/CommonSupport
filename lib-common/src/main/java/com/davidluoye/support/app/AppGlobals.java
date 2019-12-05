@@ -71,7 +71,7 @@ public class AppGlobals {
     public static Instrumentation getInstrumentation() {
         Object activityThreadObject = AppGlobals.getActivityThreadInstance();
         IType iType = new IType(activityThreadObject);
-        return iType.getField("mInstrumentation", Instrumentation.class);
+        return iType.getField("mInstrumentation");
     }
 
     public static boolean setInstrumentation(Instrumentation instrumentation) {

@@ -1,13 +1,10 @@
 package com.davidluoye.support.util;
 
-import android.support.annotation.NonNull;
-
 import java.io.ByteArrayOutputStream;
 import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Writer;
 
 public class IoUtil {
     private static final int IO_BUF_SIZE = 1024 * 16; // 16KB
@@ -33,12 +30,12 @@ public class IoUtil {
     }
 
     /** read all bytes from input stream */
-    public static byte[] readAllBytes(@NonNull InputStream is) throws IOException {
+    public static byte[] readAllBytes(InputStream is) throws IOException {
         ByteArrayOutputStream bytesBuf = new ByteArrayOutputStream(1024);
-        int bytesReaded;
+        int length;
         byte[] buf = new byte[1024 * 8];
-        while ((bytesReaded = is.read(buf, 0, buf.length)) != -1) {
-            bytesBuf.write(buf, 0, bytesReaded);
+        while ((length = is.read(buf, 0, buf.length)) != -1) {
+            bytesBuf.write(buf, 0, length);
         }
         return bytesBuf.toByteArray();
     }
@@ -47,7 +44,7 @@ public class IoUtil {
      * Copy data from the input stream to the output stream.
      * Note: This method will not close the input stream and output stream.
      */
-    public static void copyStream(@NonNull InputStream is, @NonNull OutputStream os)
+    public static void copyStream(InputStream is, OutputStream os)
             throws IOException {
         byte[] buffer = new byte[IO_BUF_SIZE];
         int len;
