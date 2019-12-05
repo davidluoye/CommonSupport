@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.david.demo.ipc.BaseRemoteService;
+import com.davidluoye.support.binder.BaseRemoteService;
 
 public class DemoService extends BaseRemoteService {
 

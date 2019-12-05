@@ -1,6 +1,5 @@
 package com.davidluoye.support.binder;
 
-import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
@@ -11,8 +10,6 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import java.lang.ref.SoftReference;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 
 public abstract class BaseRemoteManager<T extends IInterface> {
     private static final String TAG = BaseRemoteManager.class.getSimpleName();
@@ -23,16 +20,12 @@ public abstract class BaseRemoteManager<T extends IInterface> {
     private final String name;
     private T service;
 
-    protected BaseRemoteManager(String authority) {
-        this(null, authority, null);
-    }
-
     /**
+     * @param context
      * @param authority the authority declare in AndroidManifest.xml
-     * @param name the name of service if it has, null default
      */
-    protected BaseRemoteManager(String authority, String name) {
-        this(null, authority, name);
+    protected BaseRemoteManager(Context context, String authority) {
+        this(null, authority, null);
     }
 
     /**
@@ -41,26 +34,10 @@ public abstract class BaseRemoteManager<T extends IInterface> {
      * @param name the name of service service
      */
     protected BaseRemoteManager(Context context, String authority, String name) {
-        if (context == null) {
-            Application app = invoke("currentApplication");
-            context = app;
-        }
         this.context = context.getApplicationContext();
         this.authority = authority;
         this.name = name;
         this.remoteLiker = new RemoteLinker(this);
-    }
-
-    private static <T extends Type> T invoke(String function) {
-        try {
-            Class<?> activityThread = Class.forName("android.app.ActivityThread");
-            Method method = activityThread.getDeclaredMethod(function);
-            method.setAccessible(true);
-            return (T)method.invoke(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private static class RemoteLinker implements IBinder.DeathRecipient {
