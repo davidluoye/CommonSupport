@@ -28,32 +28,37 @@ public class Configuration {
     public final String name;
     public final IFileLogger logger;
     public final boolean alwaysPrint;
+    public final boolean alwaysPersist;
 
-    private Configuration(File directory, String appTag, boolean compress, boolean alwaysPrint) {
+    private Configuration(File directory, String appTag, boolean compress, boolean alwaysPrint, boolean alwaysPersist) {
         if (sInstance != null) {
             throw new IllegalStateException("has already build configuration.");
         }
         sInstance = this;
 
+        this.appTag = appTag == null ? APP_TAG : appTag;
+        this.alwaysPrint = alwaysPrint;
+        this.alwaysPersist = alwaysPersist;
         this.directory = directory != null ? directory : getFilePath();
         this.name = sTimeFormat.format(new Date());
-        this.appTag = appTag == null ? APP_TAG : appTag;
 
         IFileLogger logger = null;
-        if(compress) {
-            logger = new ZipFileLogger(this.directory, this.name);
-        } else {
-            logger = new TxtFileLogger(this.directory, this.name);
+        if (alwaysPersist) {
+            if (compress) {
+                logger = new ZipFileLogger(this.directory, this.name);
+            } else {
+                logger = new TxtFileLogger(this.directory, this.name);
+            }
         }
         this.logger = logger;
-        this.alwaysPrint = alwaysPrint;
     }
 
     public static class Builder {
         private File directory;
         private String appTag;
         private boolean compress;
-        private boolean alwaysPrint;
+        private boolean alwaysPrint = true;
+        private boolean alwaysPersist = false;
 
         public Builder directory(File directory) {
             this.directory = directory;
@@ -75,8 +80,13 @@ public class Configuration {
             return this;
         }
 
+        public Builder alwaysPersist() {
+            this.alwaysPersist = true;
+            return this;
+        }
+
         public Configuration build() {
-            Configuration config = new Configuration(directory, appTag, compress, alwaysPrint);
+            Configuration config = new Configuration(directory, appTag, compress, alwaysPrint, alwaysPersist);
             return config;
         }
     }
