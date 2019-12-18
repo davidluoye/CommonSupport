@@ -57,7 +57,7 @@ public class Configuration {
         private File directory;
         private String appTag;
         private boolean compress;
-        private boolean alwaysPrint = true;
+        private boolean alwaysPrint = false;
         private boolean alwaysPersist = false;
 
         public Builder directory(File directory) {
