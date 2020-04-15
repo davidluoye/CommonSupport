@@ -3,29 +3,32 @@ package com.davidluoye.support.util;
 
 import android.util.Log;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
-
 public class LogUtil {
 
     public static String dumpTrace(String msg) {
-        Throwable throwable = new Throwable(msg);
-        StringWriter sw = new StringWriter();
-        throwable.printStackTrace(new PrintWriter(sw));
-        return sw.toString();
+        return dumpTrace(msg, 0);
     }
 
+    public static String dumpTrace(Throwable throwable) {
+        return dumpTrace(throwable, 0);
+    }
 
-    public static String getStackTraceString(Throwable tr) {
-        if (tr != null) {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            tr.printStackTrace(pw);
-            pw.flush();
-            return sw.toString();
+    public static String dumpTrace(String msg, int deep) {
+        Throwable throwable = new Throwable(msg);
+        return dumpTrace(throwable, deep);
+    }
+
+    public static String dumpTrace(Throwable throwable, int deep) {
+        StackTraceElement[] traces = throwable.getStackTrace();
+        StringBuilder sb = new StringBuilder();
+        sb.append("dump trace with reason: " + throwable.getMessage());
+        int size = deep > 0 ? Math.min(deep, traces.length) : traces.length;
+        for (int i = 0; i < size; i++) {
+            StackTraceElement element = traces[i];
+            sb.append("\n");
+            sb.append("  => " + element.toString());
         }
-        return null;
+        return sb.toString();
     }
 
     public static String translateLevel(int level) {

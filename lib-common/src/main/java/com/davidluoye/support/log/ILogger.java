@@ -163,7 +163,7 @@ public class ILogger {
     }
 
     private void writeLog(int targetLevel, String msg, Throwable tr) {
-        writeLog(targetLevel,msg + "\n" + LogUtil.getStackTraceString(tr));
+        writeLog(targetLevel,msg + "\n" + LogUtil.dumpTrace(tr));
     }
 
     private void writeLog(int targetLevel, String msg) {

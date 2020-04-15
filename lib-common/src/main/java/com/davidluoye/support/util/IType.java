@@ -45,8 +45,13 @@ public class IType {
     /** reflect a function and get the return value. */
     public <T> T call(String name, Class<?>[] parameterTypes, Object[] parameters, Class<T> returnType) {
         Class<?> clzz = mInstance.getClass();
+        return call(clzz, name, parameterTypes, parameters, returnType);
+    }
+
+    /** reflect a function and get the return value. */
+    public <T> T call(Class<?> ownerClzz, String name, Class<?>[] parameterTypes, Object[] parameters, Class<T> returnType) {
         try {
-            Method m = clzz.getDeclaredMethod(name, parameterTypes);
+            Method m = ownerClzz.getDeclaredMethod(name, parameterTypes);
             if (m != null) {
                 m.setAccessible(true);
                 Object value = m.invoke(mInstance, parameters);
