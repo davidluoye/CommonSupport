@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 
 import com.davidluoye.support.log.ILogger;
@@ -13,24 +14,56 @@ import java.util.List;
 public class OsUtil {
     private static final ILogger LOGGER = ILogger.logger(OsUtil.class);
 
-    /** transform unit dp to pixel */
-    public static int dpToPx(int dp) {
-        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    public static final String SCHEME_ANDROID_RESOURCE = "android.resource";
+
+    public static int dp2px(int dp) {
+        return dp2px(Resources.getSystem(), dp);
     }
 
-    /** transform pixel to dp */
-    public static int pxToDp(int px) {
-        return (int) (px / Resources.getSystem().getDisplayMetrics().density);
+    public static int px2dp(int px) {
+        return px2dp(Resources.getSystem(), px);
+    }
+
+    public static int px2sp(int px) {
+        return px2sp(Resources.getSystem(), px);
+    }
+
+    public static int sp2px(int sp) {
+        return sp2px(Resources.getSystem(), sp);
+    }
+
+    public static int dp2px(Resources res, int dp) {
+        return (int) (dp * res.getDisplayMetrics().density + 0.5f);
+    }
+
+    public static int px2dp(Resources res, int px) {
+        return (int) (px / res.getDisplayMetrics().density + 0.5f);
+    }
+
+    public static int px2sp(Resources res, int px) {
+        return (int) (px / res.getDisplayMetrics().scaledDensity + 0.5f);
+    }
+
+    public static int sp2px(Resources res, int sp) {
+        return (int) (sp * res.getDisplayMetrics().scaledDensity + 0.5f);
     }
 
     /** get screen width */
     public static int getScreenWidth() {
-        return Resources.getSystem().getDisplayMetrics().widthPixels;
+        return getScreenWidth(Resources.getSystem());
     }
 
     /** get screen height */
     public static int getScreenHeigth() {
-        return Resources.getSystem().getDisplayMetrics().heightPixels;
+        return getScreenHeigth(Resources.getSystem());
+    }
+
+    public static int getScreenWidth(Resources res) {
+        return res.getDisplayMetrics().widthPixels;
+    }
+
+    public static int getScreenHeigth(Resources res) {
+        return res.getDisplayMetrics().heightPixels;
     }
 
     /** get screen width */
@@ -38,6 +71,23 @@ public class OsUtil {
         DisplayMetrics outMetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
         return outMetrics.widthPixels;
+    }
+
+    public static Uri fromResourceId(String pkg, int resId) {
+        Uri.Builder ub = new Uri.Builder();
+        ub.scheme(SCHEME_ANDROID_RESOURCE);
+        ub.authority(pkg);
+        ub.appendPath(String.valueOf(resId));
+        return ub.build();
+    }
+
+    public static Uri fromResourceName(String pkg, String type, String name) {
+        Uri.Builder ub = new Uri.Builder();
+        ub.scheme(SCHEME_ANDROID_RESOURCE);
+        ub.authority(pkg);
+        ub.appendPath(type);
+        ub.appendPath(name);
+        return ub.build();
     }
 
     /** check if current process is the main process. */

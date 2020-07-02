@@ -80,7 +80,7 @@ public class AppGlobals {
         return iType.setField("mInstrumentation", instrumentation);
     }
 
-    private static Class<?> getActivityThreadClass() {
+    public static Class<?> getActivityThreadClass() {
         try {
              return Class.forName("android.app.ActivityThread");
         } catch (Exception e) {
@@ -89,7 +89,7 @@ public class AppGlobals {
         return null;
     }
 
-    private static Object getActivityThreadInstance() {
+    public static Object getActivityThreadInstance() {
         Class<?> app = getActivityThreadClass();
         Method currentActivityThread = IType.getStaticMethod(app, "currentActivityThread", null);
         Object appInstance = IType.callStatic(currentActivityThread, null, app);

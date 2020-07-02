@@ -33,6 +33,10 @@ public class ThreadUtil {
         SystemClock.sleep(ms);
     }
 
+    public static boolean isUiThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
+    }
+
     /** post an runnable action in ui thread */
     public static void post(Runnable action) {
         ThreadHolder.sUiThreadHandler.post(action);
