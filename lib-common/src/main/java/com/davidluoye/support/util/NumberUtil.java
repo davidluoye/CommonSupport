@@ -3,23 +3,27 @@ package com.davidluoye.support.util;
 public class NumberUtil {
 
     /**
-     * Parse a string value which is a long or hex string.
-     * @param value
-     * @param defValue
-     * @return
+     * Parse a string value which is a float or hex string.
+     * @param value float string value
+     * @param defValue default value if has a number format exception
+     * @return float value
      */
-    public static long parseLong(String value, long defValue) {
-        return parseLong(value, defValue, 10);
+    public static float parseFloat(String value, float defValue) {
+        try {
+            if (value == null || value.length() == 0) return defValue;
+            return Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+        }
+        return defValue;
     }
 
     /**
      * Parse a string value which is a long or hex string.
-     * @param value
-     * @param defValue
-     * @param radix
-     * @return
+     * @param value long string value
+     * @param defValue default value if has a number format exception
+     * @return long value
      */
-    public static long parseLong(String value, long defValue, int radix) {
+    public static long parseLong(String value, long defValue) {
         try {
             if (value == null || value.length() == 0) return defValue;
             if (value.startsWith("0x")) {
@@ -28,7 +32,7 @@ public class NumberUtil {
                     return Long.parseLong(newValue, 16);
                 }
             }
-            return Long.parseLong(value, radix);
+            return Long.parseLong(value, 10);
         } catch (NumberFormatException e) {
         }
         return defValue;
@@ -36,22 +40,11 @@ public class NumberUtil {
 
     /**
      * Parse a string value which is a integer or hex string.
-     * @param value
-     * @param defValue
-     * @return
+     * @param value int string value
+     * @param defValue default value if has a number format exception
+     * @return int value
      */
     public static int parseInt(String value, int defValue) {
-        return parseInt(value, defValue, 10);
-    }
-
-    /**
-     * Parse a string value which is a integer or hex string.
-     * @param value
-     * @param defValue
-     * @param radix
-     * @return
-     */
-    public static int parseInt(String value, int defValue, int radix) {
         try {
             if (value == null || value.length() == 0) return defValue;
             if (value.startsWith("0x")) {
@@ -60,24 +53,10 @@ public class NumberUtil {
                     return Integer.parseInt(newValue, 16);
                 }
             }
-            return Integer.parseInt(value, radix);
+            return Integer.parseInt(value, 10);
         } catch (NumberFormatException e) {
         }
         return defValue;
-    }
-
-    public static final String translateIntToHexString(int value) {
-        return translateLongToHexString(value);
-    }
-
-    /** translate a integer value to hex string. */
-    public static final String translateLongToHexString(long value) {
-        String hexString = Long.toHexString(value);
-        hexString = hexString.toUpperCase();
-        if (hexString.length() == 1) {
-            return String.format("0%s", hexString);
-        }
-        return hexString;
     }
 
     /** translate a byte to integer */
@@ -95,5 +74,23 @@ public class NumberUtil {
             value[i] = parseInt(bytes[i]);
         }
         return value;
+    }
+
+    public static String toHexString(long value) {
+        String hexString = Long.toHexString(value);
+        return formatHexString(hexString);
+    }
+
+    public static String toHexString(int value) {
+        String hexString = Integer.toHexString(value);
+        return formatHexString(hexString);
+    }
+
+    private static String formatHexString(String hex) {
+        hex = hex.toUpperCase();
+        if (hex.length() == 1) {
+            return String.format("0%s", hex);
+        }
+        return hex;
     }
 }

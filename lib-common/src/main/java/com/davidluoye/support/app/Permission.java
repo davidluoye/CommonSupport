@@ -1,10 +1,17 @@
 package com.davidluoye.support.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Binder;
+import android.os.Build;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Permission {
+
+    public static final String KEY_EXTRA = "permission";
 
     public static boolean hasPermission(String permission) {
         PackageManager pm = AppGlobals.getPackageManager();
@@ -71,5 +78,36 @@ public class Permission {
         final int myPid = android.os.Process.myPid();
         final int myUid = android.os.Process.myUid();
         return checkPermission(permission, myPid, myUid);
+    }
+
+    /**
+     * Get the denied permissions
+     *
+     * @param permissions The name of the permissions being checked.
+     * @return an array of permissions which has been denied.
+     */
+    public static String[] getDeniedPermissions(String[] permissions) {
+        List<String> needRequest = new ArrayList<>();
+        for (int index = 0; index < permissions.length; index++) {
+            int gain = checkSelfPermission(permissions[index]);
+            if (gain != PackageManager.PERMISSION_GRANTED) {
+                needRequest.add(permissions[index]);
+            }
+        }
+        return needRequest.toArray(new String[]{});
+    }
+
+    /**
+     * Start a permission activity
+     * @param context
+     * @param permissions request permission array.
+     */
+    public static void requestPermission(Context context, String[] permissions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent intent = new Intent(context, PermissionUI.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(KEY_EXTRA, permissions);
+            context.startActivity(intent);
+        }
     }
 }
