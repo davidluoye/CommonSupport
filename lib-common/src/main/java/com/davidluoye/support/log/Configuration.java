@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.os.Environment;
 import android.os.Process;
+import android.util.Log;
 
 import com.davidluoye.support.app.AppGlobals;
 import com.davidluoye.support.app.Permission;
@@ -29,22 +30,24 @@ public class Configuration {
     public final IFileLogger logger;
     public final boolean alwaysPrint;
     public final boolean alwaysPersist;
+    public final int logLevel;
 
-    private Configuration(File directory, String appTag, boolean compress, boolean alwaysPrint, boolean alwaysPersist) {
+    private Configuration(Builder build) {
         if (sInstance != null) {
             throw new IllegalStateException("has already build configuration.");
         }
         sInstance = this;
 
-        this.appTag = appTag == null ? APP_TAG : appTag;
-        this.alwaysPrint = alwaysPrint;
-        this.alwaysPersist = alwaysPersist;
-        this.directory = directory != null ? directory : getFilePath();
+        this.appTag = build.appTag == null ? APP_TAG : build.appTag;
+        this.alwaysPrint = build.alwaysPrint;
+        this.alwaysPersist = build.alwaysPersist;
+        this.directory = build.directory != null ? build.directory : getFilePath();
         this.name = sTimeFormat.format(new Date());
+        this.logLevel = build.logLevel;
 
         IFileLogger logger = null;
         if (alwaysPersist) {
-            if (compress) {
+            if (build.compress) {
                 logger = new ZipFileLogger(this.directory, this.name);
             } else {
                 logger = new TxtFileLogger(this.directory, this.name);
@@ -59,6 +62,7 @@ public class Configuration {
         private boolean compress;
         private boolean alwaysPrint = false;
         private boolean alwaysPersist = false;
+        private int logLevel = ILogger.DEBUG ? Log.VERBOSE : Log.DEBUG;
 
         public Builder directory(File directory) {
             this.directory = directory;
@@ -85,14 +89,26 @@ public class Configuration {
             return this;
         }
 
+        public Builder logLevel(int level) {
+            this.logLevel = level;
+            return this;
+        }
+
         public Configuration build() {
-            Configuration config = new Configuration(directory, appTag, compress, alwaysPrint, alwaysPersist);
-            return config;
+            return new Configuration(this);
         }
     }
 
     public static Configuration get() {
         return sInstance;
+    }
+
+    /*package*/ static boolean canLog(int level) {
+        Configuration configuration = Configuration.get();
+        if (configuration != null) {
+            return configuration.logLevel <= level;
+        }
+        return true;
     }
 
     private static File getFilePath() {

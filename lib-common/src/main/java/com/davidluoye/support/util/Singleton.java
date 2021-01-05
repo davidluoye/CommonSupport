@@ -18,8 +18,6 @@ package com.davidluoye.support.util;
 
 /**
  * Singleton helper class for lazily initialization.
- *
- * @hide
  */
 public abstract class Singleton<T> {
     private T mInstance;

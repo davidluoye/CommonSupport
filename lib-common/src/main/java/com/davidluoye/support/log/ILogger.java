@@ -62,111 +62,168 @@ public class ILogger {
 
     public void v(String msg) {
         if (canLog(Log.VERBOSE)) {
-            writeLog(Log.DEBUG, msg);
+            writeLog(owner, Log.VERBOSE, msg);
         }
     }
 
     public void v(String format, Object...args) {
         if (canLog(Log.VERBOSE)) {
-            v(String.format(format, args));
+            writeLog(owner, Log.VERBOSE, format, args);
         }
     }
 
     public void d(String msg) {
         if (canLog(Log.DEBUG) || DEBUG) {
-            writeLog(Log.DEBUG, msg);
+            writeLog(owner, Log.DEBUG, msg);
         }
     }
 
     public void d(String format, Object...args) {
         if (canLog(Log.DEBUG) || DEBUG) {
-            d(String.format(format, args));
+            writeLog(owner, Log.DEBUG, format, args);
         }
     }
 
     public void w(String msg) {
         if (canLog(Log.WARN) || DEBUG) {
-            writeLog(Log.WARN, msg);
+            writeLog(owner, Log.WARN, msg);
         }
     }
 
     public void w(String format, Object...args) {
         if (canLog(Log.WARN) || DEBUG) {
-            w(String.format(format, args));
+            writeLog(owner, Log.INFO, format, args);
         }
     }
 
     public void w(Throwable tr) {
         if (canLog(Log.WARN) || DEBUG) {
-            writeLog(Log.INFO, "", tr);
+            writeLog(owner, Log.INFO, "", tr);
         }
     }
 
     public void w(Throwable tr, String msg) {
         if (canLog(Log.WARN) || DEBUG) {
-            writeLog(Log.WARN, msg, tr);
+            writeLog(owner, Log.WARN, msg, tr);
         }
     }
 
     public void w(Throwable tr, String format, Object...args) {
         if (canLog(Log.WARN) || DEBUG) {
-            w(String.format(format, args));
+            writeLog(owner, Log.WARN, format, args);
         }
     }
 
     public void i(String msg) {
         if (canLog(Log.INFO) || DEBUG) {
-            writeLog(Log.INFO, msg);
+            writeLog(owner, Log.INFO, msg);
         }
     }
 
     public void i(String format, Object...args) {
         if (canLog(Log.INFO) || DEBUG) {
-            i(String.format(format, args));
+            writeLog(owner, Log.INFO, format, args);
         }
     }
 
     public void i(Throwable tr, String msg) {
         if (canLog(Log.INFO) || DEBUG) {
-            writeLog(Log.INFO, msg, tr);
+            writeLog(owner, Log.INFO, msg, tr);
         }
     }
 
     public void i(Throwable tr, String format, Object...args) {
         if (canLog(Log.INFO) || DEBUG) {
-            i(tr, String.format(format, args));
+            writeLog(owner, Log.INFO, format, args, tr);
         }
     }
 
     public void e(String msg) {
         if (canLog(Log.ERROR) || DEBUG) {
-            writeLog(Log.ERROR, msg);
+            writeLog(owner, Log.ERROR, msg);
         }
     }
 
     public void e(String format, Object...args) {
         if (canLog(Log.ERROR) || DEBUG) {
-            e(String.format(format, args));
+            writeLog(owner, Log.ERROR, format, args);
         }
     }
 
     public void e(Throwable tr, String msg) {
         if (canLog(Log.ERROR) || DEBUG) {
-            writeLog(Log.ERROR, msg, tr);
+            writeLog(owner, Log.ERROR, msg, tr);
         }
     }
 
     public void e(Throwable tr, String format, Object...args) {
         if (canLog(Log.ERROR) || DEBUG) {
-            e(tr, String.format(format, args));
+            writeLog(owner, Log.ERROR, format, args);
         }
     }
 
-    private void writeLog(int targetLevel, String msg, Throwable tr) {
-        writeLog(targetLevel,msg + "\n" + LogUtil.dumpTrace(tr));
+
+    public static void vv(String tag, String msg) {
+        writeLog(tag, Log.VERBOSE, msg);
     }
 
-    private void writeLog(int targetLevel, String msg) {
+    public static void vv(String tag, String format, Object...args) {
+        writeLog(tag, Log.VERBOSE, format, args);
+    }
+
+    public static void dd(String tag, String msg) {
+        writeLog(tag, Log.DEBUG, msg);
+    }
+
+    public static void dd(String tag, String format, Object...args) {
+        writeLog(tag, Log.DEBUG, format, args);
+    }
+
+    public static void ii(String tag, String msg) {
+        writeLog(tag, Log.INFO, msg);
+    }
+
+    public static void ii(String tag, String format, Object...args) {
+        writeLog(tag, Log.INFO, format, args);
+    }
+
+    public static void ww(String tag, String msg) {
+        writeLog(tag, Log.WARN, msg);
+    }
+
+    public static void ww(String tag, String format, Object...args) {
+        writeLog(tag, Log.WARN, format, args);
+    }
+
+    public static void ee(String tag, String msg) {
+        writeLog(tag, Log.ERROR, msg);
+    }
+
+    public static void ee(String tag, String format, Object...args) {
+        writeLog(tag, Log.ERROR, format, args);
+    }
+
+    // ========================== internal function ===========================
+
+    private static void writeLog(String tag, int level, String format, Object...args) {
+        if (Configuration.canLog(level)) {
+            writeLog(tag, level, String.format(format, args));
+        }
+    }
+
+    private static void writeLog(String tag, int level, String msg, Throwable tr) {
+        if (Configuration.canLog(level)) {
+            writeLog(tag, level, msg + "\n" + LogUtil.dumpTrace(tr));
+        }
+    }
+
+    private static void writeLog(String tag, int level, String msg) {
+        if (Configuration.canLog(level)) {
+            writeLogImpl(tag, level, msg);
+        }
+    }
+
+    private static void writeLogImpl(String owner, int targetLevel, String msg) {
         Configuration configuration = Configuration.get();
 
         String appTag = null;

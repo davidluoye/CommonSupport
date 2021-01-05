@@ -25,7 +25,7 @@ public abstract class BaseRemoteManager<T extends IInterface> {
      * @param authority the authority declare in AndroidManifest.xml
      */
     protected BaseRemoteManager(Context context, String authority) {
-        this(null, authority, null);
+        this(context, authority, null);
     }
 
     /**
