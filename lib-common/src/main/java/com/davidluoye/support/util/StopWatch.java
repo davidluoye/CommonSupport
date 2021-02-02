@@ -29,8 +29,8 @@ public class StopWatch {
 
     private final String mLabel;
 
-    private final ArrayList<Long> mTimes = Collection.newArrayList();
-    private final ArrayList<String> mLapLabels = Collection.newArrayList();
+    private final ArrayList<Long> mTimes = new ArrayList<>();
+    private final ArrayList<String> mLapLabels = new ArrayList<>();
 
     private StopWatch(String label) {
         mLabel = label;

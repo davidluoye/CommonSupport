@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.davidluoye.support.log.ILogger;
 
 public class MainActivity extends Activity {
-    private static final ILogger LOGGER = ILogger.logger();
+    private static final ILogger LOGGER = ILogger.logger(MainActivity.class);
 
     private TextView mResultView;
 

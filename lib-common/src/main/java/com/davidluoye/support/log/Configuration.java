@@ -4,17 +4,22 @@ import android.Manifest;
 import android.content.Context;
 import android.os.Environment;
 import android.os.Process;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.davidluoye.support.app.AppGlobals;
 import com.davidluoye.support.app.Permission;
+import com.davidluoye.support.util.SharedSettings;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Configuration {
+
+    public static final int DEFAULT_LEVEL = Log.DEBUG;
 
     public static final String APP_TAG = "ILib";
 
@@ -30,7 +35,8 @@ public class Configuration {
     public final IFileLogger logger;
     public final boolean alwaysPrint;
     public final boolean alwaysPersist;
-    public final int logLevel;
+
+    private IntSetting mLogSetting;
 
     private Configuration(Builder build) {
         if (sInstance != null) {
@@ -43,7 +49,11 @@ public class Configuration {
         this.alwaysPersist = build.alwaysPersist;
         this.directory = build.directory != null ? build.directory : getFilePath();
         this.name = sTimeFormat.format(new Date());
-        this.logLevel = build.logLevel;
+
+        this.mLogSetting = new IntSetting(AppGlobals.getApplication(), "logLevel");
+        if (!mLogSetting.hasValue()) {
+            mLogSetting.setInt(build.logLevel);
+        }
 
         IFileLogger logger = null;
         if (alwaysPersist) {
@@ -56,13 +66,57 @@ public class Configuration {
         this.logger = logger;
     }
 
+    public void setLogLevel(int level) {
+        level = Math.max(level, Log.VERBOSE);
+        level = Math.min(level, Log.ERROR);
+        mLogSetting.setInt(level);
+    }
+
+    public int getLogLevel() {
+        return mLogSetting.getInt();
+    }
+
+    private static class IntSetting {
+        private final SharedSettings settings;
+        private final AtomicInteger cache;
+        private final String name;
+        private IntSetting(Context context, String name) {
+            this.name = name;
+            this.cache = new AtomicInteger();
+            this.settings = context != null? new SharedSettings(context) : null;
+            if (settings != null) {
+                cache.set(settings.getInt(name, cache.intValue()));
+                settings.registerChangedEvent((key) -> {
+                    if (TextUtils.equals(name, key)) {
+                        cache.set(settings.getInt(name, cache.intValue()));
+                    }
+                });
+            }
+        }
+
+        public boolean hasValue() {
+            return settings.containKey(name);
+        }
+
+        public void setInt(int value) {
+            int oldValue = cache.getAndSet(value);
+            if (settings != null && oldValue != value) {
+                settings.setInt(name, value);
+            }
+        }
+
+        public int getInt() {
+            return cache.get();
+        }
+    }
+
     public static class Builder {
         private File directory;
         private String appTag;
         private boolean compress;
         private boolean alwaysPrint = false;
         private boolean alwaysPersist = false;
-        private int logLevel = ILogger.DEBUG ? Log.VERBOSE : Log.DEBUG;
+        private int logLevel = DEFAULT_LEVEL;
 
         public Builder directory(File directory) {
             this.directory = directory;
@@ -104,11 +158,8 @@ public class Configuration {
     }
 
     /*package*/ static boolean canLog(int level) {
-        Configuration configuration = Configuration.get();
-        if (configuration != null) {
-            return configuration.logLevel <= level;
-        }
-        return true;
+        if (sInstance == null) return DEFAULT_LEVEL <= level;
+        return sInstance.getLogLevel() <= level;
     }
 
     private static File getFilePath() {

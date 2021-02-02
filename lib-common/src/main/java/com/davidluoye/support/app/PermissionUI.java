@@ -9,7 +9,7 @@ import android.os.Bundle;
 import com.davidluoye.support.log.ILogger;
 
 public class PermissionUI extends Activity {
-    private static final ILogger LOGGER = ILogger.logger(PermissionUI.class.getSimpleName());
+    private static final ILogger LOGGER = ILogger.logger(PermissionUI.class);
 
     private static final int REQUEST_PERMISSION_CODE = 0x0010;
 

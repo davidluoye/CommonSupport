@@ -5,10 +5,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class IType {
+public class Reflect {
     private Object mInstance;
 
-    public IType(Object instance) {
+    public Reflect(Object instance) {
         mInstance = instance;
     }
 

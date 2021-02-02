@@ -4,7 +4,7 @@ import android.os.Process;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.davidluoye.support.util.IoUtil;
+import com.davidluoye.support.util.StreamUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -74,7 +74,7 @@ public class SceneZipMaker {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            IoUtil.close(mStream);
+            StreamUtils.close(mStream);
             mStream = null;
             return true;
         }

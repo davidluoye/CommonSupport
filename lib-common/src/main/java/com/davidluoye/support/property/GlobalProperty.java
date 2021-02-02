@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.ArrayMap;
 
 import com.davidluoye.support.app.AppGlobals;
-import com.davidluoye.support.util.IoUtil;
 import com.davidluoye.support.util.NumberUtil;
+import com.davidluoye.support.util.StreamUtils;
 import com.davidluoye.support.util.StringUtil;
 
 import java.io.FileNotFoundException;
@@ -21,7 +21,7 @@ public class GlobalProperty {
 
     public static boolean set(String key, String...values) {
         ReadWriteOptions options = getOptions();
-        return options.put(key, StringUtil.join(separator, values));
+        return options.put(key, String.join(separator, values));
     }
 
     public static boolean set(String key, int value) {
@@ -136,8 +136,8 @@ public class GlobalProperty {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } finally {
-                IoUtil.flush(os);
-                IoUtil.close(os);
+                StreamUtils.flush(os);
+                StreamUtils.close(os);
             }
             return false;
         }
@@ -152,7 +152,7 @@ public class GlobalProperty {
                 return success;
             } catch (FileNotFoundException e) {
             } finally {
-                IoUtil.close(is);
+                StreamUtils.close(is);
             }
             return false;
         }

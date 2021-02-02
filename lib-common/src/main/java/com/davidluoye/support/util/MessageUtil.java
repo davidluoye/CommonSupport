@@ -114,7 +114,7 @@ public class MessageUtil {
                 return looper.getQueue();
             }
 
-            IType type = new IType(looper);
+            Reflect type = new Reflect(looper);
             MessageQueue queue = type.getField("mQueue");
             return queue;
         }

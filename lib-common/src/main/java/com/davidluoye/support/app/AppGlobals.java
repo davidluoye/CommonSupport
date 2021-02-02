@@ -4,7 +4,7 @@ import android.app.Application;
 import android.app.Instrumentation;
 import android.content.pm.PackageManager;
 
-import com.davidluoye.support.util.IType;
+import com.davidluoye.support.util.Reflect;
 
 import java.lang.reflect.Method;
 
@@ -19,8 +19,8 @@ public class AppGlobals {
      */
     public static Application getApplication() {
         Class<?> app = getActivityThreadClass();
-        Method currentApplication = IType.getStaticMethod(app, "currentApplication", null);
-        Application application = IType.callStatic(currentApplication, null, Application.class);
+        Method currentApplication = Reflect.getStaticMethod(app, "currentApplication", null);
+        Application application = Reflect.callStatic(currentApplication, null, Application.class);
         return application;
     }
 
@@ -30,8 +30,8 @@ public class AppGlobals {
      */
     public static String getPackageName() {
         Class<?> app = getActivityThreadClass();
-        Method currentPackageName = IType.getStaticMethod(app, "currentPackageName", null);
-        String packageName = IType.callStatic(currentPackageName, null, String.class);
+        Method currentPackageName = Reflect.getStaticMethod(app, "currentPackageName", null);
+        String packageName = Reflect.callStatic(currentPackageName, null, String.class);
         return packageName;
     }
 
@@ -63,21 +63,21 @@ public class AppGlobals {
         Class<?>[] parameterType = new Class[] {String.class, int.class};
         Object[] parameter = new Object[]{key, defaultValue};
 
-        IType iType = new IType(appInstance);
-        int value = iType.call("getIntCoreSetting", parameterType, parameter, int.class);
+        Reflect reflect = new Reflect(appInstance);
+        int value = reflect.call("getIntCoreSetting", parameterType, parameter, int.class);
         return value;
     }
 
     public static Instrumentation getInstrumentation() {
         Object activityThreadObject = AppGlobals.getActivityThreadInstance();
-        IType iType = new IType(activityThreadObject);
-        return iType.getField("mInstrumentation");
+        Reflect reflect = new Reflect(activityThreadObject);
+        return reflect.getField("mInstrumentation");
     }
 
     public static boolean setInstrumentation(Instrumentation instrumentation) {
         Object activityThreadObject = AppGlobals.getActivityThreadInstance();
-        IType iType = new IType(activityThreadObject);
-        return iType.setField("mInstrumentation", instrumentation);
+        Reflect reflect = new Reflect(activityThreadObject);
+        return reflect.setField("mInstrumentation", instrumentation);
     }
 
     public static Class<?> getActivityThreadClass() {
@@ -91,8 +91,8 @@ public class AppGlobals {
 
     public static Object getActivityThreadInstance() {
         Class<?> app = getActivityThreadClass();
-        Method currentActivityThread = IType.getStaticMethod(app, "currentActivityThread", null);
-        Object appInstance = IType.callStatic(currentActivityThread, null, app);
+        Method currentActivityThread = Reflect.getStaticMethod(app, "currentActivityThread", null);
+        Object appInstance = Reflect.callStatic(currentActivityThread, null, app);
         return appInstance;
     }
 }

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
-
+    compileSdkVersion buildVersion.compileSdkVersion
 
     defaultConfig {
         applicationId "com.david.demo"
-        minSdkVersion 22
-        targetSdkVersion 28
+        minSdkVersion buildVersion.minSdkVersion
+        targetSdkVersion buildVersion.targetSdkVersion
+
         versionCode 1
         versionName "1.0"
     }

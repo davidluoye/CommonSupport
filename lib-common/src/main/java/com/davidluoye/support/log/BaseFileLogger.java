@@ -2,7 +2,7 @@ package com.davidluoye.support.log;
 
 import android.os.Process;
 
-import com.davidluoye.support.util.IoUtil;
+import com.davidluoye.support.util.StreamUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -92,8 +92,8 @@ public abstract class BaseFileLogger implements IFileLogger {
     public final boolean close() {
         if (mStream != null) {
             handleClose();
-            IoUtil.flush(mStream);
-            IoUtil.close(mStream);
+            StreamUtils.flush(mStream);
+            StreamUtils.close(mStream);
             mStream = null;
         }
         return true;

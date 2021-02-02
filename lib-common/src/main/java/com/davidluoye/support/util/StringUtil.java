@@ -1,5 +1,9 @@
 package com.davidluoye.support.util;
 
+/**
+ * Use {@link String#join(CharSequence, CharSequence...) to replace}
+ */
+@Deprecated
 public class StringUtil {
     private static final String DEFAULT_SEPARATOR = ",";
 

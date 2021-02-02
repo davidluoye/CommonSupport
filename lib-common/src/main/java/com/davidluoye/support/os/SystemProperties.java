@@ -1,6 +1,6 @@
 package com.davidluoye.support.os;
 
-import com.davidluoye.support.util.IType;
+import com.davidluoye.support.util.Reflect;
 
 import java.lang.reflect.Method;
 
@@ -30,46 +30,46 @@ public class SystemProperties {
     public static String get(String key, String def) {
         if (s_get == null) {
             final Class<String>[] types = new Class[]{String.class, String.class};
-            s_get = IType.getStaticMethod(s_SystemProperties, "get", types);
+            s_get = Reflect.getStaticMethod(s_SystemProperties, "get", types);
         }
         Object[] parameters = new Object[]{key, def};
-        return IType.callStatic(s_get, parameters, String.class);
+        return Reflect.callStatic(s_get, parameters, String.class);
     }
 
     public static int getInt(String key, int def) {
         if (s_getInt == null) {
             final Class<String>[] types = new Class[]{String.class, int.class};
-            s_getInt = IType.getStaticMethod(s_SystemProperties, "getInt", types);
+            s_getInt = Reflect.getStaticMethod(s_SystemProperties, "getInt", types);
         }
         Object[] parameters = new Object[]{key, def};
-        return IType.callStatic(s_get, parameters, int.class);
+        return Reflect.callStatic(s_get, parameters, int.class);
     }
 
 
     public static long getLong(String key, long def) {
         if (s_getLong == null) {
             final Class<String>[] types = new Class[]{String.class, long.class};
-            s_getLong = IType.getStaticMethod(s_SystemProperties, "getLong", types);
+            s_getLong = Reflect.getStaticMethod(s_SystemProperties, "getLong", types);
         }
         Object[] parameters = new Object[]{key, def};
-        return IType.callStatic(s_getLong, parameters, long.class);
+        return Reflect.callStatic(s_getLong, parameters, long.class);
     }
 
     public static boolean getBoolean(String key, boolean def) {
         if (s_getBoolean == null) {
             final Class<String>[] types = new Class[]{String.class, boolean.class};
-            s_getBoolean = IType.getStaticMethod(s_SystemProperties, "getBoolean", types);
+            s_getBoolean = Reflect.getStaticMethod(s_SystemProperties, "getBoolean", types);
         }
         Object[] parameters = new Object[]{key, def};
-        return IType.callStatic(s_getBoolean, parameters, boolean.class);
+        return Reflect.callStatic(s_getBoolean, parameters, boolean.class);
     }
 
     public static void set(String key, String value) {
         if (s_set == null) {
             final Class<String>[] types = new Class[]{String.class, String.class};
-            s_set = IType.getStaticMethod(s_SystemProperties, "set", types);
+            s_set = Reflect.getStaticMethod(s_SystemProperties, "set", types);
         }
         Object[] parameters = new Object[]{key, value};
-        IType.callStatic(s_set, parameters, String.class);
+        Reflect.callStatic(s_set, parameters, String.class);
     }
 }

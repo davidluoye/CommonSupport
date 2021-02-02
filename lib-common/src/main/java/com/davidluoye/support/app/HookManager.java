@@ -2,12 +2,9 @@ package com.davidluoye.support.app;
 
 import android.app.Instrumentation;
 
-import com.davidluoye.support.log.ILogger;
-
 import java.lang.Thread.UncaughtExceptionHandler;
 
 public class HookManager {
-    private static final ILogger LOGGER = ILogger.logger("HookManager");
 
     public static UncaughtExceptionHandler hookCrash(CrashHooker hooker) {
         UncaughtExceptionHandler oldHandler = Thread.getDefaultUncaughtExceptionHandler();

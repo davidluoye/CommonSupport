@@ -25,10 +25,10 @@ allprojects {
 }
 
 ext {
-    buildConfig = [
-        'compileSdkVersion'  : 27,
-        'minSdkVersion'      : 22,
-        'targetSdkVersion'   : 28,
+    buildVersion = [
+        'compileSdkVersion'  : 30,
+        'minSdkVersion'      : 26,
+        'targetSdkVersion'   : 30,
         'versionCode'        : 1,
         'versionName'        : "1.0"
     ]

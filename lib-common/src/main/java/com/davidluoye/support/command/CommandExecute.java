@@ -1,14 +1,13 @@
 
 package com.davidluoye.support.command;
 
-import com.davidluoye.support.log.ILogger;
-import com.davidluoye.support.util.StringUtil;
+import android.util.Log;
 
 /** A convenient class to map command to values. */
 public class CommandExecute {
-    private static final ILogger LOGGER = ILogger.logger(CommandExecute.class);
+    private static final String TAG = "CommandExecute";
 
-    /** Input commands string line, this should be always to log with woring or error.*/
+    /** Input commands string line, this should be always to log with waring or error.*/
     protected final String mArgsLineString;
     private final String[] mArgs;
     private int mArgIndex;
@@ -20,7 +19,7 @@ public class CommandExecute {
         mArgIndex = -1;
         mCurrentCmd = null;
         mCurrentArg = null;
-        mArgsLineString = StringUtil.join(args);
+        mArgsLineString = String.join(",", args);
     }
 
     private String tryFindCmd(int index) {
@@ -30,17 +29,17 @@ public class CommandExecute {
 
         String arg = mArgs[index];
         if (arg == null) {
-            LOGGER.e("error, should not get here. commands[%s] is {%s}?", index, mArgsLineString);
+            Log.e(TAG, String.format("error, should not get here. commands[%s] is {%s}?", index, mArgsLineString));
             return null;
         }
 
         if (arg.equals("--")) {
-            LOGGER.e("error, invalid commands[%s]='--' in {%s}", index, mArgsLineString);
+            Log.e(TAG, String.format("error, invalid commands[%s]='--' in {%s}", index, mArgsLineString));
             return null;
         }
 
         if (arg.startsWith("---")) {
-            LOGGER.e("error, invalid commands[%s]={%s}", index, mArgsLineString);
+            Log.e(TAG, String.format("error, invalid commands[%s]={%s}", index, mArgsLineString));
             return null;
         }
 
@@ -48,7 +47,6 @@ public class CommandExecute {
             return arg.trim();
         }
 
-        LOGGER.d("get end of " + mArgsLineString);
         return arg;
     }
 

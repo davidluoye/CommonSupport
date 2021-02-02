@@ -2,7 +2,7 @@ package com.davidluoye.support.os;
 
 import android.os.IBinder;
 
-import com.davidluoye.support.util.IType;
+import com.davidluoye.support.util.Reflect;
 
 import java.lang.reflect.Method;
 
@@ -37,10 +37,10 @@ public class ServiceManager {
         if (s_getService == null) {
             final String functionName = "getService";
             final Class<String>[] types = new Class[]{String.class};
-            s_getService = IType.getStaticMethod(sServiceManager, functionName, types);
+            s_getService = Reflect.getStaticMethod(sServiceManager, functionName, types);
         }
         Object[] parameters = new Object[]{name};
-        return IType.callStatic(s_getService, parameters, IBinder.class);
+        return Reflect.callStatic(s_getService, parameters, IBinder.class);
     }
 
     /**
@@ -51,10 +51,10 @@ public class ServiceManager {
         if (s_checkService == null) {
             final String functionName = "checkService";
             final Class<String>[] types = new Class[]{String.class};
-            s_checkService = IType.getStaticMethod(sServiceManager, functionName, types);
+            s_checkService = Reflect.getStaticMethod(sServiceManager, functionName, types);
         }
         Object[] parameters = new Object[]{name};
-        return IType.callStatic(s_checkService, parameters, IBinder.class);
+        return Reflect.callStatic(s_checkService, parameters, IBinder.class);
     }
 
 
@@ -69,10 +69,10 @@ public class ServiceManager {
         if (s_addService == null) {
             final String functionName = "checkService";
             final Class<String>[] types = new Class[]{String.class, IBinder.class};
-            s_addService = IType.getStaticMethod(sServiceManager, functionName, types);
+            s_addService = Reflect.getStaticMethod(sServiceManager, functionName, types);
         }
         Object[] parameters = new Object[]{name, service};
-        IType.callStatic(s_addService, parameters, Object.class);
+        Reflect.callStatic(s_addService, parameters, Object.class);
     }
 
     /**
@@ -81,8 +81,8 @@ public class ServiceManager {
     public static String[] listServices() {
         if (s_listServices == null) {
             final String functionName = "listServices";
-            s_listServices = IType.getStaticMethod(sServiceManager, functionName, null);
+            s_listServices = Reflect.getStaticMethod(sServiceManager, functionName, null);
         }
-        return IType.callStatic(s_listServices, null, String[].class);
+        return Reflect.callStatic(s_listServices, null, String[].class);
     }
 }

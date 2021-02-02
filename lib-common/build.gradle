@@ -2,13 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion buildVersion.compileSdkVersion
     defaultConfig {
-        minSdkVersion 22
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion buildVersion.minSdkVersion
+        targetSdkVersion buildVersion.targetSdkVersion
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -31,7 +30,7 @@ publish{
     userOrg = 'davidluoye'
     groupId = 'com.davidluoye.support'
     artifactId = 'lib-common'
-    publishVersion = '2.4'
+    publishVersion = '2.4.6'
     website = 'https://bintray.com/davidluoye/CommonSupport'
 }
 
