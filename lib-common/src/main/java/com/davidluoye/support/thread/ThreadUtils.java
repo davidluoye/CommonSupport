@@ -1,17 +1,27 @@
-package com.davidluoye.support.util;
+/******************************************************************************
+ * Copyright 2021 The authors David Yang
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ********************************************************************************/
+package com.davidluoye.support.thread;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-public class ThreadUtil {
+public class ThreadUtils {
 
     public static void wait(Object obj) {
         synchronized (obj) {
@@ -77,24 +87,4 @@ public class ThreadUtil {
         private static final Handler sBgThreadHandler = BgThread.getHandler();
         private static final ExecutorService sThreadPool = new ExecutorPool(5).getThreadPool();
     }
-
-    private static class ExecutorPool {
-        private final BlockingQueue queue;
-        private final ExecutorService pools;
-        private ExecutorPool(final int size) {
-            ThreadFactory factory = new ThreadFactory() {
-                @Override
-                public Thread newThread(Runnable r) {
-                    return new Thread(r, String.format("thread-pools-%s", size));
-                }
-            };
-            queue = new LinkedBlockingQueue();
-            pools = new ThreadPoolExecutor(0, size, 0L, TimeUnit.MILLISECONDS, queue, factory);
-        }
-
-        public final ExecutorService getThreadPool() {
-            return this.pools;
-        }
-    }
-
 }

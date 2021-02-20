@@ -1,9 +1,27 @@
-package com.davidluoye.support.util;
+/******************************************************************************
+ * Copyright 2021 The authors David Yang
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ********************************************************************************/
+package com.davidluoye.support.thread;
 
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.MessageQueue;
+
+import com.davidluoye.support.util.Preconditions;
+import com.davidluoye.support.util.Reflect;
 
 public class MessageUtil {
 
@@ -79,6 +97,7 @@ public class MessageUtil {
             mIdle = false;
         }
 
+        @Override
         public final boolean queueIdle() {
             if (mCallback != null) {
                 mCallback.run();
@@ -102,6 +121,10 @@ public class MessageUtil {
         }
     }
 
+    /**
+     * deprecated this when minSdkVersion {@link Build.VERSION#SDK_INT} is larger than {@link Build.VERSION_CODES#M}
+     */
+    @Deprecated
     public static final class ILooper {
         private Looper looper;
 
@@ -110,13 +133,12 @@ public class MessageUtil {
         }
 
         public MessageQueue getQueue() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return looper.getQueue();
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                Reflect type = new Reflect(looper);
+                MessageQueue queue = type.getField("mQueue");
+                return queue;
             }
-
-            Reflect type = new Reflect(looper);
-            MessageQueue queue = type.getField("mQueue");
-            return queue;
+            return looper.getQueue();
         }
 
         public static MessageQueue myMessageQueue() {
