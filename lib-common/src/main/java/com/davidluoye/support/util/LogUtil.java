@@ -45,21 +45,40 @@ public class LogUtil {
         return sb.toString();
     }
 
-    public static String translateLevel(int level) {
+    public static String logLevelToChar(int level) {
         switch (level) {
-            case Log.VERBOSE:
-                return "V";
-            case Log.DEBUG:
-                return "D";
-            case Log.INFO:
-                return "I";
-            case Log.WARN:
-                return "W";
-            case Log.ERROR:
-                return "E";
-            case Log.ASSERT:
-                return "A";
+            case Log.VERBOSE:   return "V";
+            case Log.DEBUG:     return "D";
+            case Log.INFO:      return "I";
+            case Log.WARN:      return "W";
+            case Log.ERROR:     return "E";
+            case Log.ASSERT:    return "A";
         }
         return "N";
+    }
+
+    public static String logLevelToString(int logLevel) {
+        switch (logLevel) {
+            case Log.VERBOSE:   return "Verbose";
+            case Log.DEBUG:     return "Debug";
+            case Log.INFO:      return "Info";
+            case Log.WARN:      return "Warn";
+            case Log.ERROR:     return "Error";
+            case Log.ASSERT:    return "Assert";
+        }
+        return null;
+    }
+
+    public static int logStringToLevel(String logString) {
+        String lowerCase = logString.toLowerCase();
+        switch (lowerCase) {
+            case "2" : case "v": case "verbose":   return Log.VERBOSE;
+            case "3" : case "d": case "debug":     return Log.DEBUG;
+            case "4" : case "i": case "info":      return Log.INFO;
+            case "5" : case "w": case "warn":      return Log.WARN;
+            case "6" : case "e": case "error":     return Log.ERROR;
+            case "7" : case "a": case "assert":    return Log.ASSERT;
+        }
+        return 0;
     }
 }

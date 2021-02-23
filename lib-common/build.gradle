@@ -30,7 +30,7 @@ publish{
     userOrg = 'davidluoye'
     groupId = 'com.davidluoye.support'
     artifactId = 'lib-common'
-    publishVersion = '2.4.6'
+    publishVersion = '2.4.9.b'
     website = 'https://bintray.com/davidluoye/CommonSupport'
 }
 

@@ -51,6 +51,24 @@ public class AppGlobals {
         return packageName;
     }
 
+    public static String getOpPackageName() {
+        Class<?> app = getActivityThreadClass();
+        Method currentPackageName = Reflect.getStaticMethod(app, "currentOpPackageName", null);
+        String packageName = Reflect.callStatic(currentPackageName, null, String.class);
+        return packageName;
+    }
+
+    /**
+     * Return current process name.
+     * @return
+     */
+    public static String getProcessName() {
+        Class<?> app = getActivityThreadClass();
+        Method currentProcessName = Reflect.getStaticMethod(app, "currentProcessName", null);
+        String processName = Reflect.callStatic(currentProcessName, null, String.class);
+        return processName;
+    }
+
     /**
      * Return the raw interface to the package manager.
      * @return The package manager.

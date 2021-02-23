@@ -245,7 +245,7 @@ public class ILogger {
 
         if (configuration != null && configuration.logger != null) {
             IFileLogger logger = configuration.logger;
-            logger.write(tag, LogUtil.translateLevel(targetLevel), msg);
+            logger.write(tag, LogUtil.logLevelToChar(targetLevel), msg);
             if(!configuration.alwaysPrint) {
                 return;
             }
