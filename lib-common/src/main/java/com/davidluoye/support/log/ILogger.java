@@ -32,6 +32,10 @@ public class ILogger {
         return logger(owner.getSimpleName(), level);
     }
 
+    public static ILogger logger(String owner) {
+        return logger(owner, INVALID);
+    }
+
     public static ILogger logger(String owner, int level) {
         ILogger LOG = new ILogger(owner, level);
         return LOG;

@@ -1,11 +1,11 @@
 package com.davidluoye.support.box;
 
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
-public class IntBox {
+public class Longs {
 
-    public static int parse(String value, int defValue) {
+    public static long parse(String value, long defValue) {
         if (value == null || value.length() == 0) return defValue;
         final int radix = IBox.getRadix(value);
 
@@ -18,24 +18,24 @@ public class IntBox {
         return parse(newValue, radix, defValue);
     }
 
-    public static int parse(String value, int radix, int defValue) {
+    public static long parse(String value, int radix, long defValue) {
         try {
-            return Integer.parseInt(value, radix);
+            return Long.parseLong(value, radix);
         } catch (NumberFormatException e) {
             e.fillInStackTrace();
         }
         return defValue;
     }
 
-    public static Integer[] box(int[] array) {
-        return IntStream.of(array).boxed().toArray(Integer[]::new);
+    public static Long[] boxed(long[] array) {
+        return LongStream.of(array).boxed().toArray(Long[]::new);
     }
 
-    public static int[] unBox(Integer[] array) {
-        return Stream.of(array).mapToInt(it -> it != null ? it : 0).toArray();
+    public static long[] unBoxed(Long[] array) {
+        return Stream.of(array).mapToLong(it -> it != null ? it : 0).toArray();
     }
 
     public static String toHexString(int value) {
-        return "0x" + Integer.toHexString(value);
+        return "0x" + Long.toHexString(value);
     }
 }

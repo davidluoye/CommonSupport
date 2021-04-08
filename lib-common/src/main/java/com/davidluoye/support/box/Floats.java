@@ -1,6 +1,6 @@
 package com.davidluoye.support.box;
 
-public class FloatBox {
+public class Floats {
 
     public static float parse(String value, float defValue) {
         try {

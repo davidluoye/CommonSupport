@@ -20,7 +20,6 @@ import android.content.SharedPreferences;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class SharedSettings {
 
@@ -39,10 +38,12 @@ public class SharedSettings {
         this.mSharedPreference = sp;
     }
 
-    public void registerChangedEvent(Consumer<String> consumer) {
-        this.mSharedPreference.registerOnSharedPreferenceChangeListener((sp, key) -> {
-            consumer.accept(key);
-        });
+    public void registerChangedEvent(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        this.mSharedPreference.registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    public void unRegisterChangedEvent(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        this.mSharedPreference.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     public boolean containKey(String key) {
