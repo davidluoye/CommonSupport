@@ -35,7 +35,7 @@ public class Longs {
         return Stream.of(array).mapToLong(it -> it != null ? it : 0).toArray();
     }
 
-    public static String toHexString(int value) {
+    public static String toHexString(long value) {
         return "0x" + Long.toHexString(value);
     }
 }

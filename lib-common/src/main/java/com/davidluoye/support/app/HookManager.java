@@ -16,10 +16,22 @@
 package com.davidluoye.support.app;
 
 import android.app.Instrumentation;
+import android.os.Process;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 
 public class HookManager {
+
+    public static UncaughtExceptionHandler hookCrash() {
+        return hookCrash(new CrashHooker() {
+            @Override
+            protected boolean handleException(Thread t, Throwable e) {
+                Process.killProcess(Process.myPid());
+                System.exit(10);
+                return true;
+            }
+        });
+    }
 
     public static UncaughtExceptionHandler hookCrash(CrashHooker hooker) {
         UncaughtExceptionHandler oldHandler = Thread.getDefaultUncaughtExceptionHandler();

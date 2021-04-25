@@ -35,7 +35,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Configuration {
 
-    public static final int DEFAULT_LEVEL = Log.DEBUG;
+    public static final int DEFAULT_LEVEL = Log.INFO;
+
+    public static final boolean DEFAULT_PERSIST_LOG_LEVEL = true;
 
     public static final String APP_TAG = "ILib";
 
@@ -51,6 +53,7 @@ public class Configuration {
     public final IFileLogger logger;
     public final boolean alwaysPrint;
     public final boolean alwaysPersist;
+    public final boolean persistLogLevel;
 
     private IntSetting mLogSetting;
 
@@ -63,10 +66,11 @@ public class Configuration {
         this.appTag = build.appTag == null ? APP_TAG : build.appTag;
         this.alwaysPrint = build.alwaysPrint;
         this.alwaysPersist = build.alwaysPersist;
+        this.persistLogLevel = build.persistLogLevel;
         this.directory = build.directory != null ? build.directory : getFilePath();
         this.name = sTimeFormat.format(new Date());
 
-        this.mLogSetting = new IntSetting(AppGlobals.getApplication(), "logLevel");
+        this.mLogSetting = new IntSetting(AppGlobals.getApplication(), persistLogLevel, "logLevel");
         if (!mLogSetting.hasValue()) {
             mLogSetting.setInt(build.logLevel);
         }
@@ -97,10 +101,10 @@ public class Configuration {
         private final AtomicInteger cache;
         private final String name;
         private SharedPreferences.OnSharedPreferenceChangeListener callback;
-        private IntSetting(Context context, String name) {
+        private IntSetting(Context context, boolean persistLogLevel, String name) {
             this.name = name;
             this.cache = new AtomicInteger();
-            this.settings = context != null? new SharedSettings(context) : null;
+            this.settings = context != null && persistLogLevel ? new SharedSettings(context) : null;
             if (settings != null) {
                 this.cache.set(settings.getInt(name, cache.intValue()));
                 this.callback = (sharedPreferences, key) -> {
@@ -113,7 +117,7 @@ public class Configuration {
         }
 
         public boolean hasValue() {
-            return settings.containKey(name);
+            return settings != null && settings.containKey(name);
         }
 
         public void setInt(int value) {
@@ -134,6 +138,7 @@ public class Configuration {
         private boolean compress;
         private boolean alwaysPrint = false;
         private boolean alwaysPersist = false;
+        private boolean persistLogLevel = DEFAULT_PERSIST_LOG_LEVEL;
         private int logLevel = DEFAULT_LEVEL;
 
         public Builder directory(File directory) {
@@ -163,6 +168,11 @@ public class Configuration {
 
         public Builder logLevel(int level) {
             this.logLevel = level;
+            return this;
+        }
+
+        public Builder persistLogLevel(boolean persist) {
+            this.persistLogLevel = persist;
             return this;
         }
 

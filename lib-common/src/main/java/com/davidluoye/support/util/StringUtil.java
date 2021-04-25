@@ -15,6 +15,8 @@
  ********************************************************************************/
 package com.davidluoye.support.util;
 
+import com.davidluoye.support.box.Strings;
+
 public class StringUtil {
     private static final String DEFAULT_SEPARATOR = ",";
 
@@ -103,8 +105,6 @@ public class StringUtil {
         return buf.toString();
     }
 
-
-
     /**
      * <p>Checks if a String is empty ("") or null.</p>
      *
@@ -112,7 +112,7 @@ public class StringUtil {
      * @return <code>true</code> if the String is empty or null
      */
     public static boolean isEmpty(String value) {
-        return value == null || value.length() == 0;
+        return Strings.isEmpty(value);
     }
 
     /**
@@ -122,7 +122,7 @@ public class StringUtil {
      * @return <code>true</code> if the String is not empty and not null
      */
     public static boolean isNotEmpty(String value) {
-        return !isEmpty(value);
+        return Strings.isNotEmpty(value);
     }
 
     /**
@@ -132,13 +132,7 @@ public class StringUtil {
      * @return <code>true</code> if the String is null, empty or whitespace
      */
     public static boolean isBlank(String value) {
-        if (isEmpty(value)) return true;
-        for (int i = 0; i < value.length(); i++) {
-            if ((!Character.isWhitespace(value.charAt(i)))) {
-                return false;
-            }
-        }
-        return true;
+        return Strings.isBlank(value);
     }
 
     /**
@@ -148,46 +142,22 @@ public class StringUtil {
      * @return <code>true</code> if the String is not empty and not null and not whitespace
      */
     public static boolean isNotBlank(String value) {
-        return !isBlank(value);
+        return Strings.isNotBlank(value);
     }
 
     public static boolean equals(CharSequence pre, CharSequence next) {
-        if (pre == next) return true;
-        if (pre == null || next == null) return false;
-        if (pre.length() != next.length()) return false;
-
-        int length = pre.length();
-        for (int i = 0; i < length; i++) {
-            if (pre.charAt(i) != next.charAt(i)) {
-                return false;
-            }
-        }
-        return true;
+        return Strings.equals(pre, next);
     }
 
     public static boolean equalsIgnoreCase(CharSequence pre, CharSequence next) {
-        if (pre == next) return true;
-        if (pre == null || next == null) return false;
-        if (pre.length() != next.length()) return false;
-
-        int length = pre.length();
-        for (int i = 0; i < length; i++) {
-            char one = pre.charAt(i);
-            char two = next.charAt(i);
-            if (toLowerCase(one) != toLowerCase(two)) {
-                return false;
-            }
-        }
-        return true;
+        return Strings.equalsIgnoreCase(pre, next);
     }
 
     public static char toLowerCase(char a) {
-        if (a >= 'A' && a <= 'Z') return (char)(a + ('a' - 'A'));
-        return a;
+        return Strings.toLowerCase(a);
     }
 
     public static char toUpperCase(char a) {
-        if (a >= 'a' && a <= 'b') return (char)(a - ('a' - 'A'));
-        return a;
+        return Strings.toUpperCase(a);
     }
 }
