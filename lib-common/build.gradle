@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion buildVersion.compileSdkVersion
@@ -25,17 +24,4 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-publish{
-    repoName = 'CommonSupport'
-    userOrg = 'davidluoye'
-    groupId = 'com.davidluoye.support'
-    artifactId = 'lib-common'
-    publishVersion = '2.4.9.d'
-    website = 'https://bintray.com/davidluoye/CommonSupport'
-}
-
-tasks.withType(Javadoc) {//fix encode error
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('encoding', 'UTF-8')
-    options.addStringOption('charSet', 'UTF-8')
-}
+apply from: '../dependencies/maven_upload.gradle'
