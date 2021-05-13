@@ -18,13 +18,19 @@ package com.davidluoye.support.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class SharedSettings {
 
     private final RWLock mLock = new RWLock();
     private final SharedPreferences mSharedPreference;
+    private final SharedPreferences.OnSharedPreferenceChangeListener mDefaultCallBack;
+    private final Map<String, Consumer<String>> mCallBacks;
 
     public SharedSettings(Context context) {
         this(context, "setting");
@@ -35,15 +41,28 @@ public class SharedSettings {
     }
 
     public SharedSettings(SharedPreferences sp) {
+        this.mCallBacks = Collections.synchronizedMap(new HashMap<>());
         this.mSharedPreference = sp;
+        this.mDefaultCallBack = (sharedPreferences, key) -> {
+            mCallBacks.values().forEach(it -> it.accept(key));
+        };
+        this.mSharedPreference.registerOnSharedPreferenceChangeListener(mDefaultCallBack);
     }
 
-    public void registerChangedEvent(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        this.mSharedPreference.registerOnSharedPreferenceChangeListener(listener);
+    public void registerChangedEvent(Consumer<String> listener) {
+        this.registerChangedEvent(String.valueOf(System.identityHashCode(listener)), listener);
     }
 
-    public void unRegisterChangedEvent(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        this.mSharedPreference.unregisterOnSharedPreferenceChangeListener(listener);
+    public void unRegisterChangedEvent(Consumer<String> listener) {
+        this.unRegisterChangedEvent(String.valueOf(System.identityHashCode(listener)));
+    }
+
+    public void registerChangedEvent(String key, Consumer<String> listener) {
+        mCallBacks.put(key, listener);
+    }
+
+    public void unRegisterChangedEvent(String key) {
+        this.mCallBacks.remove(key);
     }
 
     public boolean containKey(String key) {

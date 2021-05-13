@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public abstract class BaseFileLogger implements IFileLogger {
+/* package */ abstract class BaseFileLogger implements IFileLogger {
 
     protected static final SimpleDateFormat sDayTimeFormat = new SimpleDateFormat("MM-dd HH:mm:ss:SSS", Locale.US);
     protected final File path;

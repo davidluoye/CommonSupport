@@ -16,15 +16,15 @@
 package com.davidluoye.support.property;
 
 import android.content.Context;
-import android.util.ArrayMap;
 
 import com.davidluoye.support.app.AppGlobals;
-import com.davidluoye.support.util.NumberUtil;
-import com.davidluoye.support.util.StreamUtils;
+import com.davidluoye.support.box.Floats;
+import com.davidluoye.support.box.Ints;
+import com.davidluoye.support.box.Longs;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class GlobalProperty {
 
@@ -81,7 +81,7 @@ public class GlobalProperty {
     public static int getInt(String key, int defValue) {
         ReadWriteOptions options = getOptions();
         String value = options.get(key);
-        return NumberUtil.parseInt(value, defValue);
+        return Ints.parse(value, defValue);
     }
 
     public static char getChar(String key, char defValue) {
@@ -93,13 +93,13 @@ public class GlobalProperty {
     public static float getFloat(String key, float defValue) {
         ReadWriteOptions options = getOptions();
         String value = options.get(key);
-        return NumberUtil.parseFloat(value, defValue);
+        return Floats.parse(value, defValue);
     }
 
     public static long getLong(String key, long defValue) {
         ReadWriteOptions options = getOptions();
         String value = options.get(key);
-        return NumberUtil.parseLong(value, defValue);
+        return Longs.parse(value, defValue);
     }
 
     public static boolean getBoolean(String key, boolean defValue) {
@@ -114,61 +114,11 @@ public class GlobalProperty {
 
     private static ReadWriteOptions getOptions() {
         if (options == null) {
-            options = new ReadWriteOptions();
-            options.read();
+            Context app = AppGlobals.getApplication();
+            File filePath = app.getFilesDir();
+            Path path = Paths.get(filePath.getAbsolutePath(), name);
+            options = new ReadWriteOptions(path);
         }
         return options;
-    }
-
-    private static class ReadWriteOptions {
-        private static final char SPLITTER = '=';
-
-        private final ArrayMap<String, String> cache;
-        private final PropertyReader mReader;
-        private final PropertyWriter mWriter;
-        private ReadWriteOptions() {
-            this.mReader = new PropertyReader(SPLITTER);
-            this.mWriter = new PropertyWriter(SPLITTER);
-            this.cache = new ArrayMap<>();
-        }
-
-        public boolean put(String key, String value) {
-            cache.put(key, value);
-            return write();
-        }
-
-        public String get(String key) {
-            return cache.get(key);
-        }
-
-        private synchronized boolean write() {
-            Context app = AppGlobals.getApplication();
-            OutputStream os = null;
-            try {
-                os = app.openFileOutput(name, Context.MODE_PRIVATE);
-                return mWriter.write(os, cache);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } finally {
-                StreamUtils.flush(os);
-                StreamUtils.close(os);
-            }
-            return false;
-        }
-
-        private synchronized boolean read() {
-            Context app = AppGlobals.getApplication();
-            InputStream is = null;
-            try {
-                is = app.openFileInput(name);
-                boolean success = mReader.read(is);
-                cache.putAll(mReader.getProperties());
-                return success;
-            } catch (FileNotFoundException e) {
-            } finally {
-                StreamUtils.close(is);
-            }
-            return false;
-        }
     }
 }

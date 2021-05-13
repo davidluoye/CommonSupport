@@ -17,7 +17,6 @@ package com.davidluoye.support.log;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.Process;
 import android.text.TextUtils;
@@ -100,19 +99,17 @@ public class Configuration {
         private final SharedSettings settings;
         private final AtomicInteger cache;
         private final String name;
-        private SharedPreferences.OnSharedPreferenceChangeListener callback;
         private IntSetting(Context context, boolean persistLogLevel, String name) {
             this.name = name;
             this.cache = new AtomicInteger();
             this.settings = context != null && persistLogLevel ? new SharedSettings(context) : null;
             if (settings != null) {
                 this.cache.set(settings.getInt(name, cache.intValue()));
-                this.callback = (sharedPreferences, key) -> {
+                settings.registerChangedEvent((key) -> {
                     if (TextUtils.equals(name, key)) {
                         cache.set(settings.getInt(name, cache.intValue()));
                     }
-                };
-                settings.registerChangedEvent(callback);
+                });
             }
         }
 

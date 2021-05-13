@@ -274,8 +274,4 @@ public class StreamUtils {
             }
         } catch (Exception e) {}
     }
-
-    public static String translate(boolean success) {
-        return success ? "success" : "fail";
-    }
 }

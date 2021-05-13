@@ -19,6 +19,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,17 +30,19 @@ public class PropertyReader {
 
     private final char mSplitter;
     private final HashMap<String, String> mCache;
-    public PropertyReader(char splitter) {
+    private final Path path;
+    public PropertyReader(char splitter, Path path) {
         this.mSplitter = splitter;
         this.mCache = new HashMap<>();
+        this.path = path;
     }
 
-    public Map getProperties() {
+    public Map<String, String> getProperties() {
         return Collections.unmodifiableMap(mCache);
     }
 
-    public boolean read(InputStream is) {
-        try {
+    public boolean read() {
+        try(InputStream is = Files.newInputStream(path, StandardOpenOption.READ)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -48,9 +53,10 @@ public class PropertyReader {
                     mCache.put(key, value);
                 }
             }
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 }

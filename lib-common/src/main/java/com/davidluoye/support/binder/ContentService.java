@@ -27,7 +27,7 @@ import android.os.CancellationSignal;
  * we should package this class instead of public. any other user should to override {@link BaseRemoteService} to use remote service api.
  *
  */
-/*public*/ abstract class ContentService extends ContentProvider {
+/* package */ abstract class ContentService extends ContentProvider {
     public static final String KEY_REMOTE = "service";
 
     @Override

@@ -15,13 +15,11 @@
  ********************************************************************************/
 package com.davidluoye.support.thread;
 
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.MessageQueue;
 
 import com.davidluoye.support.util.Preconditions;
-import com.davidluoye.support.util.Reflect;
 
 public class MessageUtil {
 
@@ -65,9 +63,7 @@ public class MessageUtil {
      */
     public static void waitForIdle(Looper looper, Runnable callback) {
         Preconditions.checkNotNull(looper, "Looper should not be null.");
-        final ILooper iLooper = new ILooper(looper);
-        final MessageQueue queue = iLooper.getQueue();
-        waitForIdle(queue, callback);
+        waitForIdle(looper.getQueue(), callback);
     }
 
     /**
@@ -78,7 +74,7 @@ public class MessageUtil {
      */
     public static void waitForIdle(MessageQueue queue, Runnable callback) {
         Preconditions.checkNotNull(queue, "MessageQueue should not be null.");
-        final MessageQueue currentQueue = ILooper.myMessageQueue();
+        final MessageQueue currentQueue = Looper.myLooper().getQueue();
         if (currentQueue == queue) {
             throw new IllegalStateException("Can not call this function in same thread.");
         }
@@ -118,36 +114,6 @@ public class MessageUtil {
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * deprecated this when minSdkVersion {@link Build.VERSION#SDK_INT} is larger than {@link Build.VERSION_CODES#M}
-     */
-    @Deprecated
-    public static final class ILooper {
-        private Looper looper;
-
-        public ILooper(Looper looper) {
-            this.looper = looper;
-        }
-
-        public MessageQueue getQueue() {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                Reflect type = new Reflect(looper);
-                MessageQueue queue = type.getField("mQueue");
-                return queue;
-            }
-            return looper.getQueue();
-        }
-
-        public static MessageQueue myMessageQueue() {
-            Looper looper = Looper.myLooper();
-            if (looper != null) {
-                ILooper iLooper = new ILooper(looper);
-                return iLooper.getQueue();
-            }
-            return null;
         }
     }
 }

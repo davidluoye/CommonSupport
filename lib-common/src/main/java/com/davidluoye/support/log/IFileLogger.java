@@ -15,7 +15,7 @@
  ********************************************************************************/
 package com.davidluoye.support.log;
 
-public interface IFileLogger {
+/* package */ interface IFileLogger {
 
     String getPath();
 

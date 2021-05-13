@@ -21,16 +21,21 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 public class PropertyWriter {
 
     private final char mSplitter;
-    public PropertyWriter(char splitter) {
+    private final Path path;
+    public PropertyWriter(char splitter, Path path) {
         this.mSplitter = splitter;
+        this.path = path;
     }
 
-    public boolean write(OutputStream os, ArrayMap<String, String> map) {
-        try {
+    public boolean write(ArrayMap<String, String> map) {
+        try (OutputStream os = Files.newOutputStream(path, StandardOpenOption.CREATE)){
             BufferedWriter stream = new BufferedWriter(new OutputStreamWriter(os));
             final int size = map.size();
             for (int index = 0; index < size; index++) {

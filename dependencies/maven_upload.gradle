@@ -1,6 +1,38 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+ext {
+    publish_group_id = 'io.github.davidluoye'
+    publish_artifact_id = 'lib-common'
+    publish_version = "2.5.0"
+}
+
+configurations {
+    doclava
+}
+
+dependencies {
+    // do not to depend on any other library.
+    doclava 'com.google.doclava:doclava:1.0.6'
+}
+
+task buildJavadoc(type: Javadoc, dependsOn: [project.configurations.doclava, 'assembleDebug']) {
+    failOnError = true
+    title = null
+    source = android.sourceSets.main.java.srcDirs
+    options.doclet = "com.google.doclava.Doclava"
+    options.docletpath = configurations.doclava.files.asType(List)
+    options.noTimestamp = false
+    options.memberLevel = JavadocMemberLevel.PROTECTED
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    destinationDir = file("build/outputs/javadoc")
+}
+
+task androidJavadoc(type: Zip, dependsOn: buildJavadoc) {
+    archiveClassifier.set("doc")
+    from "build/outputs/javadoc"
+}
+
 task androidSourcesJar(type: Jar) {
     // archiveClassifier need gradle version >= 5.1
     archiveClassifier.set("sources")
@@ -12,12 +44,14 @@ task androidSourcesJar(type: Jar) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            groupId 'io.github.davidluoye'
-            artifactId 'lib-common'
-            version '2.5.0'
+            groupId     publish_group_id
+            artifactId  publish_artifact_id
+            version     publish_version
 
-            artifact("$buildDir/outputs/aar/${project.getName()}.aar")
-            artifact androidSourcesJar
+            artifact    ("$buildDir/outputs/aar/${project.getName()}.aar")
+            artifact    androidJavadoc
+            artifact    androidSourcesJar
+
             pom {
                 // 构件名称，可以自定义
                 name = 'lib-common'
