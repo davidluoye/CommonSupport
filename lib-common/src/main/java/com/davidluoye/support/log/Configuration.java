@@ -19,6 +19,7 @@ import android.Manifest;
 import android.content.Context;
 import android.os.Environment;
 import android.os.Process;
+import android.os.UserManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -68,7 +69,6 @@ public class Configuration {
         this.persistLogLevel = build.persistLogLevel;
         this.directory = build.directory != null ? build.directory : getFilePath();
         this.name = sTimeFormat.format(new Date());
-
         this.mLogSetting = new IntSetting(AppGlobals.getApplication(), persistLogLevel, "logLevel");
         if (!mLogSetting.hasValue()) {
             mLogSetting.setInt(build.logLevel);
@@ -102,7 +102,7 @@ public class Configuration {
         private IntSetting(Context context, boolean persistLogLevel, String name) {
             this.name = name;
             this.cache = new AtomicInteger();
-            this.settings = context != null && persistLogLevel ? new SharedSettings(context) : null;
+            this.settings = persistLogLevel && AppGlobals.canAccessStorage(context) ? new SharedSettings(context) : null;
             if (settings != null) {
                 this.cache.set(settings.getInt(name, cache.intValue()));
                 settings.registerChangedEvent((key) -> {

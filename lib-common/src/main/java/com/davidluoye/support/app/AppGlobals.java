@@ -18,7 +18,9 @@ package com.davidluoye.support.app;
 
 import android.app.Application;
 import android.app.Instrumentation;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.UserManager;
 
 import com.davidluoye.support.util.Reflect;
 
@@ -128,5 +130,13 @@ public class AppGlobals {
         Method currentActivityThread = Reflect.getStaticMethod(app, "currentActivityThread", null);
         Object appInstance = Reflect.callStatic(currentActivityThread, null, app);
         return appInstance;
+    }
+
+    public static boolean canAccessStorage(Context context) {
+        if (context == null) return false;
+        if (context.isDeviceProtectedStorage()) return true;
+        UserManager ums = context.getSystemService(UserManager.class);
+        if (ums != null && ums.isUserUnlocked()) return true;
+        return false;
     }
 }
