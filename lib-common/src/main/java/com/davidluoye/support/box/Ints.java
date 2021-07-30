@@ -56,6 +56,6 @@ public class Ints {
     }
 
     public static String toHexString(int value) {
-        return "0x" + Integer.toHexString(value);
+        return IBox.HEX + Integer.toHexString(value);
     }
 }

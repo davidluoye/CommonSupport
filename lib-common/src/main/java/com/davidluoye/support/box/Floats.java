@@ -11,7 +11,7 @@ public class Floats {
         return defValue;
     }
 
-    public static String toHexString(int value) {
-        return Float.toHexString(value);
+    public static String toHexString(float value) {
+        return IBox.HEX + Float.toHexString(value);
     }
 }

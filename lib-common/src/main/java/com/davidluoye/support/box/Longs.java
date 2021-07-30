@@ -36,6 +36,6 @@ public class Longs {
     }
 
     public static String toHexString(long value) {
-        return "0x" + Long.toHexString(value);
+        return IBox.HEX + Long.toHexString(value);
     }
 }

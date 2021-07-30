@@ -19,7 +19,6 @@ import android.Manifest;
 import android.content.Context;
 import android.os.Environment;
 import android.os.Process;
-import android.os.UserManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -75,7 +74,7 @@ public class Configuration {
         }
 
         IFileLogger logger = null;
-        if (alwaysPersist) {
+        if (alwaysPersist && (this.directory != null)) {
             if (build.compress) {
                 logger = new ZipFileLogger(this.directory, this.name);
             } else {
@@ -188,6 +187,11 @@ public class Configuration {
     }
 
     private static File getFilePath() {
+        String packageName = AppGlobals.getPackageName();
+        if (packageName == null || TextUtils.equals("android", packageName)) {
+            return null;
+        }
+
         File root = null;
         if (Permission.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
             root = Environment.getExternalStorageDirectory();
@@ -195,8 +199,10 @@ public class Configuration {
             root = Environment.getDataDirectory();
         } else {
             Context context = AppGlobals.getApplication();
-            root = context.getCacheDir();
+            root = context != null ? context.getCacheDir() : null;
         }
+
+        if (root == null) return null;
         File logPath = new File(root, PATH_BASE);
         File appLog = new File(logPath, AppGlobals.getPackageName());
         return appLog;
