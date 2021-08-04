@@ -38,11 +38,11 @@ public class Configuration {
 
     public static final boolean DEFAULT_PERSIST_LOG_LEVEL = true;
 
-    public static final String APP_TAG = "ILib";
-
     public static final String PATH_BASE = "logcat";
 
     private static final SimpleDateFormat sTimeFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.US);
+
+    public static String APP_TAG = "ILib";
 
     private static Configuration sInstance;
 
@@ -187,24 +187,29 @@ public class Configuration {
     }
 
     private static File getFilePath() {
-        String packageName = AppGlobals.getPackageName();
-        if (packageName == null || TextUtils.equals("android", packageName)) {
-            return null;
-        }
+        try {
+            String packageName = AppGlobals.getPackageName();
+            if (packageName == null || TextUtils.equals("android", packageName)) {
+                return null;
+            }
 
-        File root = null;
-        if (Permission.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-            root = Environment.getExternalStorageDirectory();
-        } else if (Process.myUid() == Process.SYSTEM_UID){
-            root = Environment.getDataDirectory();
-        } else {
-            Context context = AppGlobals.getApplication();
-            root = context != null ? context.getCacheDir() : null;
-        }
+            File root = null;
+            if (Permission.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                root = Environment.getExternalStorageDirectory();
+            } else if (Process.myUid() == Process.SYSTEM_UID) {
+                root = Environment.getDataDirectory();
+            } else {
+                Context context = AppGlobals.getApplication();
+                root = context != null ? context.getCacheDir() : null;
+            }
 
-        if (root == null) return null;
-        File logPath = new File(root, PATH_BASE);
-        File appLog = new File(logPath, AppGlobals.getPackageName());
-        return appLog;
+            if (root == null) return null;
+            File logPath = new File(root, PATH_BASE);
+            File appLog = new File(logPath, AppGlobals.getPackageName());
+            return appLog;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

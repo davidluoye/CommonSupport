@@ -23,6 +23,14 @@ import java.util.concurrent.ExecutorService;
 
 public class ThreadUtils {
 
+    public static void wait(Object obj, long milliseconds) {
+        synchronized (obj) {
+            try {
+                obj.wait(milliseconds);
+            } catch (Exception e) {}
+        }
+    }
+
     public static void wait(Object obj) {
         synchronized (obj) {
             try {

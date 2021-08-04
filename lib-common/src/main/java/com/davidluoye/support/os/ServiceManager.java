@@ -82,7 +82,7 @@ public class ServiceManager {
      */
     public static void addService(String name, IBinder service) {
         if (s_addService == null) {
-            final String functionName = "checkService";
+            final String functionName = "addService";
             final Class<String>[] types = new Class[]{String.class, IBinder.class};
             s_addService = Reflect.getStaticMethod(sServiceManager, functionName, types);
         }
