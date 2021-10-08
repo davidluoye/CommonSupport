@@ -35,7 +35,9 @@ public class LogUtil {
     public static String dumpTrace(Throwable throwable, int deep) {
         StackTraceElement[] traces = throwable.getStackTrace();
         StringBuilder sb = new StringBuilder();
-        sb.append("dump trace with reason: " + throwable.getMessage());
+        sb.append("dump bellow details:");
+        sb.append("\n");
+        sb.append(throwable.getClass().getName() + " : " + throwable.getMessage());
         int size = deep > 0 ? Math.min(deep, traces.length) : traces.length;
         for (int i = 0; i < size; i++) {
             StackTraceElement element = traces[i];

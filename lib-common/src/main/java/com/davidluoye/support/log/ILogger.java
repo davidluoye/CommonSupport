@@ -71,164 +71,164 @@ public class ILogger {
 
     public void v(String msg) {
         if (canLog(Log.VERBOSE)) {
-            writeLog(owner, Log.VERBOSE, true, msg);
+            writeLog(owner, Log.VERBOSE, true, null, msg);
         }
     }
 
     public void v(String format, Object...args) {
         if (canLog(Log.VERBOSE)) {
-            writeLog(owner, Log.VERBOSE, true, format, args);
+            writeLog(owner, Log.VERBOSE, true, null, format, args);
         }
     }
 
     public void d(String msg) {
         if (canLog(Log.DEBUG)) {
-            writeLog(owner, Log.DEBUG, true, msg);
+            writeLog(owner, Log.DEBUG, true, null, msg);
         }
     }
 
     public void d(String format, Object...args) {
         if (canLog(Log.DEBUG)) {
-            writeLog(owner, Log.DEBUG, true, format, args);
+            writeLog(owner, Log.DEBUG, true, null, format, args);
         }
     }
 
     public void w(String msg) {
         if (canLog(Log.WARN)) {
-            writeLog(owner, Log.WARN, true, msg);
+            writeLog(owner, Log.WARN, true, null, msg);
         }
     }
 
     public void w(String format, Object...args) {
         if (canLog(Log.WARN)) {
-            writeLog(owner, Log.INFO, true, format, args);
+            writeLog(owner, Log.INFO, true, null, format, args);
         }
     }
 
     public void w(Throwable tr) {
         if (canLog(Log.WARN)) {
-            writeLog(owner, Log.INFO, true, "", tr);
+            writeLog(owner, Log.INFO, true, tr, null);
         }
     }
 
     public void w(Throwable tr, String msg) {
         if (canLog(Log.WARN)) {
-            writeLog(owner, Log.WARN, true, msg, tr);
+            writeLog(owner, Log.WARN, true, tr, msg);
         }
     }
 
     public void w(Throwable tr, String format, Object...args) {
         if (canLog(Log.WARN)) {
-            writeLog(owner, Log.WARN, true, format, args);
+            writeLog(owner, Log.WARN, true, tr, format, args);
         }
     }
 
     public void i(String msg) {
         if (canLog(Log.INFO)) {
-            writeLog(owner, Log.INFO, true, msg);
+            writeLog(owner, Log.INFO, true, null, msg);
         }
     }
 
     public void i(String format, Object...args) {
         if (canLog(Log.INFO)) {
-            writeLog(owner, Log.INFO, true, format, args);
+            writeLog(owner, Log.INFO, true, null, format, args);
         }
     }
 
     public void i(Throwable tr, String msg) {
         if (canLog(Log.INFO)) {
-            writeLog(owner, Log.INFO, true, msg, tr);
+            writeLog(owner, Log.INFO, true, tr, msg);
         }
     }
 
     public void i(Throwable tr, String format, Object...args) {
         if (canLog(Log.INFO)) {
-            writeLog(owner, Log.INFO, true, format, args, tr);
+            writeLog(owner, Log.INFO, true, tr, format, args);
         }
     }
 
     public void e(String msg) {
         if (canLog(Log.ERROR)) {
-            writeLog(owner, Log.ERROR, true, msg);
+            writeLog(owner, Log.ERROR, true, null, msg);
         }
     }
 
     public void e(String format, Object...args) {
         if (canLog(Log.ERROR)) {
-            writeLog(owner, Log.ERROR, true, format, args);
+            writeLog(owner, Log.ERROR, true, null, format, args);
         }
     }
 
     public void e(Throwable tr, String msg) {
         if (canLog(Log.ERROR)) {
-            writeLog(owner, Log.ERROR, true, msg, tr);
+            writeLog(owner, Log.ERROR, true, tr, msg);
         }
     }
 
     public void e(Throwable tr, String format, Object...args) {
         if (canLog(Log.ERROR)) {
-            writeLog(owner, Log.ERROR, true, format, args);
+            writeLog(owner, Log.ERROR, true, tr, format, args);
         }
     }
 
 
     public static void vv(String tag, String msg) {
-        writeLog(tag, Log.VERBOSE, false, msg);
+        writeLog(tag, Log.VERBOSE, false, null, msg);
     }
 
     public static void vv(String tag, String format, Object...args) {
-        writeLog(tag, Log.VERBOSE, false, format, args);
+        writeLog(tag, Log.VERBOSE, false, null, format, args);
     }
 
     public static void dd(String tag, String msg) {
-        writeLog(tag, Log.DEBUG, false, msg);
+        writeLog(tag, Log.DEBUG, false, null, msg);
     }
 
     public static void dd(String tag, String format, Object...args) {
-        writeLog(tag, Log.DEBUG, false, format, args);
+        writeLog(tag, Log.DEBUG, false, null, format, args);
     }
 
     public static void ii(String tag, String msg) {
-        writeLog(tag, Log.INFO, false, msg);
+        writeLog(tag, Log.INFO, false, null, msg);
     }
 
     public static void ii(String tag, String format, Object...args) {
-        writeLog(tag, Log.INFO, false, format, args);
+        writeLog(tag, Log.INFO, false, null, format, args);
     }
 
     public static void ww(String tag, String msg) {
-        writeLog(tag, Log.WARN, false, msg);
+        writeLog(tag, Log.WARN, false, null, msg);
     }
 
     public static void ww(String tag, String format, Object...args) {
-        writeLog(tag, Log.WARN, false, format, args);
+        writeLog(tag, Log.WARN, false, null, format, args);
     }
 
     public static void ee(String tag, String msg) {
-        writeLog(tag, Log.ERROR, false, msg);
+        writeLog(tag, Log.ERROR, false, null, msg);
     }
 
     public static void ee(String tag, String format, Object...args) {
-        writeLog(tag, Log.ERROR, false, format, args);
+        writeLog(tag, Log.ERROR, false, null, format, args);
     }
 
     // ========================== internal function ===========================
 
-    private static void writeLog(String tag, int level, boolean allowed, String format, Object...args) {
+    private static void writeLog(String tag, int level, boolean allowed, Throwable tr, String format, Object...args) {
         if (allowed || Configuration.canLog(level)) {
-            writeLog(tag, level, allowed, String.format(format, args));
+            writeLog(tag, level, allowed, tr, String.format(format, args));
         }
     }
 
-    private static void writeLog(String tag, int level, boolean allowed, String msg, Throwable tr) {
+    private static void writeLog(String tag, int level, boolean allowed, Throwable tr, String msg) {
         if (allowed || Configuration.canLog(level)) {
-            writeLog(tag, level, allowed, msg + "\n" + LogUtil.dumpTrace(tr));
-        }
-    }
-
-    private static void writeLog(String tag, int level, boolean allowed, String msg) {
-        if (allowed || Configuration.canLog(level)) {
-            writeLogImpl(tag, level, msg);
+            if (tr != null && msg != null) {
+                writeLogImpl(tag, level, msg + "\n" + LogUtil.dumpTrace(tr));
+            } else if (msg != null) {
+                writeLogImpl(tag, level, msg);
+            } else if (tr != null) {
+                writeLogImpl(tag, level, LogUtil.dumpTrace(tr));
+            }
         }
     }
 

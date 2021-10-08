@@ -26,10 +26,18 @@ public class Reflect {
         mInstance = instance;
     }
 
-    /** reflect a field and get the value. */
     public <T> T getField(String name) {
+        return getField(mInstance.getClass(), name);
+    }
+
+    public boolean setField(String name, Object value) {
+        return setField(mInstance.getClass(), name, value);
+    }
+
+    /** reflect a field and get the value. */
+    public <T> T getField(Class<?> clazz, String name) {
         try {
-            Field f = mInstance.getClass().getDeclaredField(name);
+            Field f = clazz.getDeclaredField(name);
             if (f != null) {
                 f.setAccessible(true);
                 Object value = f.get(mInstance);
@@ -42,9 +50,9 @@ public class Reflect {
     }
 
     /** set a class member by reflect */
-    public boolean setField(String name, Object value) {
+    public boolean setField(Class<?> clazz, String name, Object value) {
         try {
-            Field f = mInstance.getClass().getDeclaredField(name);
+            Field f = clazz.getDeclaredField(name);
             if (f != null) {
                 f.setAccessible(true);
                 f.set(mInstance, value);

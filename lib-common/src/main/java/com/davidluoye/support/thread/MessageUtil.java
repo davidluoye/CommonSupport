@@ -26,7 +26,7 @@ public class MessageUtil {
     /**
      * Wait util the application's main thread goes idle.
      */
-    public void waitForIdle() {
+    public static void waitForIdle() {
         waitForIdle(null);
     }
 

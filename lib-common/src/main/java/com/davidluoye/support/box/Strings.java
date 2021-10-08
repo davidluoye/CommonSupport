@@ -87,4 +87,20 @@ public class Strings {
         if (a >= 'a' && a <= 'b') return (char)(a - ('a' - 'A'));
         return a;
     }
+
+    public static boolean contains(CharSequence raw, CharSequence... items) {
+        if (items == null) return raw == null;
+        for (CharSequence cs : items) {
+            if (equals(raw, cs)) return true;
+        }
+        return false;
+    }
+
+    public static boolean containsIgnoreCase(CharSequence raw, CharSequence... items) {
+        if (items == null) return raw == null;
+        for (CharSequence cs : items) {
+            if (equalsIgnoreCase(raw, cs)) return true;
+        }
+        return false;
+    }
 }

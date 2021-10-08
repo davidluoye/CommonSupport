@@ -36,8 +36,6 @@ public class Configuration {
 
     public static final int DEFAULT_LEVEL = Log.INFO;
 
-    public static final boolean DEFAULT_PERSIST_LOG_LEVEL = true;
-
     public static final String PATH_BASE = "logcat";
 
     private static final SimpleDateFormat sTimeFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.US);
@@ -66,8 +64,9 @@ public class Configuration {
         this.alwaysPrint = build.alwaysPrint;
         this.alwaysPersist = build.alwaysPersist;
         this.persistLogLevel = build.persistLogLevel;
-        this.directory = build.directory != null ? build.directory : getFilePath();
+        this.directory = (build.directory != null) ? build.directory : (alwaysPersist ? getFilePath() : null);
         this.name = sTimeFormat.format(new Date());
+
         this.mLogSetting = new IntSetting(AppGlobals.getApplication(), persistLogLevel, "logLevel");
         if (!mLogSetting.hasValue()) {
             mLogSetting.setInt(build.logLevel);
@@ -131,10 +130,10 @@ public class Configuration {
     public static class Builder {
         private File directory;
         private String appTag;
-        private boolean compress;
+        private boolean compress = false;
         private boolean alwaysPrint = false;
         private boolean alwaysPersist = false;
-        private boolean persistLogLevel = DEFAULT_PERSIST_LOG_LEVEL;
+        private boolean persistLogLevel = false;
         private int logLevel = DEFAULT_LEVEL;
 
         public Builder directory(File directory) {
