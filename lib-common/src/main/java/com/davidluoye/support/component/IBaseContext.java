@@ -29,7 +29,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.davidluoye.support.thread.ThreadUtils;
+import com.davidluoye.support.thread.Threads;
 
 public abstract class IBaseContext implements IContext {
     private final Context mContext;
@@ -113,22 +113,22 @@ public abstract class IBaseContext implements IContext {
 
     @Override
     public void runOnUiThread(Runnable action) {
-        ThreadUtils.post(action);
+        Threads.post(action);
     }
 
     @Override
     public void runOnUiThread(Runnable action, long delayMillis) {
-        ThreadUtils.post(action, delayMillis);
+        Threads.post(action, delayMillis);
     }
 
     @Override
     public void runOnBgThread(Runnable action) {
-        ThreadUtils.execute(action);
+        Threads.execute(action);
     }
 
     @Override
     public void runOnBgThread(Runnable action, long delayMillis) {
-        ThreadUtils.execute(action, delayMillis);
+        Threads.execute(action, delayMillis);
     }
 
     @Override

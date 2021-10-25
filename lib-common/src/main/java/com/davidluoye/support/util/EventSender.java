@@ -19,7 +19,7 @@ public class EventSender {
      */
     // see InputDispatcher.h
     public static final int INJECT_INPUT_EVENT_MODE_ASYNC =
-            Reflect.getStaticField(InputManager.class, "INJECT_INPUT_EVENT_MODE_ASYNC", int.class);
+            Reflect.getStaticField(InputManager.class, "INJECT_INPUT_EVENT_MODE_ASYNC");
 
     /**
      * Input Event Injection Synchronization Mode: Wait for result.
@@ -30,7 +30,7 @@ public class EventSender {
      */
     // see InputDispatcher.h
     public static final int INJECT_INPUT_EVENT_MODE_WAIT_FOR_RESULT =
-            Reflect.getStaticField(InputManager.class, "INJECT_INPUT_EVENT_MODE_WAIT_FOR_RESULT", int.class);;
+            Reflect.getStaticField(InputManager.class, "INJECT_INPUT_EVENT_MODE_WAIT_FOR_RESULT");
 
     /**
      * Input Event Injection Synchronization Mode: Wait for finish.
@@ -38,7 +38,7 @@ public class EventSender {
      */
     // see InputDispatcher.h
     public static final int INJECT_INPUT_EVENT_MODE_WAIT_FOR_FINISH =
-            Reflect.getStaticField(InputManager.class, "INJECT_INPUT_EVENT_MODE_WAIT_FOR_FINISH", int.class);;
+            Reflect.getStaticField(InputManager.class, "INJECT_INPUT_EVENT_MODE_WAIT_FOR_FINISH");
 
     /**
      * Sends the key events corresponding to the text to the app being
@@ -147,7 +147,7 @@ public class EventSender {
     private static boolean injectInputEvent(InputEvent event, int mode) {
         Method method = Reflect.getStaticMethod(InputManager.class, "injectInputEvent", new Class[]{InputEvent.class, int.class});
         if (method != null) {
-            return Reflect.callStatic(method, new Object[]{event, mode}, boolean.class);
+            return Reflect.callStaticMethod(method, new Object[]{event, mode});
         }
         return false;
     }

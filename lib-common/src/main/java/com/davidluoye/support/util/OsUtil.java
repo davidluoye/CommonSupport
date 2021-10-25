@@ -69,15 +69,15 @@ public class OsUtil {
     }
 
     /** get screen height */
-    public static int getScreenHeigth() {
-        return getScreenHeigth(Resources.getSystem());
+    public static int getScreenHeight() {
+        return getScreenHeight(Resources.getSystem());
     }
 
     public static int getScreenWidth(Resources res) {
         return res.getDisplayMetrics().widthPixels;
     }
 
-    public static int getScreenHeigth(Resources res) {
+    public static int getScreenHeight(Resources res) {
         return res.getDisplayMetrics().heightPixels;
     }
 

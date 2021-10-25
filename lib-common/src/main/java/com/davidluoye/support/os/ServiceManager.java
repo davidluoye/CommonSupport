@@ -55,7 +55,7 @@ public class ServiceManager {
             s_getService = Reflect.getStaticMethod(sServiceManager, functionName, types);
         }
         Object[] parameters = new Object[]{name};
-        return Reflect.callStatic(s_getService, parameters, IBinder.class);
+        return Reflect.callStaticMethod(s_getService, parameters);
     }
 
     /**
@@ -69,7 +69,7 @@ public class ServiceManager {
             s_checkService = Reflect.getStaticMethod(sServiceManager, functionName, types);
         }
         Object[] parameters = new Object[]{name};
-        return Reflect.callStatic(s_checkService, parameters, IBinder.class);
+        return Reflect.callStaticMethod(s_checkService, parameters);
     }
 
 
@@ -87,7 +87,7 @@ public class ServiceManager {
             s_addService = Reflect.getStaticMethod(sServiceManager, functionName, types);
         }
         Object[] parameters = new Object[]{name, service};
-        Reflect.callStatic(s_addService, parameters, Object.class);
+        Reflect.callStaticMethod(s_addService, parameters);
     }
 
     /**
@@ -98,6 +98,6 @@ public class ServiceManager {
             final String functionName = "listServices";
             s_listServices = Reflect.getStaticMethod(sServiceManager, functionName, null);
         }
-        return Reflect.callStatic(s_listServices, null, String[].class);
+        return Reflect.callStaticMethod(s_listServices, null);
     }
 }

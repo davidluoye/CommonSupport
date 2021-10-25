@@ -50,6 +50,7 @@ public class FixQueue<T> implements Iterable<T> {
             return true;
         }
         System.arraycopy(items, 1, items, 0, size - 1);
+        size--;
         items[size++] = t;
         return true;
     }
@@ -112,7 +113,7 @@ public class FixQueue<T> implements Iterable<T> {
         return obj;
     }
 
-    public <T> T[] toArray(T[] a) {
+    public T[] toArray(T[] a) {
         if (a.length < size) {
             return (T[]) Arrays.copyOf(items, size, a.getClass());
         }

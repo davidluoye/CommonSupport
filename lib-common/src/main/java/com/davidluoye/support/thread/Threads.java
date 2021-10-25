@@ -21,7 +21,7 @@ import android.os.SystemClock;
 
 import java.util.concurrent.ExecutorService;
 
-public class ThreadUtils {
+public class Threads {
 
     public static void wait(Object obj, long milliseconds) {
         synchronized (obj) {

@@ -48,7 +48,8 @@ public class SystemProperties {
             s_get = Reflect.getStaticMethod(s_SystemProperties, "get", types);
         }
         Object[] parameters = new Object[]{key, def};
-        return Reflect.callStatic(s_get, parameters, String.class);
+        String value = Reflect.callStaticMethod(s_get, parameters);
+        return value != null ? value : def;
     }
 
     public static int getInt(String key, int def) {
@@ -57,7 +58,8 @@ public class SystemProperties {
             s_getInt = Reflect.getStaticMethod(s_SystemProperties, "getInt", types);
         }
         Object[] parameters = new Object[]{key, def};
-        return Reflect.callStatic(s_get, parameters, int.class);
+        Integer value = Reflect.callStaticMethod(s_get, parameters);
+        return value != null ? value : def;
     }
 
 
@@ -67,7 +69,8 @@ public class SystemProperties {
             s_getLong = Reflect.getStaticMethod(s_SystemProperties, "getLong", types);
         }
         Object[] parameters = new Object[]{key, def};
-        return Reflect.callStatic(s_getLong, parameters, long.class);
+        Long value = Reflect.callStaticMethod(s_getLong, parameters);
+        return value != null ? value : def;
     }
 
     public static boolean getBoolean(String key, boolean def) {
@@ -76,7 +79,8 @@ public class SystemProperties {
             s_getBoolean = Reflect.getStaticMethod(s_SystemProperties, "getBoolean", types);
         }
         Object[] parameters = new Object[]{key, def};
-        return Reflect.callStatic(s_getBoolean, parameters, boolean.class);
+        Boolean value = Reflect.callStaticMethod(s_getBoolean, parameters);
+        return value != null ? value : def;
     }
 
     public static void set(String key, String value) {
@@ -85,6 +89,6 @@ public class SystemProperties {
             s_set = Reflect.getStaticMethod(s_SystemProperties, "set", types);
         }
         Object[] parameters = new Object[]{key, value};
-        Reflect.callStatic(s_set, parameters, String.class);
+        Reflect.callStaticMethod(s_set, parameters);
     }
 }

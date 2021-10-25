@@ -74,8 +74,8 @@ public class MessageUtil {
      */
     public static void waitForIdle(MessageQueue queue, Runnable callback) {
         Preconditions.checkNotNull(queue, "MessageQueue should not be null.");
-        final MessageQueue currentQueue = Looper.myLooper().getQueue();
-        if (currentQueue == queue) {
+        final Looper current = Looper.myLooper();
+        if (current != null && current.getQueue() == queue) {
             throw new IllegalStateException("Can not call this function in same thread.");
         }
 

@@ -38,7 +38,7 @@ public class AppGlobals {
     public static Application getApplication() {
         Class<?> app = getActivityThreadClass();
         Method currentApplication = Reflect.getStaticMethod(app, "currentApplication", null);
-        Application application = Reflect.callStatic(currentApplication, null, Application.class);
+        Application application = Reflect.callStaticMethod(currentApplication, null);
         return application;
     }
 
@@ -49,14 +49,14 @@ public class AppGlobals {
     public static String getPackageName() {
         Class<?> app = getActivityThreadClass();
         Method currentPackageName = Reflect.getStaticMethod(app, "currentPackageName", null);
-        String packageName = Reflect.callStatic(currentPackageName, null, String.class);
+        String packageName = Reflect.callStaticMethod(currentPackageName, null);
         return packageName;
     }
 
     public static String getOpPackageName() {
         Class<?> app = getActivityThreadClass();
         Method currentPackageName = Reflect.getStaticMethod(app, "currentOpPackageName", null);
-        String packageName = Reflect.callStatic(currentPackageName, null, String.class);
+        String packageName = Reflect.callStaticMethod(currentPackageName, null);
         return packageName;
     }
 
@@ -67,7 +67,7 @@ public class AppGlobals {
     public static String getProcessName() {
         Class<?> app = getActivityThreadClass();
         Method currentProcessName = Reflect.getStaticMethod(app, "currentProcessName", null);
-        String processName = Reflect.callStatic(currentProcessName, null, String.class);
+        String processName = Reflect.callStaticMethod(currentProcessName, null);
         return processName;
     }
 
@@ -100,7 +100,7 @@ public class AppGlobals {
         Object[] parameter = new Object[]{key, defaultValue};
 
         Reflect reflect = new Reflect(appInstance);
-        int value = reflect.call("getIntCoreSetting", parameterType, parameter, int.class);
+        int value = reflect.call("getIntCoreSetting", parameterType, parameter);
         return value;
     }
 
@@ -128,7 +128,7 @@ public class AppGlobals {
     public static Object getActivityThreadInstance() {
         Class<?> app = getActivityThreadClass();
         Method currentActivityThread = Reflect.getStaticMethod(app, "currentActivityThread", null);
-        Object appInstance = Reflect.callStatic(currentActivityThread, null, app);
+        Object appInstance = Reflect.callStaticMethod(currentActivityThread, null);
         return appInstance;
     }
 

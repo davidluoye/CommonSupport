@@ -35,14 +35,12 @@ public class Reflect {
     }
 
     /** reflect a field and get the value. */
-    public <T> T getField(Class<?> clazz, String name) {
+    public <T> T getField(Class<?> ownerClazz, String name) {
         try {
-            Field f = clazz.getDeclaredField(name);
-            if (f != null) {
-                f.setAccessible(true);
-                Object value = f.get(mInstance);
-                return translate(value);
-            }
+            Field f = ownerClazz.getDeclaredField(name);
+            f.setAccessible(true);
+            Object value = f.get(mInstance);
+            return translate(value);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,14 +48,12 @@ public class Reflect {
     }
 
     /** set a class member by reflect */
-    public boolean setField(Class<?> clazz, String name, Object value) {
+    public boolean setField(Class<?> ownerClazz, String name, Object value) {
         try {
-            Field f = clazz.getDeclaredField(name);
-            if (f != null) {
-                f.setAccessible(true);
-                f.set(mInstance, value);
-                return true;
-            }
+            Field f = ownerClazz.getDeclaredField(name);
+            f.setAccessible(true);
+            f.set(mInstance, value);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,20 +61,18 @@ public class Reflect {
     }
 
     /** reflect a function and get the return value. */
-    public <T> T call(String name, Class<?>[] parameterTypes, Object[] parameters, Class<T> returnType) {
-        Class<?> clzz = mInstance.getClass();
-        return call(clzz, name, parameterTypes, parameters, returnType);
+    public <T> T call(String name, Class<?>[] parameterTypes, Object[] parameters) {
+        Class<?> ownerClazz = mInstance.getClass();
+        return call(ownerClazz, name, parameterTypes, parameters);
     }
 
     /** reflect a function and get the return value. */
-    public <T> T call(Class<?> ownerClzz, String name, Class<?>[] parameterTypes, Object[] parameters, Class<T> returnType) {
+    public <T> T call(Class<?> ownerClazz, String name, Class<?>[] parameterTypes, Object[] parameters) {
         try {
-            Method m = ownerClzz.getDeclaredMethod(name, parameterTypes);
-            if (m != null) {
-                m.setAccessible(true);
-                Object value = m.invoke(mInstance, parameters);
-                return translate(value);
-            }
+            Method m = ownerClazz.getDeclaredMethod(name, parameterTypes);
+            m.setAccessible(true);
+            Object value = m.invoke(mInstance, parameters);
+            return translate(value);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,31 +81,30 @@ public class Reflect {
 
     /** reflect an annotation. */
     public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
-        Class<?> clazz = mInstance.getClass();
-        Object value = clazz.getAnnotation(annotationType);
+        return getAnnotation(mInstance.getClass(), annotationType);
+    }
+
+    public <T extends Annotation> T getAnnotation(Class<?> ownerClazz, Class<T> annotationType) {
+        Object value = ownerClazz.getAnnotation(annotationType);
         return translate(value);
     }
 
     /** reflect a static field. */
-    public static <T> T getStaticField(Class<?> clzz, String name, Class<T> type){
+    public static <T> T getStaticField(Class<?> ownerClazz, String name){
         try {
-            Field f = clzz.getDeclaredField(name);
-            if (f != null){
-                f.setAccessible(true);
-                return translate(f.get(null));
-            }
+            Field f = ownerClazz.getDeclaredField(name);
+            f.setAccessible(true);
+            return translate(f.get(null));
         } catch (Exception e){
             e.printStackTrace();
         }
         return null;
     }
 
-    public static Method getStaticMethod(Class<?> clzz, String name, Class<?>[] parameterTypes) {
+    public static Method getStaticMethod(Class<?> ownerClazz, String name, Class<?>[] parameterTypes) {
         try {
-            Method m = clzz.getDeclaredMethod(name, parameterTypes);
-            if (m != null) {
-                m.setAccessible(true);
-            }
+            Method m = ownerClazz.getDeclaredMethod(name, parameterTypes);
+            m.setAccessible(true);
             return m;
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,14 +113,11 @@ public class Reflect {
     }
 
     /** reflect a static function and get the return value. */
-    public static <T> T callStatic(Method method, Object[] parameters, Class<T> returnType) {
+    public static <T> T callStaticMethod(Method method, Object[] parameters) {
         try {
             if (method != null) {
                 method.setAccessible(true);
                 Object value = method.invoke(null, parameters);
-                if (returnType == null) {
-                    return null;
-                }
                 return translate(value);
             }
         } catch (Exception e) {
