@@ -1,50 +1,70 @@
 package com.davidluoye.support.box;
-
 /* package */interface IBox {
-
+    String HEX = "0x";
     String BINARY = "0b";
     String OCTAL = "0";
-    String HEX = "0x";
 
-    int RADIX_BINARY = 2;
-    int RADIX_OCTAL = 8;
-    int RADIX_DECIMAL = 10;
-    int RADIX_HEX = 16;
-
-    static boolean hasHeader(String value) {
+    static boolean isValidNumber(String value) {
         if (value == null || value.length() == 0) return false;
-        if (value.length() == 1) return false;
-        final char firstChar = value.charAt(0);
-        if (firstChar != '0') return false;
+        if (isHexNumber(value)) return true;
+        if (isOctalNumber(value)) return true;
+        if (isBinaryNumber(value)) return true;
+        if (isDecimalNumber(value)) return true;
+        return false;
+    }
+
+    static boolean isHexNumber(String value) {
+        if (value == null || value.length() == 0) return false;
+        if (value.length() <= 2) return false;
+        if (!value.startsWith(HEX)) return false;
+        for (int index = 2; index < value.length(); index++) {
+            char ch = value.charAt(index);
+            if (ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'f' || ch >= 'A' && ch <= 'F') {
+                continue;
+            }
+            return false;
+        }
         return true;
     }
 
-    static String getHeader(String value) {
-        if (value == null || value.length() == 0) return null;
-        if (value.length() == 1) return null;
-        final char firstChar = value.charAt(0);
-        if (firstChar != '0') return null;
-
-        final char secondChar = value.charAt(1);
-        if (secondChar == 'b' || secondChar == 'B') {
-            return BINARY;
+    static boolean isOctalNumber(String value) {
+        if (value == null || value.length() == 0) return false;
+        if (value.length() <= 1) return false;
+        if (!value.startsWith(OCTAL)) return false;
+        for (int index = 1; index < value.length(); index++) {
+            char ch = value.charAt(index);
+            if (ch >= '0' && ch <= '7') {
+                continue;
+            }
+            return false;
         }
-
-        if (secondChar == 'x' || secondChar == 'X') {
-            return HEX;
-        }
-
-        if (secondChar >= '1' && secondChar <= '7') {
-            return OCTAL;
-        }
-        return null;
+        return true;
     }
 
-    static int getRadix(String value) {
-        String head = getHeader(value);
-        if (head == BINARY) return 2;
-        if (head == OCTAL) return 8;
-        if (head == HEX) return 16;
-        return 10;
+    static boolean isBinaryNumber(String value) {
+        if (value == null || value.length() == 0) return false;
+        if (value.length() <= 2) return false;
+        if (!value.startsWith(BINARY)) return false;
+        for (int index = 2; index < value.length(); index++) {
+            char ch = value.charAt(index);
+            if (ch >= '0' && ch <= '1') {
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    static boolean isDecimalNumber(String value) {
+        if (value == null || value.length() == 0) return false;
+        for (int index = 0; index < value.length(); index++) {
+            char ch = value.charAt(index);
+            if (index == 0 && ch == '0') return false;
+            if (ch >= '0' && ch <= '9') {
+                continue;
+            }
+            return false;
+        }
+        return true;
     }
 }

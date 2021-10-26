@@ -48,6 +48,10 @@ public class Strings {
         return !isBlank(value);
     }
 
+    public static <T> boolean isEmpty(T[] values) {
+        return  values == null || values.length == 0;
+    }
+
     public static boolean equals(CharSequence pre, CharSequence next) {
         if (pre == next) return true;
         if (pre == null || next == null) return false;
