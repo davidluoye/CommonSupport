@@ -31,10 +31,20 @@ public class RWLock {
         rwLock = new ReentrantReadWriteLock(fair);
     }
 
-    public Lock lock(boolean read) {
-        Lock lock = read ? rwLock.readLock() : rwLock.writeLock();
+    public Lock lockRead() {
+        Lock lock = rwLock.readLock();
         lock.lock();
         return lock;
+    }
+
+    public Lock lockWrite() {
+        Lock lock = rwLock.writeLock();
+        lock.lock();
+        return lock;
+    }
+
+    public Lock lock(boolean read) {
+        return read ? lockRead() : lockWrite();
     }
 
     public <T> T readLock(Supplier<T> action) {

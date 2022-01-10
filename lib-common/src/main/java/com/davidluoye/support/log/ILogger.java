@@ -41,7 +41,7 @@ public class ILogger {
         return LOG;
     }
 
-    private String owner;
+    private final String owner;
     private int level;
 
     private ILogger(String owner, int level) {
@@ -56,6 +56,10 @@ public class ILogger {
     public ILogger setLogLevel(int level) {
         this.level = level;
         return this;
+    }
+
+    public String getTag() {
+        return formatTag(appTag(), owner);
     }
 
     public boolean canLog(int level) {
@@ -212,6 +216,24 @@ public class ILogger {
         writeLog(tag, Log.ERROR, false, null, format, args);
     }
 
+    public static String appTag() {
+        Configuration configuration = Configuration.get();
+        String appTag = null;
+        if (configuration == null || configuration.appTag == null) {
+            appTag = Configuration.APP_TAG;
+        } else {
+            appTag = configuration.appTag;
+        }
+        return appTag;
+    }
+
+    private static String formatTag(String appTag, String owner) {
+        if (owner != null) {
+            return String.format("%s: [%s]", appTag, owner);
+        }
+        return appTag;
+    }
+
     // ========================== internal function ===========================
 
     private static void writeLog(String tag, int level, boolean allowed, Throwable tr, String format, Object...args) {
@@ -233,20 +255,8 @@ public class ILogger {
     }
 
     private static void writeLogImpl(String owner, int targetLevel, String msg) {
+        String tag = formatTag(appTag(), owner);
         Configuration configuration = Configuration.get();
-
-        String appTag = null;
-        if (configuration == null || configuration.appTag == null) {
-            appTag = Configuration.APP_TAG;
-        } else {
-            appTag = configuration.appTag;
-        }
-
-        String tag = appTag;
-        if (owner != null) {
-            tag = String.format("%s: [%s]", tag, owner);
-        }
-
         if (configuration != null && configuration.logger != null) {
             IFileLogger logger = configuration.logger;
             logger.write(tag, LogUtil.logLevelToChar(targetLevel), msg);

@@ -4,7 +4,7 @@ apply plugin: 'signing'
 ext {
     publish_group_id = 'io.github.davidluoye'
     publish_artifact_id = 'lib-common'
-    publish_version = "2.5.7"
+    publish_version = "2.6.0"
 }
 
 configurations {
@@ -20,6 +20,7 @@ task buildJavadoc(type: Javadoc, dependsOn: [project.configurations.doclava, 'as
     failOnError = true
     title = null
     source = android.sourceSets.main.java.srcDirs
+    source += "build/generated/aidl_source_output_dir/debug/out/com/davidluoye/support"
     options.doclet = "com.google.doclava.Doclava"
     options.docletpath = configurations.doclava.files.asType(List)
     options.noTimestamp = false

@@ -24,10 +24,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    android.libraryVariants.all { variant ->
+        variant.outputs.each { output ->
+            def name = output.outputFileName
+            if (name != null && name.endsWith('.aar')) {
+                output.outputFileName = "lib-common.aar"
+            }
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-apply from: '../dependencies/maven_upload.gradle'
+apply from: '../dependencies/lib-common.gradle'

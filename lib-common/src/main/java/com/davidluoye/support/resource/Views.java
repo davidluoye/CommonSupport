@@ -1,4 +1,4 @@
-package com.davidluoye.support.util;
+package com.davidluoye.support.resource;
 
 import android.view.View;
 import android.view.ViewGroup;

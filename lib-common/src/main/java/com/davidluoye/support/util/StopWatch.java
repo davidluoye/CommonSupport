@@ -27,21 +27,18 @@ import java.util.ArrayList;
  */
 public class StopWatch {
 
-    private final String mLabel;
-
     private final ArrayList<Long> mTimes = new ArrayList<>();
     private final ArrayList<String> mLapLabels = new ArrayList<>();
 
-    private StopWatch(String label) {
-        mLabel = label;
+    private StopWatch() {
         lap("");
     }
 
     /**
      * Create a new instance and start it.
      */
-    public static StopWatch start(String label) {
-        return new StopWatch(label);
+    public static StopWatch start() {
+        return new StopWatch();
     }
 
     /**
@@ -66,20 +63,20 @@ public class StopWatch {
         if (total < timeThresholdToLog) return;
 
         final StringBuilder sb = new StringBuilder();
-        sb.append(mLabel);
-        sb.append(",");
-        sb.append(total);
-        sb.append(": ");
+        sb.append(String.format("total: %s {", total));
 
         long last = start;
         for (int i = 1; i < mTimes.size(); i++) {
             final long current = mTimes.get(i);
+            sb.append(i > 1 ? ", [" : "[");
             sb.append(mLapLabels.get(i));
-            sb.append(",");
+            sb.append(" : ");
             sb.append((current - last));
-            sb.append(" ");
+            sb.append("]");
             last = current;
         }
+
+        sb.append("}");
         Log.d(TAG, sb.toString());
     }
 
@@ -87,14 +84,14 @@ public class StopWatch {
      * Return a dummy instance that does no operations.
      */
     public static StopWatch getNullStopWatch() {
-        return NullStopWatch.INSTANCE;
+        return StopWatch.NullStopWatch.INSTANCE;
     }
 
     private static class NullStopWatch extends StopWatch {
         public static final NullStopWatch INSTANCE = new NullStopWatch();
 
         public NullStopWatch() {
-            super(null);
+            super();
         }
 
         @Override

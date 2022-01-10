@@ -1,4 +1,4 @@
-package com.davidluoye.support.util;
+package com.davidluoye.support.resource;
 
 import android.content.res.Resources;
 import android.view.View;
