@@ -4,7 +4,7 @@ apply plugin: 'signing'
 ext {
     publish_group_id = 'io.github.davidluoye'
     publish_artifact_id = 'lib-common'
-    publish_version = "2.6.0"
+    publish_version = "2.6.1"
 }
 
 configurations {
@@ -42,6 +42,13 @@ task androidSourcesJar(type: Jar) {
     exclude "**/BuildConfig.class"
 }
 
+task androidJavaJar(type: Jar, dependsOn:['assembleDebug']) {
+    archiveClassifier.set("jar")
+    from "build/intermediates/javac/debug/classes"
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class"
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -52,6 +59,7 @@ publishing {
             artifact    ("$buildDir/outputs/aar/${project.getName()}.aar")
             artifact    androidJavadoc
             artifact    androidSourcesJar
+            artifact    androidJavaJar
 
             pom {
                 // 构件名称，可以自定义

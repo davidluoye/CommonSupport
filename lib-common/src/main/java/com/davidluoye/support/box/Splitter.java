@@ -57,4 +57,23 @@ public class Splitter {
         }
         return buf.toString();
     }
+
+    public static String join(String[] keys, Object[] values) {
+        return join(DEFAULT_SEPARATOR, keys, values);
+    }
+
+    public static String join(String separator, String[] keys, Object[] values) {
+        if (keys == null && values == null) return "";
+        if (keys != null && values != null) {
+            if (keys.length == 0 && values.length == 0) return "";
+            if (keys.length != values.length) throw new IllegalArgumentException("error, invalid arguments.");
+            StringBuilder sb = new StringBuilder();
+            for (int index = 0; index < keys.length; index++) {
+                if (index > 0) sb.append(separator).append(" ");
+                sb.append(keys[index]).append(" ").append(values[index]);
+            }
+            return sb.toString();
+        }
+        throw new IllegalArgumentException("error, invalid null arguments.");
+    }
 }

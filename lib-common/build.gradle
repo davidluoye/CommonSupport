@@ -27,9 +27,10 @@ android {
 
     android.libraryVariants.all { variant ->
         variant.outputs.each { output ->
-            def name = output.outputFileName
-            if (name != null && name.endsWith('.aar')) {
-                output.outputFileName = "lib-common.aar"
+            String file = output.outputFileName // output file name
+            String name = output.name  // debug or release
+            if (file != null && name == "debug") {
+                output.outputFileName = file.replace(String.format("-%s", name), "")
             }
         }
     }
