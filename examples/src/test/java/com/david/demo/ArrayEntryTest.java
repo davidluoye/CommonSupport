@@ -58,20 +58,20 @@ public class ArrayEntryTest {
 
         Assert.assertEquals(entries.size(), 10);
 
-        Assert.assertEquals(entries.key(5), "5");
-        Assert.assertEquals(entries.key(6), "6");
+        Assert.assertEquals(entries.keyAt(5), "5");
+        Assert.assertEquals(entries.keyAt(6), "6");
 
-        Assert.assertEquals(entries.value(5), "55");
-        Assert.assertEquals(entries.value(6), "66");
+        Assert.assertEquals(entries.valueAt(5), "55");
+        Assert.assertEquals(entries.valueAt(6), "66");
 
         value = entries.add("5", "66");
         Assert.assertEquals(value, "55");
-        Assert.assertEquals(entries.value(5), "66");
+        Assert.assertEquals(entries.valueAt(5), "66");
         Assert.assertEquals(entries.getValue("5"), "66");
 
         value = entries.add("5", "55");
         Assert.assertEquals(value, "66");
-        Assert.assertEquals(entries.value(5), "55");
+        Assert.assertEquals(entries.valueAt(5), "55");
         Assert.assertEquals(entries.getValue("5"), "55");
 
 

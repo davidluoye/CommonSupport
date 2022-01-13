@@ -14,18 +14,23 @@ public class Token<T> extends IToken.Stub {
     }
 
     @Override
-    public final int getCallerPid() {
+    public final int fromPid() {
         return Process.myPid();
     }
 
     @Override
-    public final int getCallerUid() {
+    public final int fromUid() {
         return Process.myUid();
     }
 
     @Override
-    public final String getCallerPackage() {
+    public final String fromPackage() {
         return AppGlobals.getPackageName();
+    }
+
+    @Override
+    public String string() {
+        return toString();
     }
 
     @Override

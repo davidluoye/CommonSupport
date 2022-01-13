@@ -152,6 +152,13 @@ public class SynchronizedFixQueue<T> extends FixQueue<T> {
         return mLock.readLock(() -> super.stream(startInclusive, endExclusive));
     }
 
+    @Override
+    protected FixQueue<T> onCloneNewQueue(int maxCapacity) {
+        FixQueue<T> queue = new SynchronizedFixQueue<>(maxCapacity);
+        forEach(queue::add);
+        return queue;
+    }
+
     public static <T> SynchronizedFixQueue<T> of(T... ts) {
         return new SynchronizedFixQueue<>(ts);
     }

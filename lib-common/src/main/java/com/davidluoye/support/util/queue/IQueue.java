@@ -207,6 +207,8 @@ public interface IQueue<T> extends Iterable<T> {
 
     public List<T> getQueue();
 
+    public IQueue<T> clone(boolean immutable);
+
     /**
      * Creates a {@code Spliterator} covering a range of elements of a given
      * array, using a customized set of spliterator characteristics.

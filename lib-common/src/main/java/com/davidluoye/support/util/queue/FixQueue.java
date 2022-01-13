@@ -315,6 +315,11 @@ public class FixQueue<T> implements IQueue<T> {
     }
 
     @Override
+    public final FixQueue<T> clone(boolean immutable) {
+        return onCloneNewQueue(this.maxCapacity);
+    }
+
+    @Override
     public Spliterator<T> spliterator(int startInclusive, int endExclusive) {
         return Spliterators.spliterator(items, startInclusive, endExclusive,
                 Spliterator.ORDERED | Spliterator.IMMUTABLE);
@@ -343,6 +348,12 @@ public class FixQueue<T> implements IQueue<T> {
                 items = tmp;
             }
         }
+    }
+
+    protected FixQueue<T> onCloneNewQueue(int maxCapacity) {
+        FixQueue<T> queue = new FixQueue<>(maxCapacity);
+        forEach(queue::add);
+        return queue;
     }
 
     public static <T> FixQueue<T> of(T... ts) {
