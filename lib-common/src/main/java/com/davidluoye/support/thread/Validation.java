@@ -7,11 +7,11 @@ import com.davidluoye.support.except.InvalidThreadCallerException;
 public class Validation {
 
     public static void checkMainThread() {
-        checkMainThread("Cannot called in async thread.");
+        checkMainThread("Cannot be called in async thread.");
     }
 
     public static void checkNotMainThread() {
-        checkNotMainThread("Cannot called in main thread.");
+        checkNotMainThread("Cannot be called in main thread.");
     }
 
     public static void checkMainThread(String message) {

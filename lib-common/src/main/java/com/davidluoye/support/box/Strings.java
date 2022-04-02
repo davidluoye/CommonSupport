@@ -88,7 +88,7 @@ public class Strings {
     }
 
     public static char toUpperCase(char a) {
-        if (a >= 'a' && a <= 'b') return (char)(a - ('a' - 'A'));
+        if (a >= 'a' && a <= 'z') return (char)(a - ('a' - 'A'));
         return a;
     }
 
@@ -106,5 +106,9 @@ public class Strings {
             if (equalsIgnoreCase(raw, cs)) return true;
         }
         return false;
+    }
+
+    public static String removeWhiteSpace(String oldString) {
+        return oldString.replaceAll("\\s+", "");
     }
 }
