@@ -1,8 +1,9 @@
-package com.davidluoye.support.util.list;
+package com.davidluoye.support.os;
 
 import android.os.IInterface;
 import android.os.RemoteCallbackList;
 
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 public class RemoteCallBackList<CALLBACK extends IInterface, COOKIE> {
@@ -49,7 +50,7 @@ public class RemoteCallBackList<CALLBACK extends IInterface, COOKIE> {
             try {
                 for (int index = count - 1; index >= 0; index--) {
                     COOKIE c = (COOKIE)(cache.getBroadcastCookie(index));
-                    if (c.equals(cookie)) return true;
+                    if (Objects.equals(c, cookie)) return true;
                 }
             } finally {
                 cache.finishBroadcast();
@@ -71,5 +72,17 @@ public class RemoteCallBackList<CALLBACK extends IInterface, COOKIE> {
             }
         }
         return null;
+    }
+
+    public int size() {
+        return cache.getRegisteredCallbackCount();
+    }
+
+    public CALLBACK getCallbackItem(int index) {
+        return cache.getRegisteredCallbackItem(index);
+    }
+
+    public COOKIE getCookieItem(int index) {
+        return (COOKIE)cache.getBroadcastCookie(index);
     }
 }

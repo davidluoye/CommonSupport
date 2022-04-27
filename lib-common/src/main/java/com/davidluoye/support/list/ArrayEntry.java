@@ -1,6 +1,6 @@
-package com.davidluoye.support.util.list;
+package com.davidluoye.support.list;
 
-import com.davidluoye.support.util.queue.FixQueue;
+import com.davidluoye.support.queue.FixQueue;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +22,7 @@ public class ArrayEntry<KEY, VALUE> {
         this.entries = entries != null ? entries.entries : new FixQueue<>();
     }
 
-    public VALUE add(KEY key, VALUE value) {
+    public VALUE put(KEY key, VALUE value) {
         checkPermission(false);
         EntrySet<KEY, VALUE> entry = entries.findEach(it -> it.key.equals(key));
         if (entry != null) {

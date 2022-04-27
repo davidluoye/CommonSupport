@@ -77,7 +77,11 @@ import android.os.CancellationSignal;
     }
 
     @Override
-    public abstract Bundle call(String method, String arg, Bundle extras);
+    public final Bundle call(String method, String arg, Bundle extras) {
+        return this.call(method, arg);
+    }
+
+    protected abstract Bundle call(String method, String arg);
 
     protected abstract void onCreate(Context context);
 

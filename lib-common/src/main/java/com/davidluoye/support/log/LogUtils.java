@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ********************************************************************************/
-package com.davidluoye.support.util;
+package com.davidluoye.support.log;
 
 import android.util.Log;
 
-public class LogUtil {
+import com.davidluoye.support.box.Strings;
+
+public class LogUtils {
 
     public static String dumpTrace(String msg) {
         return dumpTrace(msg, 0);
@@ -71,8 +73,8 @@ public class LogUtil {
         return null;
     }
 
-    public static int logStringToLevel(String logString) {
-        String lowerCase = logString.toLowerCase();
+    public static int logStringToLevel(String level) {
+        String lowerCase = Strings.isBlank(level) ? "" : level.toLowerCase();
         switch (lowerCase) {
             case "2" : case "v": case "verbose":   return Log.VERBOSE;
             case "3" : case "d": case "debug":     return Log.DEBUG;

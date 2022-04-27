@@ -18,24 +18,32 @@ package com.davidluoye.support.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 
+import com.davidluoye.support.IPermissionCallBack;
 import com.davidluoye.support.log.ILogger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PermissionUI extends Activity {
     private static final ILogger LOGGER = ILogger.logger(PermissionUI.class);
 
     private static final int REQUEST_PERMISSION_CODE = 0x0010;
 
+    private IPermissionCallBack mCallBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         if (intent != null) {
-            String[] permissions = intent.getStringArrayExtra(Permission.KEY_EXTRA);
-            if (permissions != null && permissions.length > 0) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Bundle extra = intent.getBundleExtra(Permission.KEY_EXTRA);
+            if (extra != null) {
+                String[] permissions = extra.getStringArray(Permission.KEY_PERMISSION);
+                IBinder callback = extra.getBinder(Permission.KEY_CALLBACK);
+                mCallBack = IPermissionCallBack.Stub.asInterface(callback);
+                if (permissions != null && permissions.length > 0) {
                     requestPermissions(permissions, REQUEST_PERMISSION_CODE);
                     return;
                 }
@@ -47,10 +55,19 @@ public class PermissionUI extends Activity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_PERMISSION_CODE) {
+            List<String> grantedPermission = new ArrayList<>();
             for (int index = 0; index < permissions.length; index++) {
-                if (grantResults[index] != PackageManager.PERMISSION_GRANTED) {
+                if (grantResults[index] == PackageManager.PERMISSION_GRANTED) {
+                    grantedPermission.add(permissions[index]);
+                } else {
                     LOGGER.e("request %s fail.", permissions[index]);
                 }
+            }
+
+            if (mCallBack != null) {
+                try {
+                    mCallBack.onCallBack(grantedPermission);
+                } catch (Exception e){}
             }
         }
         finish();

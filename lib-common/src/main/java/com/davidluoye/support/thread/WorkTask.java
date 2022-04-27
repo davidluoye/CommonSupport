@@ -19,7 +19,7 @@ package com.davidluoye.support.thread;
 import android.os.Handler;
 import android.os.HandlerThread;
 
-import com.davidluoye.support.util.list.ArrayEntry;
+import com.davidluoye.support.list.ArrayEntry;
 
 import java.util.List;
 
@@ -37,8 +37,8 @@ public class WorkTask extends HandlerThread {
         if (thread == null) {
             thread = new WorkTask(name);
             thread.start();
-            sInstances.add(name, thread);
-            sHandlers.add(name, new Handler(thread.getLooper()));
+            sInstances.put(name, thread);
+            sHandlers.put(name, new Handler(thread.getLooper()));
             index++;
         }
     }

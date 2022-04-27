@@ -1,4 +1,4 @@
-package com.davidluoye.support.util.list;
+package com.davidluoye.support.list;
 
 import com.davidluoye.support.util.RWLock;
 
@@ -19,8 +19,8 @@ public class SynchronizedArrayEntry<KEY, VALUE> extends ArrayEntry<KEY, VALUE> {
     }
 
     @Override
-    public VALUE add(KEY key, VALUE value) {
-        return mLock.writeLock(() -> super.add(key, value));
+    public VALUE put(KEY key, VALUE value) {
+        return mLock.writeLock(() -> super.put(key, value));
     }
 
     @Override

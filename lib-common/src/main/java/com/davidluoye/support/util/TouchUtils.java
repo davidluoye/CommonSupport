@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.davidluoye.support.annotation.RunOnAsyncThread;
-import com.davidluoye.support.app.AppGlobals;
+import com.davidluoye.support.app.Applications;
 import com.davidluoye.support.log.ILogger;
 import com.davidluoye.support.thread.Threads;
 
@@ -125,11 +125,11 @@ public class TouchUtils {
     }
 
     public static final Instrumentation getInstrumentation() {
-        return AppGlobals.getInstrumentation();
+        return Applications.getInstrumentation();
     }
 
     public static final ViewConfiguration getViewConfiguration() {
-        return ViewConfiguration.get(AppGlobals.getApplication());
+        return ViewConfiguration.get(Applications.getApplication());
     }
 
     public static final PointF getLocation(View view) {

@@ -38,7 +38,7 @@ public abstract class BaseRemoteService extends ContentService {
     }
 
     @Override
-    public final Bundle call(String serviceName, String callerPackage, Bundle extras) {
+    protected final Bundle call(String serviceName, String callerPackage) {
         final int callerPid = Binder.getCallingPid();
         final int callerUid = Binder.getCallingUid();
         final long identity = Binder.clearCallingIdentity();
@@ -84,9 +84,9 @@ public abstract class BaseRemoteService extends ContentService {
         return result;
     }
 
-    public abstract IBinder onBind(String name);
+    protected abstract IBinder onBind(String name);
 
-    public boolean allowBindService(String callerPackage, int callerPid, int callerUid) {
+    protected boolean allowBindService(String callerPackage, int callerPid, int callerUid) {
         return true;
     }
 }

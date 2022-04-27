@@ -1,4 +1,4 @@
-package com.davidluoye.support.util.queue;
+package com.davidluoye.support.queue;
 
 import com.davidluoye.support.annotation.RunOnAsyncThread;
 import com.davidluoye.support.thread.Threads;

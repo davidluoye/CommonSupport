@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
 /**
  * Special private access for certain globals related to a process.
  */
-public class AppGlobals {
+public class Applications {
 
     /**
      * Return the first Application object made in the process.
@@ -40,6 +40,13 @@ public class AppGlobals {
         Method currentApplication = Reflect.getStaticMethod(app, "currentApplication", null);
         Application application = Reflect.callStaticMethod(currentApplication, null);
         return application;
+    }
+
+    public static boolean isSystem() {
+        Class<?> app = getActivityThreadClass();
+        Method isSystem = Reflect.getStaticMethod(app, "isSystem", null);
+        Boolean system = Reflect.callStaticMethod(isSystem, null);
+        return system != null && system;
     }
 
     /**
@@ -105,13 +112,13 @@ public class AppGlobals {
     }
 
     public static Instrumentation getInstrumentation() {
-        Object activityThreadObject = AppGlobals.getActivityThreadInstance();
+        Object activityThreadObject = Applications.getActivityThreadInstance();
         Reflect reflect = new Reflect(activityThreadObject);
         return reflect.getField("mInstrumentation");
     }
 
     public static boolean setInstrumentation(Instrumentation instrumentation) {
-        Object activityThreadObject = AppGlobals.getActivityThreadInstance();
+        Object activityThreadObject = Applications.getActivityThreadInstance();
         Reflect reflect = new Reflect(activityThreadObject);
         return reflect.setField("mInstrumentation", instrumentation);
     }

@@ -41,9 +41,9 @@ public class HookManager {
     }
 
     public static Instrumentation hookInstrumentation(InstrumentationHooker hooker) {
-        Instrumentation oldInstrumentation = AppGlobals.getInstrumentation();
+        Instrumentation oldInstrumentation = Applications.getInstrumentation();
         hooker.attachInstrumentation(oldInstrumentation);
-        AppGlobals.setInstrumentation(hooker);
+        Applications.setInstrumentation(hooker);
         return oldInstrumentation;
     }
 

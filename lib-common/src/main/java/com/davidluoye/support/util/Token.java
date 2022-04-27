@@ -3,7 +3,7 @@ package com.davidluoye.support.util;
 import android.os.Process;
 
 import com.davidluoye.support.IToken;
-import com.davidluoye.support.app.AppGlobals;
+import com.davidluoye.support.app.Applications;
 
 import java.util.Objects;
 
@@ -25,7 +25,7 @@ public class Token<T> extends IToken.Stub {
 
     @Override
     public final String fromPackage() {
-        return AppGlobals.getPackageName();
+        return Applications.getPackageName();
     }
 
     @Override

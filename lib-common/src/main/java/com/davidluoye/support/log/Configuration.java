@@ -15,72 +15,41 @@
  ********************************************************************************/
 package com.davidluoye.support.log;
 
-import android.Manifest;
 import android.content.Context;
-import android.os.Environment;
-import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.davidluoye.support.app.AppGlobals;
-import com.davidluoye.support.app.Permission;
+import com.davidluoye.support.app.Applications;
+import com.davidluoye.support.box.Strings;
 import com.davidluoye.support.util.SharedSettings;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Configuration {
 
     public static final int DEFAULT_LEVEL = Log.INFO;
 
-    public static final String PATH_BASE = "logcat";
-
-    private static final SimpleDateFormat sTimeFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.US);
-
     public static String APP_TAG = "ILib";
 
     private static Configuration sInstance;
 
-    public final File directory;
-    public final String appTag;
-    public final String name;
-    public final IFileLogger logger;
-    public final boolean alwaysPrint;
-    public final boolean alwaysPersist;
     public final boolean persistLogLevel;
 
-    private IntSetting mLogSetting;
-
+    private final IntSetting mLogSetting;
+    private String appTag;
     private Configuration(Builder build) {
         if (sInstance != null) {
             throw new IllegalStateException("has already build configuration.");
         }
         sInstance = this;
 
-        this.appTag = build.appTag == null ? APP_TAG : build.appTag;
-        this.alwaysPrint = build.alwaysPrint;
-        this.alwaysPersist = build.alwaysPersist;
+        this.appTag = Strings.isBlank(build.appTag) ? APP_TAG : build.appTag;
         this.persistLogLevel = build.persistLogLevel;
-        this.directory = (build.directory != null) ? build.directory : (alwaysPersist ? getFilePath() : null);
-        this.name = sTimeFormat.format(new Date());
 
-        this.mLogSetting = new IntSetting(AppGlobals.getApplication(), persistLogLevel, "logLevel");
+        this.mLogSetting = new IntSetting(Applications.getApplication(), persistLogLevel, "logLevel");
         if (!mLogSetting.hasValue()) {
             mLogSetting.setInt(build.logLevel);
         }
-
-        IFileLogger logger = null;
-        if (alwaysPersist && (this.directory != null)) {
-            if (build.compress) {
-                logger = new ZipFileLogger(this.directory, this.name);
-            } else {
-                logger = new TxtFileLogger(this.directory, this.name);
-            }
-        }
-        this.logger = logger;
     }
 
     public void setLogLevel(int level) {
@@ -93,6 +62,14 @@ public class Configuration {
         return mLogSetting.getInt();
     }
 
+    public void appTag(String appTag) {
+        this.appTag = appTag;
+    }
+
+    public String appTag() {
+        return this.appTag;
+    }
+
     private static class IntSetting {
         private final SharedSettings settings;
         private final AtomicInteger cache;
@@ -100,7 +77,7 @@ public class Configuration {
         private IntSetting(Context context, boolean persistLogLevel, String name) {
             this.name = name;
             this.cache = new AtomicInteger();
-            this.settings = persistLogLevel && AppGlobals.canAccessStorage(context) ? new SharedSettings(context) : null;
+            this.settings = persistLogLevel && Applications.canAccessStorage(context) ? new SharedSettings(context) : null;
             if (settings != null) {
                 this.cache.set(settings.getInt(name, cache.intValue()));
                 settings.registerChangedEvent((key) -> {
@@ -128,36 +105,12 @@ public class Configuration {
     }
 
     public static class Builder {
-        private File directory;
         private String appTag;
-        private boolean compress = false;
-        private boolean alwaysPrint = false;
-        private boolean alwaysPersist = false;
         private boolean persistLogLevel = false;
         private int logLevel = DEFAULT_LEVEL;
 
-        public Builder directory(File directory) {
-            this.directory = directory;
-            return this;
-        }
-
         public Builder appTag(String appTag) {
             this.appTag = appTag;
-            return this;
-        }
-
-        public Builder compress() {
-            this.compress = true;
-            return this;
-        }
-
-        public Builder alwaysPrint() {
-            this.alwaysPrint = true;
-            return this;
-        }
-
-        public Builder alwaysPersist() {
-            this.alwaysPersist = true;
             return this;
         }
 
@@ -172,6 +125,12 @@ public class Configuration {
         }
 
         public Configuration build() {
+            Configuration configuration = Configuration.get();
+            if (configuration != null) {
+                configuration.appTag(this.appTag);
+                configuration.setLogLevel(this.logLevel);
+                return configuration;
+            }
             return new Configuration(this);
         }
     }
@@ -183,32 +142,5 @@ public class Configuration {
     /*package*/ static boolean canLog(int level) {
         if (sInstance == null) return DEFAULT_LEVEL <= level;
         return sInstance.getLogLevel() <= level;
-    }
-
-    private static File getFilePath() {
-        try {
-            String packageName = AppGlobals.getPackageName();
-            if (packageName == null || TextUtils.equals("android", packageName)) {
-                return null;
-            }
-
-            File root = null;
-            if (Permission.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                root = Environment.getExternalStorageDirectory();
-            } else if (Process.myUid() == Process.SYSTEM_UID) {
-                root = Environment.getDataDirectory();
-            } else {
-                Context context = AppGlobals.getApplication();
-                root = context != null ? context.getCacheDir() : null;
-            }
-
-            if (root == null) return null;
-            File logPath = new File(root, PATH_BASE);
-            File appLog = new File(logPath, AppGlobals.getPackageName());
-            return appLog;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

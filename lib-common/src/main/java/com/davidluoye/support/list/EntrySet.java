@@ -1,4 +1,4 @@
-package com.davidluoye.support.util.list;
+package com.davidluoye.support.list;
 
 import java.util.LinkedList;
 import java.util.Objects;

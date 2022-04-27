@@ -17,8 +17,6 @@ package com.davidluoye.support.log;
 
 import android.util.Log;
 
-import com.davidluoye.support.util.LogUtil;
-
 /** A logcat utils */
 public class ILogger {
 
@@ -49,17 +47,21 @@ public class ILogger {
         this.level = level;
     }
 
-    public int getLogLevel() {
-        return level;
-    }
-
-    public ILogger setLogLevel(int level) {
+    public ILogger level(int level) {
         this.level = level;
         return this;
     }
 
-    public String getTag() {
+    public int level() {
+        return level;
+    }
+
+    public String tag() {
         return formatTag(appTag(), owner);
+    }
+
+    public String owner() {
+        return this.owner;
     }
 
     public boolean canLog(int level) {
@@ -219,10 +221,10 @@ public class ILogger {
     public static String appTag() {
         Configuration configuration = Configuration.get();
         String appTag = null;
-        if (configuration == null || configuration.appTag == null) {
+        if (configuration == null || configuration.appTag() == null) {
             appTag = Configuration.APP_TAG;
         } else {
-            appTag = configuration.appTag;
+            appTag = configuration.appTag();
         }
         return appTag;
     }
@@ -245,26 +247,17 @@ public class ILogger {
     private static void writeLog(String tag, int level, boolean allowed, Throwable tr, String msg) {
         if (allowed || Configuration.canLog(level)) {
             if (tr != null && msg != null) {
-                writeLogImpl(tag, level, msg + "\n" + LogUtil.dumpTrace(tr));
+                writeLogImpl(tag, level, msg + "\n" + LogUtils.dumpTrace(tr));
             } else if (msg != null) {
                 writeLogImpl(tag, level, msg);
             } else if (tr != null) {
-                writeLogImpl(tag, level, LogUtil.dumpTrace(tr));
+                writeLogImpl(tag, level, LogUtils.dumpTrace(tr));
             }
         }
     }
 
     private static void writeLogImpl(String owner, int targetLevel, String msg) {
         String tag = formatTag(appTag(), owner);
-        Configuration configuration = Configuration.get();
-        if (configuration != null && configuration.logger != null) {
-            IFileLogger logger = configuration.logger;
-            logger.write(tag, LogUtil.logLevelToChar(targetLevel), msg);
-            if(!configuration.alwaysPrint) {
-                return;
-            }
-        }
-
         Log.println(targetLevel, tag, msg);
     }
 }

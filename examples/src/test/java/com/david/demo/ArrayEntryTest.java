@@ -1,6 +1,6 @@
 package com.david.demo;
 
-import com.davidluoye.support.util.list.ArrayEntry;
+import com.davidluoye.support.list.ArrayEntry;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,16 +13,16 @@ public class ArrayEntryTest {
     }
 
     private void fill() {
-        entries.add("0", "00");
-        entries.add("1", "11");
-        entries.add("2", "22");
-        entries.add("3", "33");
-        entries.add("4", "44");
-        entries.add("5", "55");
-        entries.add("6", "66");
-        entries.add("7", "77");
-        entries.add("8", "88");
-        entries.add("9", "99");
+        entries.put("0", "00");
+        entries.put("1", "11");
+        entries.put("2", "22");
+        entries.put("3", "33");
+        entries.put("4", "44");
+        entries.put("5", "55");
+        entries.put("6", "66");
+        entries.put("7", "77");
+        entries.put("8", "88");
+        entries.put("9", "99");
     }
 
     @Test
@@ -51,9 +51,9 @@ public class ArrayEntryTest {
 
         String value = null;
 
-        value = entries.add("5", "55");
+        value = entries.put("5", "55");
         Assert.assertEquals(value, "55");
-        value = entries.add("6", "66");
+        value = entries.put("6", "66");
         Assert.assertEquals(value, "66");
 
         Assert.assertEquals(entries.size(), 10);
@@ -64,12 +64,12 @@ public class ArrayEntryTest {
         Assert.assertEquals(entries.valueAt(5), "55");
         Assert.assertEquals(entries.valueAt(6), "66");
 
-        value = entries.add("5", "66");
+        value = entries.put("5", "66");
         Assert.assertEquals(value, "55");
         Assert.assertEquals(entries.valueAt(5), "66");
         Assert.assertEquals(entries.getValue("5"), "66");
 
-        value = entries.add("5", "55");
+        value = entries.put("5", "55");
         Assert.assertEquals(value, "66");
         Assert.assertEquals(entries.valueAt(5), "55");
         Assert.assertEquals(entries.getValue("5"), "55");

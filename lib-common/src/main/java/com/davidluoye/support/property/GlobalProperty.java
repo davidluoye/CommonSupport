@@ -17,7 +17,7 @@ package com.davidluoye.support.property;
 
 import android.content.Context;
 
-import com.davidluoye.support.app.AppGlobals;
+import com.davidluoye.support.app.Applications;
 import com.davidluoye.support.box.Floats;
 import com.davidluoye.support.box.Ints;
 import com.davidluoye.support.box.Longs;
@@ -114,7 +114,7 @@ public class GlobalProperty {
 
     private static ReadWriteOptions getOptions() {
         if (options == null) {
-            Context app = AppGlobals.getApplication();
+            Context app = Applications.getApplication();
             File filePath = app.getFilesDir();
             Path path = Paths.get(filePath.getAbsolutePath(), name);
             options = new ReadWriteOptions(path);

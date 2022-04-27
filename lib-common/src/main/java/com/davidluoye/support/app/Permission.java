@@ -19,18 +19,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Binder;
-import android.os.Build;
+import android.os.Bundle;
+
+import com.davidluoye.support.util.PermissionCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Permission {
 
-    public static final String KEY_EXTRA = "permission";
+    public static final String KEY_EXTRA = "intent-extra";
+    public static final String KEY_PERMISSION = "key-permission";
+    public static final String KEY_CALLBACK = "key-callback";
 
     public static boolean hasPermission(String permission) {
-        PackageManager pm = AppGlobals.getPackageManager();
-        String pkg = AppGlobals.getPackageName();
+        PackageManager pm = Applications.getPackageManager();
+        String pkg = Applications.getPackageName();
         int gain = pm.checkPermission(permission, pkg);
         return gain == PackageManager.PERMISSION_GRANTED;
     }
@@ -49,7 +53,7 @@ public class Permission {
      *      {@link PackageManager#PERMISSION_DENIED} if it is not.
      */
     public static int checkPermission(String permission, int pid, int uid) {
-        Context context = AppGlobals.getApplication();
+        Context context = Applications.getApplication();
         return context.checkPermission(permission, pid, uid);
     }
 
@@ -118,11 +122,27 @@ public class Permission {
      * @param permissions request permission array.
      */
     public static void requestPermission(Context context, String[] permissions) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Intent intent = new Intent(context, PermissionUI.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(KEY_EXTRA, permissions);
-            context.startActivity(intent);
+        requestPermission(context, new PermissionCallBack(permissions){});
+    }
+
+    /**
+     * Start a permission activity
+     * @param context
+     * @param callback permission state changed callback
+     */
+    public static void requestPermission(Context context, PermissionCallBack callback) {
+        String[] permissions = callback.permissions;
+        if (permissions == null || permissions.length <= 0) {
+            callback.onGranted(new String[0], permissions);
+            return;
         }
+
+        Intent intent = new Intent(context, PermissionUI.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Bundle extra = new Bundle();
+        extra.putStringArray(KEY_PERMISSION, permissions);
+        extra.putBinder(KEY_CALLBACK, callback);
+        intent.putExtra(KEY_EXTRA, extra);
+        context.startActivity(intent);
     }
 }
