@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2012 The Android Open Source Project
+/*
+ * Copyright 2021 The authors David Yang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.davidluoye.support.util;
+package com.davidluoye.support.utils;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

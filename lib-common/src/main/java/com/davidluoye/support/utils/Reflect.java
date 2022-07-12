@@ -1,4 +1,4 @@
-/******************************************************************************
+/*
  * Copyright 2021 The authors David Yang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ********************************************************************************/
-package com.davidluoye.support.util;
+ */
+package com.davidluoye.support.utils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -89,6 +89,16 @@ public class Reflect {
         return translate(value);
     }
 
+    public static <T> T getStaticField(ClassLoader loader, String ownerClass, String name, T defValue) {
+        try {
+            Class<?> cl = loader.loadClass(ownerClass);
+            return Reflect.getStaticField(cl, name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return defValue;
+    }
+
     /** reflect a static field. */
     public static <T> T getStaticField(Class<?> ownerClazz, String name){
         try {
@@ -132,5 +142,23 @@ public class Reflect {
             return null;
         }
         return (T)obj;
+    }
+
+    public static Class<?> loadClass(String className) {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Class<?> loadClass(ClassLoader loader, String className) {
+        try {
+            return loader.loadClass(className);
+        } catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

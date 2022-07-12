@@ -1,4 +1,4 @@
-/******************************************************************************
+/*
  * Copyright 2021 The authors David Yang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ********************************************************************************/
-package com.davidluoye.support.binder;
+ */
+package com.davidluoye.support.link;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -36,7 +36,7 @@ public abstract class BaseRemoteManager<T extends IInterface> {
     private T service;
 
     /**
-     * @param context
+     * @param context the application environment.
      * @param authority the authority declare in AndroidManifest.xml
      */
     protected BaseRemoteManager(Context context, String authority) {
@@ -44,7 +44,7 @@ public abstract class BaseRemoteManager<T extends IInterface> {
     }
 
     /**
-     * @param context
+     * @param context the application environment.
      * @param authority the authority declare in AndroidManifest.xml
      * @param name the name of service service
      */
@@ -91,6 +91,7 @@ public abstract class BaseRemoteManager<T extends IInterface> {
                 service = null;
             }
         }
+        onServiceDied();
     }
 
     /**
@@ -149,6 +150,8 @@ public abstract class BaseRemoteManager<T extends IInterface> {
     }
 
     protected abstract T convertService(IBinder remote);
+
+    protected void onServiceDied() {}
 
     protected boolean handleAuthorityNotFoundException(String msg) {
         return true;

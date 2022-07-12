@@ -1,3 +1,19 @@
+/*
+ * Copyright 2021 The authors David Yang
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.davidluoye.support.list;
 
 import com.davidluoye.support.queue.FixQueue;
@@ -20,6 +36,17 @@ public class ArrayEntry<KEY, VALUE> {
     protected ArrayEntry(boolean immutable, ArrayEntry<KEY, VALUE> entries) {
         this.immutable = immutable;
         this.entries = entries != null ? entries.entries : new FixQueue<>();
+    }
+
+    public void put(ArrayEntry<KEY, VALUE> entries) {
+        final int size = entries.size();
+        for (int index = 0; index < size; index++) {
+            this.put(entries.get(index));
+        }
+    }
+
+    public void put(EntrySet<KEY, VALUE> entry) {
+        this.put(entry.key(), entry.value());
     }
 
     public VALUE put(KEY key, VALUE value) {
