@@ -177,6 +177,9 @@ public class ILogger {
         }
     }
 
+    public void dumpTrace(String msg) {
+        i(LogUtils.dumpTrace(msg));
+    }
 
     public static void vv(String tag, String msg) {
         writeLog(tag, Log.VERBOSE, false, null, msg);

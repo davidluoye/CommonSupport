@@ -28,14 +28,24 @@ public class ArrayEntry<KEY, VALUE> {
 
     private final FixQueue<EntrySet<KEY, VALUE>> entries;
     private final boolean immutable;
+    private final boolean equalsAsSameOne;
 
     public ArrayEntry() {
         this(false, null);
     }
 
+    public ArrayEntry(boolean equalsAsSameOne) {
+        this(false, null, equalsAsSameOne);
+    }
+
     protected ArrayEntry(boolean immutable, ArrayEntry<KEY, VALUE> entries) {
+        this(immutable, entries, true);
+    }
+
+    protected ArrayEntry(boolean immutable, ArrayEntry<KEY, VALUE> entries, boolean equalsAsSameOne) {
         this.immutable = immutable;
         this.entries = entries != null ? entries.entries : new FixQueue<>();
+        this.equalsAsSameOne = equalsAsSameOne;
     }
 
     public void put(ArrayEntry<KEY, VALUE> entries) {
@@ -51,7 +61,7 @@ public class ArrayEntry<KEY, VALUE> {
 
     public VALUE put(KEY key, VALUE value) {
         checkPermission(false);
-        EntrySet<KEY, VALUE> entry = entries.findEach(it -> it.key.equals(key));
+        EntrySet<KEY, VALUE> entry = entries.findEach(it -> sameKey(it.key(), key));
         if (entry != null) {
             return entry.value.set(value);
         }
@@ -101,12 +111,12 @@ public class ArrayEntry<KEY, VALUE> {
 
     public int indexOfKey(KEY key) {
         checkPermission(true);
-        return entries.findEach((index, entry) -> entry.key.equals(key));
+        return entries.findEach((index, entry) -> sameKey(entry.key(), key));
     }
 
     public VALUE getValue(KEY key) {
         checkPermission(true);
-        EntrySet<KEY, VALUE> entry = entries.findEach(it -> it.key.equals(key));
+        EntrySet<KEY, VALUE> entry = entries.findEach(it -> sameKey(it.key(), key));
         return entry == null ? null : entry.value.find();
     }
 
@@ -114,7 +124,7 @@ public class ArrayEntry<KEY, VALUE> {
         checkPermission(false);
         for (int index = entries.size() - 1; index >= 0; index--) {
             EntrySet<KEY, VALUE> entry = entries.get(index);
-            if (entry.key.equals(key)) {
+            if (sameKey(entry.key(), key)) {
                 entries.remove(index);
                 VALUE value = entry.value.find();
                 entry.recycle();
@@ -128,7 +138,7 @@ public class ArrayEntry<KEY, VALUE> {
         checkPermission(false);
         for (int index = entries.size() - 1; index >= 0; index--) {
             EntrySet<KEY, VALUE> entry = entries.get(index);
-            if (entry.value.equals(value)) {
+            if (sameValue(entry.value(), value)) {
                 entry.recycle();
                 entries.remove(index);
                 return true;
@@ -150,12 +160,12 @@ public class ArrayEntry<KEY, VALUE> {
 
     public boolean hasKey(KEY key) {
         checkPermission(true);
-        return entries.stream().anyMatch(it -> it.key.equals(key));
+        return entries.stream().anyMatch(it -> sameKey(it.key(), key));
     }
 
     public boolean hasValue(VALUE value) {
         checkPermission(true);
-        return entries.stream().anyMatch(it -> it.value.equals(value));
+        return entries.stream().anyMatch(it -> sameValue(it.value(), value));
     }
 
     public int size() {
@@ -214,6 +224,16 @@ public class ArrayEntry<KEY, VALUE> {
 
     public ArrayEntry<KEY, VALUE> clone(boolean immutable) {
         return new ArrayEntry<>(immutable, this);
+    }
+
+    public boolean sameKey(KEY key, KEY key2) {
+        if (this.equalsAsSameOne) return Objects.equals(key, key2);
+        return key == key2;
+    }
+
+    public boolean sameValue(VALUE value, VALUE value2) {
+        if (this.equalsAsSameOne) return Objects.equals(value, value2);
+        return value == value2;
     }
 
     private void checkPermission(boolean readOption) {

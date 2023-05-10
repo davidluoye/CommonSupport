@@ -70,4 +70,20 @@ public final class LocalServices {
             sLocalServiceObjects.put(name, service);
         }
     }
+
+    public static <T> T remove(Class<T> type) {
+        return remove(type.getName());
+    }
+
+    public static <T> T remove(String name) {
+        synchronized (sLocalServiceObjects) {
+            return (T)sLocalServiceObjects.remove(name);
+        }
+    }
+
+    public static void clean() {
+        synchronized (sLocalServiceObjects) {
+            sLocalServiceObjects.clear();
+        }
+    }
 }

@@ -57,7 +57,7 @@ public class Splitter {
         return join(DEFAULT_SEPARATOR, param);
     }
 
-    public static String join(Object...param) {
+    public static String joins(Object...param) {
         return join(DEFAULT_SEPARATOR, Stream.of(param).map(String::valueOf).toArray(String[]::new));
     }
 

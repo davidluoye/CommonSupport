@@ -131,8 +131,8 @@ public class Permission {
      * @param callback permission state changed callback
      */
     public static void requestPermission(Context context, PermissionCallBack callback) {
-        String[] permissions = callback.permissions;
-        if (permissions == null || permissions.length <= 0) {
+        String[] permissions = getDeniedPermissions(callback.permissions);
+        if (permissions.length <= 0) {
             callback.onGranted(new String[0], permissions);
             return;
         }

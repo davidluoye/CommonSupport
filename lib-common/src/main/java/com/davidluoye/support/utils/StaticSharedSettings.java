@@ -31,7 +31,7 @@ public class StaticSharedSettings {
     }
 
     public static synchronized StaticSharedSettings init(SharedPreferences sp) {
-        if (sInstance != null) {
+        if (sInstance == null) {
             sInstance = new StaticSharedSettings(sp);
         }
         return sInstance;

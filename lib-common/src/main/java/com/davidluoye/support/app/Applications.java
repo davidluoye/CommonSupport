@@ -20,6 +20,8 @@ import android.app.Application;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Process;
 import android.os.UserManager;
 
 import com.davidluoye.support.utils.Reflect;
@@ -47,6 +49,19 @@ public class Applications {
         Method isSystem = Reflect.getStaticMethod(app, "isSystem", null);
         Boolean system = Reflect.callStaticMethod(isSystem, null);
         return system != null && system;
+    }
+
+    /**
+     * Returns whether the current process is in an isolated sandbox.
+     */
+    public static final boolean isIsolated() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            return Process.isIsolated();
+        }
+        Class<?> clazz = android.os.Process.class;
+        Method isIsolated = Reflect.getStaticMethod(clazz, "isIsolated", null);
+        Boolean isolated = Reflect.callStaticMethod(isIsolated, null);
+        return isolated != null && isolated;
     }
 
     /**

@@ -81,14 +81,15 @@ public class RemoteCallBacks<CALLBACK extends IInterface, COOKIE> {
     }
 
     public void broadcast(BiConsumer<CALLBACK, COOKIE> consumer, boolean reverseOrder) {
+        List<Node> nodes = null;
         synchronized (this) {
-            List<Node> nodes = entries.values();
-            final int step = reverseOrder ? -1 : 1;
-            final int head = reverseOrder ? nodes.size() - 1 : 0;
-            for (int index = head; index >= 0 && index < nodes.size(); index += step) {
-                Node node = nodes.get(index);
-                consumer.accept(node.callback, node.cookie);
-            }
+            nodes = entries.values();
+        }
+        final int step = reverseOrder ? -1 : 1;
+        final int head = reverseOrder ? nodes.size() - 1 : 0;
+        for (int index = head; index >= 0 && index < nodes.size(); index += step) {
+            Node node = nodes.get(index);
+            consumer.accept(node.callback, node.cookie);
         }
     }
 
@@ -97,18 +98,19 @@ public class RemoteCallBacks<CALLBACK extends IInterface, COOKIE> {
     }
 
     public EntrySet<CALLBACK, COOKIE> findBreak(BiiConsumer<CALLBACK, COOKIE> consumer, boolean reverseOrder) {
+        List<Node> nodes = null;
         synchronized (this) {
-            List<Node> nodes = entries.values();
-            final int step = reverseOrder ? -1 : 1;
-            final int head = reverseOrder ? nodes.size() - 1 : 0;
-            for (int index = head; index >= 0 && index < nodes.size(); index += step) {
-                Node node = nodes.get(index);
-                if (consumer.interrupt(node.callback, node.cookie)) {
-                    return EntrySet.obtain(node.callback, node.cookie);
-                }
-            }
-            return null;
+            nodes = entries.values();
         }
+        final int step = reverseOrder ? -1 : 1;
+        final int head = reverseOrder ? nodes.size() - 1 : 0;
+        for (int index = head; index >= 0 && index < nodes.size(); index += step) {
+            Node node = nodes.get(index);
+            if (consumer.interrupt(node.callback, node.cookie)) {
+                return EntrySet.obtain(node.callback, node.cookie);
+            }
+        }
+        return null;
     }
 
     public CALLBACK getCallBackFromCookie(COOKIE cookie) {
@@ -121,7 +123,10 @@ public class RemoteCallBacks<CALLBACK extends IInterface, COOKIE> {
     }
 
     public COOKIE getCookieFromCallBack(CALLBACK callback) {
-        Node node = entries.getValue(callback.asBinder());
+        Node node = null;
+        synchronized (this) {
+            node = entries.getValue(callback.asBinder());
+        }
         return node != null ? node.cookie : null;
     }
 
