@@ -1,1 +1,1 @@
-include ':lib-common', ':examples'
+include ':lib-common', 'view-pager', ':examples'
