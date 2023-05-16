@@ -1,6 +1,6 @@
 package com.david.demo;
 
-import com.davidluoye.support.list.ArrayEntry;
+import com.davidluoye.core.list.ArrayEntry;
 
 import org.junit.Assert;
 import org.junit.Test;

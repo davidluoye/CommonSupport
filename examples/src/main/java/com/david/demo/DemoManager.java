@@ -4,8 +4,7 @@ import android.content.Context;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.davidluoye.support.link.BaseRemoteManager;
-
+import com.davidluoye.linker.BaseRemoteManager;
 
 public class DemoManager extends BaseRemoteManager<IDemo> {
 

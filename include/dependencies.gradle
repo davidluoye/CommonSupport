@@ -1,0 +1,29 @@
+android {
+    compileSdkVersion buildVersion.compileSdkVersion
+    defaultConfig {
+        minSdkVersion buildVersion.minSdkVersion
+        targetSdkVersion buildVersion.targetSdkVersion
+    }
+
+    android.libraryVariants.all { variant ->
+        variant.outputs.each { output ->
+            String file = output.outputFileName // output file name
+            String name = output.name  // debug or release
+            if (file != null && name == "debug") {
+                output.outputFileName = file.replace(String.format("-%s", name), "")
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            aidl.srcDirs = ['src/main/aidl']
+        }
+    }
+}
+

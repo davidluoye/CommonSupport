@@ -1,0 +1,3 @@
+apply plugin: 'com.android.library'
+apply from: "${rootDir}/include/dependencies.gradle"
+apply from: "${rootDir}/include/lib-linker.gradle"

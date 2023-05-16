@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.davidluoye.support.link.BaseRemoteService;
+import com.davidluoye.linker.BaseRemoteService;
 
 public class DemoService extends BaseRemoteService {
 

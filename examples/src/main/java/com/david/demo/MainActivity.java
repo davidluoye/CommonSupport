@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.davidluoye.support.log.ILogger;
+import com.davidluoye.core.log.ILogger;
 
 public class MainActivity extends Activity {
     private static final ILogger LOGGER = ILogger.logger(MainActivity.class);

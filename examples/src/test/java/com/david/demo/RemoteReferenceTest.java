@@ -21,7 +21,7 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.support.annotation.NonNull;
 
-import com.davidluoye.support.utils.RemoteReference;
+import com.davidluoye.core.utils.RemoteReference;
 
 import org.junit.Assert;
 import org.junit.Test;

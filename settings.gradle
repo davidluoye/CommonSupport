@@ -1,1 +1,1 @@
-include ':lib-common', 'view-pager', ':examples'
+include ':lib-core', 'lib-viewpager', 'lib-command', 'lib-component', 'lib-linker', ':examples'

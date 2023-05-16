@@ -1,0 +1,111 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+ext {
+    publish_group_id = 'io.github.davidluoye'
+    publish_artifact_id = "$project.name"
+    publish_version = "1.0.0"
+    publish_package = "com/davidluoye/core"
+}
+
+configurations {
+    doclava
+}
+
+dependencies {
+    // do not to depend on any other library.
+    doclava 'com.google.doclava:doclava:1.0.6'
+}
+
+task buildJavadoc(type: Javadoc, dependsOn: [project.configurations.doclava, 'assembleDebug']) {
+    failOnError = true
+    title = null
+    source = android.sourceSets.main.java.srcDirs
+    source += "build/generated/aidl_source_output_dir/debug/out/$publish_package"
+    options.doclet = "com.google.doclava.Doclava"
+    options.docletpath = configurations.doclava.files.asType(List)
+    options.noTimestamp = false
+    options.memberLevel = JavadocMemberLevel.PROTECTED
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    destinationDir = file("build/outputs/javadoc")
+}
+
+task androidJavadoc(type: Zip, dependsOn: buildJavadoc) {
+    archiveClassifier.set("doc")
+    from "build/outputs/javadoc"
+}
+
+task androidSourcesJar(type: Jar) {
+    // archiveClassifier need gradle version >= 5.1
+    archiveClassifier.set("sources")
+    from android.sourceSets.main.java.source
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class"
+}
+
+task androidJavaJar(type: Jar, dependsOn:['assembleDebug']) {
+    archiveClassifier.set("jar")
+    from "build/intermediates/javac/debug/classes"
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId     publish_group_id
+            artifactId  publish_artifact_id
+            version     publish_version
+
+            artifact    ("$buildDir/outputs/aar/${project.name}.aar")
+            artifact    androidJavadoc
+            artifact    androidSourcesJar
+            artifact    androidJavaJar
+
+            pom {
+                // 构件名称，可以自定义
+                name = "${project.name}"
+                // 构件描述
+                description = 'Android common util library.'
+                // 构件主页
+                url = 'https://github.com/davidluoye/CommonSupport'
+                // 许可证名称和地址
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                // 开发者信息
+                developers {
+                    developer {
+                        name = 'Yangdw'
+                        email = 'davidluoye@gmail.com'
+                    }
+                }
+                // 版本控制仓库地址
+                scm {
+                    url = 'https://github.com/davidluoye/CommonSupport'
+                    connection = 'scm:git:github.com/davidluoye/CommonSupport.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/davidluoye/CommonSupport.git'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                // username and password should be place in global properties in ~/.gradle/gradle.properties in linux.
+                username sonatypeUsername
+                password sonatypePassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications
+}

@@ -25,7 +25,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':lib-common')
+    implementation project(':lib-core')
+    implementation project(':lib-linker')
     implementation deps.support.appcompat
 
     testImplementation 'junit:junit:4.+'

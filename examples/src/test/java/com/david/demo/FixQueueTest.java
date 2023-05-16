@@ -1,6 +1,6 @@
 package com.david.demo;
 
-import com.davidluoye.support.queue.FixQueue;
+import com.davidluoye.core.queue.FixQueue;
 
 import org.junit.Assert;
 import org.junit.Test;
