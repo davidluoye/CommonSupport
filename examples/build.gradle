@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'com.david.demo'
 
     defaultConfig {
-        applicationId "com.david.demo"
         minSdkVersion buildVersion.minSdkVersion
         targetSdkVersion buildVersion.targetSdkVersion
         compileSdkVersion buildVersion.compileSdkVersion

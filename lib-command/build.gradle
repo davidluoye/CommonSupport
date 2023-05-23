@@ -1,3 +1,7 @@
 apply plugin: 'com.android.library'
 apply from: "${rootDir}/include/dependencies.gradle"
 apply from: "${rootDir}/include/lib-command.gradle"
+
+android {
+    namespace 'com.davidluoye.command'
+}

@@ -2,6 +2,10 @@ apply plugin: 'com.android.library'
 apply from: "${rootDir}/include/dependencies.gradle"
 apply from: "${rootDir}/include/lib-viewpager.gradle"
 
+android {
+    namespace 'com.davidluoye.viewpager'
+}
+
 dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
