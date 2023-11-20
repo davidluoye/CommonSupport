@@ -40,6 +40,8 @@ public interface IActivity {
 
     void onPostResume();
 
+    void onPause();
+
     void onStop();
 
     void onDestroy();

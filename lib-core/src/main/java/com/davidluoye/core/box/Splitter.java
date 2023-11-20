@@ -16,17 +16,19 @@
 
 package com.davidluoye.core.box;
 
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 public class Splitter {
     private static final String DEFAULT_SEPARATOR = ",";
 
     public static String join(int... param) {
-        return join(DEFAULT_SEPARATOR, Stream.of(param).map(String::valueOf).toArray(String[]::new));
+        return join(DEFAULT_SEPARATOR, IntStream.of(param).mapToObj(String::valueOf).toArray(String[]::new));
     }
 
     public static String join(long... param) {
-        return join(DEFAULT_SEPARATOR, Stream.of(param).map(String::valueOf).toArray(String[]::new));
+        return join(DEFAULT_SEPARATOR, LongStream.of(param).mapToObj(String::valueOf).toArray(String[]::new));
     }
 
     public static String join(float... param) {

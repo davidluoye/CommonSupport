@@ -17,11 +17,13 @@
 package com.davidluoye.core.utils;
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.RemoteException;
 
 import com.davidluoye.core.IRemoteCallBack;
 
-public class RemoteCallBack {
+public class RemoteCallBack implements Parcelable {
 
     public interface OnCallBack {
         Bundle onCallback(String key, Bundle extra);
@@ -58,4 +60,34 @@ public class RemoteCallBack {
         }
         return null;
     }
+
+
+    /************************** for parcelable ******************************/
+    protected RemoteCallBack(Parcel in) {
+        this.mRemote = IRemoteCallBack.Stub.asInterface(in.readStrongBinder());
+        this.callback = null;
+    }
+
+    public static final Creator<RemoteCallBack> CREATOR = new Creator<RemoteCallBack>() {
+        @Override
+        public RemoteCallBack createFromParcel(Parcel in) {
+            return new RemoteCallBack(in);
+        }
+
+        @Override
+        public RemoteCallBack[] newArray(int size) {
+            return new RemoteCallBack[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeStrongBinder(this.mRemote.asBinder());
+    }
+
 }

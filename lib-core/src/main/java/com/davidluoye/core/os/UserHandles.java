@@ -28,6 +28,8 @@ public class UserHandles {
 
     private static int def(Integer value, int defValue) { return value != null ? value : defValue; }
 
+    public static final int PER_USER_RANGE = def(Reflect.getStaticField(UserHandle.class, "PER_USER_RANGE"), 100000);
+
     public static final int USER_ALL = def(Reflect.getStaticField(UserHandle.class, "USER_ALL"), -1);
     public static final UserHandle ALL = Reflect.getStaticField(UserHandle.class, "ALL");
 
@@ -62,12 +64,7 @@ public class UserHandles {
     public static boolean isSystem(UserHandle handle) { return handle.equals(SYSTEM); }
 
     public static int getUserId(int uid) {
-        Method method = Reflect.getStaticMethod(UserHandle.class, "getUserId", new Class[]{int.class});
-        if (method != null) {
-            Integer res = Reflect.callStaticMethod(method, new Object[]{uid});
-            return res != null ? res : 0;
-        }
-        return 0;
+        return uid / PER_USER_RANGE;
     }
 
     public static UserHandle of(int userId) {

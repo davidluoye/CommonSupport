@@ -118,6 +118,11 @@ public abstract class IBaseActivity extends IBaseContext implements IActivity {
     }
 
     @Override
+    public void onPause() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
     public void onStop() {
         // TODO Auto-generated method stub
     }
