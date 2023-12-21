@@ -3,6 +3,6 @@
     package="com.davidluoye.core">
 
     <application>
-        <activity android:name=".app.PermissionUI" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name="com.davidluoye.permission.PermissionUI" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 </manifest>

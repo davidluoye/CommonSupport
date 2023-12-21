@@ -18,6 +18,8 @@ package com.davidluoye.core.os;
 
 import android.util.ArrayMap;
 
+import java.util.Optional;
+
 /**
  * This class is used in a similar way as ServiceManager, except the services registered here
  * are not Binder objects and are only available in the same process.
@@ -29,6 +31,7 @@ public final class LocalServices {
     private LocalServices() {}
 
     private static final ArrayMap<String, Object> sLocalServiceObjects = new ArrayMap<>();
+    private static final ArrayMap<String, IServiceChangedCallBack> sServiceChangedCallBacks = new ArrayMap<>();
 
     /**
      * Returns a local service instance that implements the specified interface.
@@ -68,6 +71,7 @@ public final class LocalServices {
                 throw new IllegalStateException("Overriding service registration");
             }
             sLocalServiceObjects.put(name, service);
+            Optional.ofNullable(sServiceChangedCallBacks.get(name)).ifPresent(it -> it.onServiceRemoved(name, it));
         }
     }
 
@@ -77,13 +81,52 @@ public final class LocalServices {
 
     public static <T> T remove(String name) {
         synchronized (sLocalServiceObjects) {
-            return (T)sLocalServiceObjects.remove(name);
+            Object service = sLocalServiceObjects.remove(name);
+            if (service != null) {
+                Optional.ofNullable(sServiceChangedCallBacks.get(name)).ifPresent(it -> it.onServiceRemoved(name, it));
+            }
+            return (T)service;
         }
     }
 
     public static void clean() {
         synchronized (sLocalServiceObjects) {
+            sServiceChangedCallBacks.forEach((key, value) -> value.onServiceRemoved(key, value));
             sLocalServiceObjects.clear();
+            sServiceChangedCallBacks.clear();
         }
+    }
+
+    // ============= service changed callback interface ====================
+    public static <T> void addServiceChangedCallBack(Class<T> type, IServiceChangedCallBack callback) {
+        addServiceChangedCallBack(type.getName(), callback);
+    }
+
+    public static void addServiceChangedCallBack(String name, IServiceChangedCallBack callback) {
+        synchronized (sLocalServiceObjects) {
+            if (sServiceChangedCallBacks.containsKey(name)) {
+                throw new IllegalStateException("Overriding callback registration");
+            }
+            sServiceChangedCallBacks.put(name, callback);
+
+            // update callback
+            Object service = sLocalServiceObjects.get(name);
+            if (service != null) {
+                callback.onServiceAdded(name, service);
+            }
+        }
+    }
+
+    public interface IServiceChangedCallBack {
+        default void onServiceAdded(String name, Object service) {}
+        default void onServiceRemoved(String name, Object service) {}
+    }
+
+    public interface IServiceAddCallBack extends IServiceChangedCallBack {
+        void onServiceAdded(String name, Object service);
+    }
+
+    public interface IServiceRemoveCallBack extends IServiceChangedCallBack {
+        void onServiceRemoved(String name, Object service);
     }
 }

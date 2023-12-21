@@ -1,6 +1,6 @@
 package com.david.demo;
 
-import com.davidluoye.core.queue.FixQueue;
+import com.davidluoye.core.queue.ArrayFixQueue;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,12 +12,12 @@ public class FixQueueTest {
 
     private static final int MAX_QUEUE = 10;
 
-    private final FixQueue<String> queue;
+    private final ArrayFixQueue<String> queue;
     public FixQueueTest() {
-        this.queue = new FixQueue(MAX_QUEUE);
+        this.queue = new ArrayFixQueue(MAX_QUEUE);
     }
 
-    private void fill(FixQueue<String> queue, int min, int count) {
+    private void fill(ArrayFixQueue<String> queue, int min, int count) {
         for (int index = min; index < count + min; index++) {
             queue.add(String.valueOf(index));
         }
@@ -222,26 +222,26 @@ public class FixQueueTest {
 
     @Test
     public void testCreate() {
-        FixQueue<String> queue = null;
+        ArrayFixQueue<String> queue = null;
         String[] array = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
         String[] array1 = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
-        queue = FixQueue.of(array);
+        queue = ArrayFixQueue.of(array);
         Assert.assertArrayEquals(queue.toArray(String[]::new), array);
 
-        queue = FixQueue.of(10, array);
+        queue = ArrayFixQueue.of(10, array);
         Assert.assertEquals(queue.size(), 10);
         Assert.assertArrayEquals(queue.toArray(String[]::new), array1);
         Assert.assertEquals(queue.peek(), "1");
         Assert.assertEquals(queue.tail(), "10");
 
-        queue = new FixQueue<>();
+        queue = new ArrayFixQueue<>();
         queue.add(array);
         Assert.assertEquals(queue.size(), 12);
         Assert.assertEquals(queue.peek(), "1");
         Assert.assertEquals(queue.tail(), "12");
 
-        queue = new FixQueue<>(10);
+        queue = new ArrayFixQueue<>(10);
         queue.add(array);
         Assert.assertEquals(queue.size(), 10);
         Assert.assertEquals(queue.peek(), "3");

@@ -25,27 +25,27 @@ import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public class SynchronizedFixQueue<T> extends FixQueue<T> {
+public class SynchronizedArrayFixQueue<T> extends ArrayFixQueue<T> {
 
     private final RWLock mLock = new RWLock();
 
-    public SynchronizedFixQueue() {
+    public SynchronizedArrayFixQueue() {
         super();
     }
 
-    public SynchronizedFixQueue(int maxCapacity) {
+    public SynchronizedArrayFixQueue(int maxCapacity) {
         super(maxCapacity);
     }
 
-    public SynchronizedFixQueue(T[] array) {
+    public SynchronizedArrayFixQueue(T[] array) {
         super(array);
     }
 
-    public SynchronizedFixQueue(T[] array, int maxCapacity) {
+    public SynchronizedArrayFixQueue(T[] array, int maxCapacity) {
         super(array, maxCapacity);
     }
 
-    public SynchronizedFixQueue(int initCapacity, int maxCapacity) {
+    public SynchronizedArrayFixQueue(int initCapacity, int maxCapacity) {
         super(initCapacity, maxCapacity);
     }
 
@@ -169,17 +169,17 @@ public class SynchronizedFixQueue<T> extends FixQueue<T> {
     }
 
     @Override
-    protected FixQueue<T> onCloneNewQueue(int maxCapacity) {
-        FixQueue<T> queue = new SynchronizedFixQueue<>(maxCapacity);
+    protected ArrayFixQueue<T> onCloneNewQueue(int maxCapacity) {
+        ArrayFixQueue<T> queue = new SynchronizedArrayFixQueue<>(maxCapacity);
         forEach(queue::add);
         return queue;
     }
 
-    public static <T> SynchronizedFixQueue<T> of(T... ts) {
-        return new SynchronizedFixQueue<>(ts);
+    public static <T> SynchronizedArrayFixQueue<T> of(T... ts) {
+        return new SynchronizedArrayFixQueue<>(ts);
     }
 
-    public static <T> SynchronizedFixQueue<T> of(int maxCapacity, T... ts) {
-        return new SynchronizedFixQueue<>(ts, maxCapacity);
+    public static <T> SynchronizedArrayFixQueue<T> of(int maxCapacity, T... ts) {
+        return new SynchronizedArrayFixQueue<>(ts, maxCapacity);
     }
 }

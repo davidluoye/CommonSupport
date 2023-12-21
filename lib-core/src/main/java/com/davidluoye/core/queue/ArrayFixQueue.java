@@ -24,7 +24,7 @@ import java.util.Spliterators;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
-public class FixQueue<T> implements IQueue<T> {
+public class ArrayFixQueue<T> implements IQueue<T> {
 
     private static final int INIT_CAPACITY = 8;
 
@@ -32,25 +32,25 @@ public class FixQueue<T> implements IQueue<T> {
 
     private int size;
     private Object[] items;
-    public FixQueue() {
+    public ArrayFixQueue() {
         this(INIT_CAPACITY, Integer.MAX_VALUE);
     }
 
-    public FixQueue(int maxCapacity) {
+    public ArrayFixQueue(int maxCapacity) {
         this(INIT_CAPACITY, maxCapacity);
     }
 
-    public FixQueue(T[] array) {
+    public ArrayFixQueue(T[] array) {
         this(array, Integer.MAX_VALUE);
     }
 
-    public FixQueue(T[] array, int maxCapacity) {
+    public ArrayFixQueue(T[] array, int maxCapacity) {
         this(array.length, maxCapacity);
         this.size = items.length;
         System.arraycopy(array, 0, items, 0, size);
     }
 
-    public FixQueue(int initCapacity, int maxCapacity) {
+    public ArrayFixQueue(int initCapacity, int maxCapacity) {
         int capacity = initCapacity;
         if (maxCapacity <= 0) {
             maxCapacity = Integer.MAX_VALUE;
@@ -315,7 +315,7 @@ public class FixQueue<T> implements IQueue<T> {
     }
 
     @Override
-    public final FixQueue<T> clone(boolean immutable) {
+    public final ArrayFixQueue<T> clone(boolean immutable) {
         return onCloneNewQueue(this.maxCapacity);
     }
 
@@ -350,17 +350,17 @@ public class FixQueue<T> implements IQueue<T> {
         }
     }
 
-    protected FixQueue<T> onCloneNewQueue(int maxCapacity) {
-        FixQueue<T> queue = new FixQueue<>(maxCapacity);
+    protected ArrayFixQueue<T> onCloneNewQueue(int maxCapacity) {
+        ArrayFixQueue<T> queue = new ArrayFixQueue<>(maxCapacity);
         forEach(queue::add);
         return queue;
     }
 
-    public static <T> FixQueue<T> of(T... ts) {
-        return new FixQueue<>(ts);
+    public static <T> ArrayFixQueue<T> of(T... ts) {
+        return new ArrayFixQueue<>(ts);
     }
 
-    public static <T> FixQueue<T> of(int maxCapacity, T... ts) {
-        return new FixQueue<>(ts, maxCapacity);
+    public static <T> ArrayFixQueue<T> of(int maxCapacity, T... ts) {
+        return new ArrayFixQueue<>(ts, maxCapacity);
     }
 }

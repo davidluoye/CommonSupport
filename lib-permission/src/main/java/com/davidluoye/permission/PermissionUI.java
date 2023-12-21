@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.davidluoye.core.app;
+package com.davidluoye.permission;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
-
-import com.davidluoye.core.IPermissionCallBack;
-import com.davidluoye.core.log.ILogger;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PermissionUI extends Activity {
-    private static final ILogger LOGGER = ILogger.logger(PermissionUI.class);
-
     private static final int REQUEST_PERMISSION_CODE = 0x0010;
 
     private IPermissionCallBack mCallBack;
@@ -60,7 +56,7 @@ public class PermissionUI extends Activity {
                 if (grantResults[index] == PackageManager.PERMISSION_GRANTED) {
                     grantedPermission.add(permissions[index]);
                 } else {
-                    LOGGER.e("request %s fail.", permissions[index]);
+                    Log.e("PermissionUI", String.format("request %s fail.", permissions[index]));
                 }
             }
 

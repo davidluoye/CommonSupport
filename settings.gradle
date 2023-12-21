@@ -1,1 +1,1 @@
-include ':lib-core', 'lib-viewpager', 'lib-command', 'lib-component', 'lib-linker', ':examples'
+include ':lib-core', 'lib-viewpager', 'lib-command', 'lib-component', 'lib-linker', 'lib-permission', ':examples'

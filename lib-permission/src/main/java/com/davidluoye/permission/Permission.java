@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.davidluoye.core.app;
+package com.davidluoye.permission;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.Bundle;
-
-import com.davidluoye.core.utils.PermissionCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +30,9 @@ public class Permission {
     public static final String KEY_PERMISSION = "key-permission";
     public static final String KEY_CALLBACK = "key-callback";
 
-    public static boolean hasPermission(String permission) {
-        PackageManager pm = Applications.getPackageManager();
-        String pkg = Applications.getPackageName();
+    public static boolean hasPermission(Context context, String permission) {
+        PackageManager pm = context.getPackageManager();
+        String pkg = context.getPackageName();
         int gain = pm.checkPermission(permission, pkg);
         return gain == PackageManager.PERMISSION_GRANTED;
     }
@@ -52,15 +50,14 @@ public class Permission {
      *       pid/uid is allowed that permission, or
      *      {@link PackageManager#PERMISSION_DENIED} if it is not.
      */
-    public static int checkPermission(String permission, int pid, int uid) {
-        Context context = Applications.getApplication();
+    public static int checkPermission(Context context, String permission, int pid, int uid) {
         return context.checkPermission(permission, pid, uid);
     }
 
     /**
      * Determine whether the calling process of an IPC you are handling has been
      * granted a particular permission.  This is basically the same as calling
-     * {@link #checkPermission(String, int, int)} with the pid and uid returned
+     * {@link #checkPermission(Context, String, int, int)} with the pid and uid returned
      * by {@link android.os.Binder#getCallingPid} and
      * {@link android.os.Binder#getCallingUid}.  One important difference
      * is that if you are not currently processing an IPC, this function
@@ -76,10 +73,10 @@ public class Permission {
      * @see PackageManager#checkPermission(String, String)
      * @see #checkPermission
      */
-    public static int checkCallingPermission(String permission) {
+    public static int checkCallingPermission(Context context, String permission) {
         final int pid = Binder.getCallingPid();
         final int uid = Binder.getCallingUid();
-        return checkPermission(permission, pid, uid);
+        return checkPermission(context, permission, pid, uid);
     }
 
     /**
@@ -91,12 +88,12 @@ public class Permission {
      * permission, or {@link PackageManager#PERMISSION_DENIED} if not.
      *
      * @see PackageManager#checkPermission(String, String)
-     * @see #checkCallingPermission(String)
+     * @see #checkCallingPermission(Context, String)
      */
-    public static int checkSelfPermission(String permission) {
+    public static int checkSelfPermission(Context context, String permission) {
         final int myPid = android.os.Process.myPid();
         final int myUid = android.os.Process.myUid();
-        return checkPermission(permission, myPid, myUid);
+        return checkPermission(context, permission, myPid, myUid);
     }
 
     /**
@@ -105,10 +102,10 @@ public class Permission {
      * @param permissions The name of the permissions being checked.
      * @return an array of permissions which has been denied.
      */
-    public static String[] getDeniedPermissions(String[] permissions) {
+    public static String[] getDeniedPermissions(Context context, String[] permissions) {
         List<String> needRequest = new ArrayList<>();
         for (int index = 0; index < permissions.length; index++) {
-            int gain = checkSelfPermission(permissions[index]);
+            int gain = checkSelfPermission(context, permissions[index]);
             if (gain != PackageManager.PERMISSION_GRANTED) {
                 needRequest.add(permissions[index]);
             }
@@ -131,7 +128,7 @@ public class Permission {
      * @param callback permission state changed callback
      */
     public static void requestPermission(Context context, PermissionCallBack callback) {
-        String[] permissions = getDeniedPermissions(callback.permissions);
+        String[] permissions = getDeniedPermissions(context, callback.permissions);
         if (permissions.length <= 0) {
             callback.onGranted(new String[0], permissions);
             return;

@@ -1,0 +1,7 @@
+apply plugin: 'com.android.library'
+apply from: "${rootDir}/include/dependencies.gradle"
+apply from: "${rootDir}/include/lib-permission.gradle"
+
+android {
+    namespace 'com.davidluoye.permission'
+}

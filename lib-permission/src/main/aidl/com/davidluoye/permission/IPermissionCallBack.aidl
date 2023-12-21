@@ -1,4 +1,4 @@
-package com.davidluoye.core;
+package com.davidluoye.permission;
 
 import java.util.List;
 

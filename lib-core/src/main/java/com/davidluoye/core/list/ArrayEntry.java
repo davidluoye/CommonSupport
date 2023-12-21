@@ -16,7 +16,7 @@
 
 package com.davidluoye.core.list;
 
-import com.davidluoye.core.queue.FixQueue;
+import com.davidluoye.core.queue.ArrayFixQueue;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 public class ArrayEntry<KEY, VALUE> {
 
-    private final FixQueue<EntrySet<KEY, VALUE>> entries;
+    private final ArrayFixQueue<EntrySet<KEY, VALUE>> entries;
     private final boolean immutable;
     private final boolean equalsAsSameOne;
 
@@ -44,7 +44,7 @@ public class ArrayEntry<KEY, VALUE> {
 
     protected ArrayEntry(boolean immutable, ArrayEntry<KEY, VALUE> entries, boolean equalsAsSameOne) {
         this.immutable = immutable;
-        this.entries = entries != null ? entries.entries : new FixQueue<>();
+        this.entries = entries != null ? entries.entries : new ArrayFixQueue<>();
         this.equalsAsSameOne = equalsAsSameOne;
     }
 
