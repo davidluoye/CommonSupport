@@ -27,3 +27,23 @@ android {
     }
 }
 
+def version_libraries="1.2.0"
+
+ext {
+    versions = [
+            'lib_command'                                          : version_libraries,
+            'lib_component'                                        : version_libraries,
+            'lib_core'                                             : version_libraries,
+            'lib_linker'                                           : version_libraries,
+            'lib_permission'                                       : version_libraries,
+            'lib_viewpager'                                        : version_libraries,
+
+            'jaxDoclet'                                              : "0.10.0",
+
+    ]
+
+    deps = [
+        'jaxDoclet'                   : "com.lunatech.jax-doclets:doclets:${versions.jaxDoclet}",
+    ]
+}
+

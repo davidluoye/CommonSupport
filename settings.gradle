@@ -1,1 +1,22 @@
-include ':lib-core', 'lib-viewpager', 'lib-command', 'lib-component', 'lib-linker', 'lib-permission', ':examples'
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "CommonSupport"
+include ':lib-core'
+include ':lib-command'
+include ':lib-component'
+include ':lib-linker'
+include ':lib-permission'
+include ':lib-viewpager'
+include ':examples'

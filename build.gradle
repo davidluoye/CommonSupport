@@ -1,21 +1,6 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-buildscript {
-    
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.0'
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+plugins {
+    id 'com.android.application' version '8.0.1' apply false
+    id 'com.android.library' version '8.0.1' apply false
 }
 
 ext {
@@ -36,10 +21,4 @@ ext {
              'appcompat'       : "com.android.support:appcompat-v7:${versions.supportLib}"
         ],
     ]
-
-}
-
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

@@ -1,33 +1,35 @@
+apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
+apply from: "${rootDir}/include/dependencies.gradle"
 
 ext {
     publish_group_id = 'io.github.davidluoye'
     publish_artifact_id = "$project.name"
-    publish_version = "1.0.0"
+    publish_version = versions.lib_component
     publish_package = "com/davidluoye/component"
 }
 
-configurations {
-    doclava
-}
+task buildJavadoc(type: Javadoc, dependsOn:['assembleDebug']) {
+    options {
+        linkSource true
+        author false
+        noTree false
+        noIndex false
+        noNavBar false
+        encoding('UTF-8')
+        charSet('UTF-8')
+        memberLevel = JavadocMemberLevel.PROTECTED
+        addStringOption('Xdoclint:none', '-quiet')
+    }
 
-dependencies {
-    // do not to depend on any other library.
-    doclava 'com.google.doclava:doclava:1.0.6'
-}
-
-task buildJavadoc(type: Javadoc, dependsOn: [project.configurations.doclava, 'assembleDebug']) {
     failOnError = true
     title = null
     source = android.sourceSets.main.java.srcDirs
     source += "build/generated/aidl_source_output_dir/debug/out/$publish_package"
-    options.doclet = "com.google.doclava.Doclava"
-    options.docletpath = configurations.doclava.files.asType(List)
-    options.noTimestamp = false
-    options.memberLevel = JavadocMemberLevel.PROTECTED
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     destinationDir = file("build/outputs/javadoc")
+    doNotTrackState("Javadoc task does not impact the outcome of the build.")
 }
 
 task androidJavadoc(type: Zip, dependsOn: buildJavadoc) {
@@ -98,6 +100,7 @@ publishing {
             def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
+                // maven repository username and password
                 // username and password should be place in global properties in ~/.gradle/gradle.properties in linux.
                 username sonatypeUsername
                 password sonatypePassword
