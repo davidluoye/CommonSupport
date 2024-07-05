@@ -27,7 +27,7 @@ android {
     }
 }
 
-def version_libraries="1.2.0"
+def version_libraries="1.2.1"
 
 ext {
     versions = [

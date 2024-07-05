@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.davidluoye.core">
-
-    <application>
-        <activity android:name="com.davidluoye.permission.PermissionUI" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-    </application>
 </manifest>

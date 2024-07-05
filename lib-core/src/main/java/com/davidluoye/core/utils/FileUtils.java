@@ -17,7 +17,7 @@ package com.davidluoye.core.utils;
 
 import java.io.File;
 
-public class FileUtil {
+public class FileUtils {
 
     /**
      * Delete a file or directory

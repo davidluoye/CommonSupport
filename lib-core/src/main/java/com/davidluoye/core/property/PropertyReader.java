@@ -15,6 +15,8 @@
  */
 package com.davidluoye.core.property;
 
+import com.davidluoye.core.log.ILogger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,14 +29,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PropertyReader {
+    private static final ILogger LOGGER = ILogger.logger(PropertyReader.class);
 
     private final char mSplitter;
     private final HashMap<String, String> mCache;
     private final Path path;
+    private final InputStream stream;
     public PropertyReader(char splitter, Path path) {
         this.mSplitter = splitter;
         this.mCache = new HashMap<>();
         this.path = path;
+        this.stream = null;
+    }
+
+    public PropertyReader(char splitter, InputStream stream) {
+        this.mSplitter = splitter;
+        this.mCache = new HashMap<>();
+        this.path = null;
+        this.stream = stream;
     }
 
     public Map<String, String> getProperties() {
@@ -42,8 +54,21 @@ public class PropertyReader {
     }
 
     public boolean read() {
-        try(InputStream is = Files.newInputStream(path, StandardOpenOption.READ)) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        if (stream != null) {
+            return read(stream);
+        }
+
+        try (InputStream stream = Files.newInputStream(path, StandardOpenOption.READ)) {
+            return read(stream);
+        } catch (IOException e) {
+            LOGGER.e(e, "fail to read: %s", path);
+        }
+        return false;
+    }
+
+    private boolean read(InputStream stream) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String line = null;
             while ((line = reader.readLine()) != null) {
                 int index = line.indexOf(mSplitter);
@@ -53,9 +78,8 @@ public class PropertyReader {
                     mCache.put(key, value);
                 }
             }
-            return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.e(e, "fail to read properties");
         }
         return false;
     }

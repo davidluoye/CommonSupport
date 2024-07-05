@@ -26,8 +26,8 @@ import com.davidluoye.core.log.ILogger;
 
 import java.util.List;
 
-public class OsUtil {
-    private static final ILogger LOGGER = ILogger.logger(OsUtil.class);
+public class OsUtils {
+    private static final ILogger LOGGER = ILogger.logger(OsUtils.class);
 
     public static final String SCHEME_ANDROID_RESOURCE = "android.resource";
 
