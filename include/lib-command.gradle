@@ -105,6 +105,13 @@ publishing {
                 username sonatypeUsername
                 password sonatypePassword
             }
+
+            credentials {
+                // maven repository user token
+                // username and password should be place in global properties in ~/.gradle/gradle.properties in linux.
+                username = sonatypeUserTokenUsername
+                password = sonatypeUserTokenPassword
+            }
         }
     }
 }
