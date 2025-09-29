@@ -1,0 +1,121 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+apply from: "${rootDir}/include/dependencies.gradle"
+
+ext {
+    publish_group_id = 'io.github.davidluoye'
+    publish_artifact_id = "$project.name"
+    publish_version = versions.lib_views
+    publish_package = "com/davidluoye/views"
+}
+
+task buildJavadoc(type: Javadoc, dependsOn:['assembleDebug']) {
+    options {
+        linkSource true
+        author false
+        noTree false
+        noIndex false
+        noNavBar false
+        encoding('UTF-8')
+        charSet('UTF-8')
+        memberLevel = JavadocMemberLevel.PROTECTED
+        addStringOption('Xdoclint:none', '-quiet')
+    }
+
+    failOnError = true
+    title = null
+    source = android.sourceSets.main.java.srcDirs
+    source += "build/generated/aidl_source_output_dir/debug/out/$publish_package"
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    destinationDir = file("build/outputs/javadoc")
+    doNotTrackState("Javadoc task does not impact the outcome of the build.")
+}
+
+task androidJavadoc(type: Zip, dependsOn: buildJavadoc) {
+    archiveClassifier.set("doc")
+    from "build/outputs/javadoc"
+}
+
+task androidSourcesJar(type: Jar) {
+    // archiveClassifier need gradle version >= 5.1
+    archiveClassifier.set("sources")
+    from android.sourceSets.main.java.source
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class"
+}
+
+task androidJavaJar(type: Jar, dependsOn:['assembleDebug']) {
+    archiveClassifier.set("jar")
+    from "build/intermediates/javac/debug/classes"
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId     publish_group_id
+            artifactId  publish_artifact_id
+            version     publish_version
+
+            artifact    ("$buildDir/outputs/aar/${project.name}.aar")
+            artifact    androidJavadoc
+            artifact    androidSourcesJar
+            artifact    androidJavaJar
+
+            pom {
+                // 构件名称，可以自定义
+                name = "${project.name}"
+                // 构件描述
+                description = 'Android common util library.'
+                // 构件主页
+                url = 'https://github.com/davidluoye/CommonSupport'
+                // 许可证名称和地址
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                // 开发者信息
+                developers {
+                    developer {
+                        name = 'Yangdw'
+                        email = 'davidluoye@gmail.com'
+                    }
+                }
+                // 版本控制仓库地址
+                scm {
+                    url = 'https://github.com/davidluoye/CommonSupport'
+                    connection = 'scm:git:github.com/davidluoye/CommonSupport.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/davidluoye/CommonSupport.git'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                // maven repository username and password
+                // username and password should be place in global properties in ~/.gradle/gradle.properties in linux.
+                username sonatypeUsername
+                password sonatypePassword
+            }
+
+            credentials {
+                // maven repository user token
+                // username and password should be place in global properties in ~/.gradle/gradle.properties in linux.
+                username = sonatypeUserTokenUsername
+                password = sonatypeUserTokenPassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications
+}

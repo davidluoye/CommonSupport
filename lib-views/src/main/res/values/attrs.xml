@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RoundCornerAttribute">
+        <attr name="radiusLeftTopX" format="dimension"/>
+        <attr name="radiusLeftTopY" format="dimension"/>
+        <attr name="radiusRightTopX" format="dimension"/>
+        <attr name="radiusRightTopY" format="dimension"/>
+        <attr name="radiusLeftBottomX" format="dimension"/>
+        <attr name="radiusLeftBottomY" format="dimension"/>
+        <attr name="radiusRightBottomX" format="dimension"/>
+        <attr name="radiusRightBottomY" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="RoundImageView">
+        <attr name="backgroundCorner" format="reference"/>
+        <attr name="foregroundCorner" format="reference"/>
+        <attr name="resourceCorner" format="reference"/>
+    </declare-styleable>
+</resources>

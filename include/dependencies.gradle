@@ -37,6 +37,7 @@ ext {
             'lib_linker'                                           : version_libraries,
             'lib_permission'                                       : version_libraries,
             'lib_viewpager'                                        : version_libraries,
+            'lib_views'                                            : version_libraries,
 
             'jaxDoclet'                                              : "0.10.0",
 
