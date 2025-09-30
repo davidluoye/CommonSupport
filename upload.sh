@@ -4,4 +4,6 @@
 # such as:
 # ./gradlew lib-core:publishMavenJavaPublicationToSonatypeRepository
 
-./gradlew $1:publishMavenJavaPublicationToMavenRepository
+#./gradlew $1:publishMavenJavaPublicationToMavenRepository
+
+./gradlew $1:publishMavenJavaPublicationToOssrh
