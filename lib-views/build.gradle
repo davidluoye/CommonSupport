@@ -5,3 +5,7 @@ apply from: "${rootDir}/include/lib-views.gradle"
 android {
     namespace 'com.davidluoye.views'
 }
+
+dependencies {
+    implementation 'androidx.annotation:annotation:1.1.0'
+}

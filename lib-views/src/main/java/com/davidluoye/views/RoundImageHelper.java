@@ -5,6 +5,8 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
+import androidx.annotation.Nullable;
+
 public class RoundImageHelper implements DrawableTranslator {
 
     private final Context mContext;
@@ -13,24 +15,26 @@ public class RoundImageHelper implements DrawableTranslator {
     private RoundAttribute mBackgroundAttribute;
     private RoundAttribute mForegroundAttribute;
     private RoundAttribute mResourceAttribute;
-    public RoundImageHelper(Context context, DrawableTranslator translator) {
+    /* package */ RoundImageHelper(Context context, DrawableTranslator translator) {
         this.mContext = context;
         this.mTranslator = translator;
     }
 
-    public void buildAttribute(AttributeSet attrs, int defStyleAttr) {
-        final TypedArray a = mContext.obtainStyledAttributes(
-                attrs, R.styleable.RoundImageView, defStyleAttr, 0);
-        try {
-            setBackgroundAttribute(buildRoundAttribute(mContext, a, R.styleable.RoundImageView_backgroundCorner));
-            setForegroundAttribute(buildRoundAttribute(mContext, a, R.styleable.RoundImageView_foregroundCorner));
-            setResourceAttribute(buildRoundAttribute(mContext, a, R.styleable.RoundImageView_resourceCorner));
-        } finally {
-            a.recycle();
+    public void buildAttribute(@Nullable AttributeSet attrs, int defStyleAttr) {
+        if (attrs != null) {
+            final TypedArray a = mContext.obtainStyledAttributes(
+                    attrs, R.styleable.RoundImageView, defStyleAttr, 0);
+            try {
+                setBackgroundAttribute(buildRoundAttribute(mContext, a, R.styleable.RoundImageView_backgroundCorner));
+                setForegroundAttribute(buildRoundAttribute(mContext, a, R.styleable.RoundImageView_foregroundCorner));
+                setResourceAttribute(buildRoundAttribute(mContext, a, R.styleable.RoundImageView_resourceCorner));
+            } finally {
+                a.recycle();
+            }
         }
     }
 
-    public void setBackgroundAttribute(RoundAttribute attribute) {
+    public void setBackgroundAttribute(@Nullable RoundAttribute attribute) {
         this.mBackgroundAttribute = attribute == null ? RoundAttribute.buildEmpty() : attribute.obtain();
         Drawable drawable = this.mTranslator.getBackgroundDrawable();
         if (drawable != null) {
@@ -38,7 +42,7 @@ public class RoundImageHelper implements DrawableTranslator {
         }
     }
 
-    public void setForegroundAttribute(RoundAttribute attribute) {
+    public void setForegroundAttribute(@Nullable RoundAttribute attribute) {
         this.mForegroundAttribute = attribute == null ? RoundAttribute.buildEmpty() : attribute.obtain();
         Drawable drawable = this.mTranslator.getForegroundDrawable();
         if (drawable != null) {
@@ -46,7 +50,7 @@ public class RoundImageHelper implements DrawableTranslator {
         }
     }
 
-    public void setResourceAttribute(RoundAttribute attribute) {
+    public void setResourceAttribute(@Nullable RoundAttribute attribute) {
         this.mResourceAttribute = attribute == null ? RoundAttribute.buildEmpty() : attribute.obtain();
         Drawable drawable = this.mTranslator.getImageDrawable();
         if (drawable != null) {
@@ -55,7 +59,7 @@ public class RoundImageHelper implements DrawableTranslator {
     }
 
     @Override
-    public void setBackgroundDrawable(Drawable background) {
+    public void setBackgroundDrawable(@Nullable Drawable background) {
         if (background == null) {
             this.mTranslator.setBackgroundDrawable(null);
             return;
@@ -69,7 +73,7 @@ public class RoundImageHelper implements DrawableTranslator {
     }
 
     @Override
-    public void setImageDrawable(Drawable drawable) {
+    public void setImageDrawable(@Nullable Drawable drawable) {
         if (drawable == null) {
             this.mTranslator.setImageDrawable(null);
             return;
@@ -83,7 +87,7 @@ public class RoundImageHelper implements DrawableTranslator {
     }
 
     @Override
-    public void setForegroundDrawable(Drawable foreground) {
+    public void setForegroundDrawable(@Nullable Drawable foreground) {
         if (foreground == null) {
             this.mTranslator.setForegroundDrawable(null);
             return;
@@ -96,21 +100,21 @@ public class RoundImageHelper implements DrawableTranslator {
         this.mTranslator.setForegroundDrawable(new RoundDrawable(foreground, mForegroundAttribute));
     }
 
-    public static RoundAttribute buildRoundAttribute(Context context, TypedArray a, int styleableRes) {
+    private static RoundAttribute buildRoundAttribute(Context context, TypedArray a, int styleableRes) {
         if (!a.hasValue(styleableRes)) return null;
         int resId = a.getResourceId(styleableRes, 0);
         if (resId == 0) return null;
-        TypedArray res = context.obtainStyledAttributes(resId, R.styleable.RoundCornerAttribute);
+        TypedArray res = context.obtainStyledAttributes(resId, R.styleable.RoundAttribute);
         try {
             RoundAttribute.Builder builder = new RoundAttribute.Builder();
-            builder.setRadiusLeftTopX(res.getDimension(R.styleable.RoundCornerAttribute_radiusLeftTopX, 0));
-            builder.setRadiusLeftTopY(res.getDimension(R.styleable.RoundCornerAttribute_radiusLeftTopY, 0));
-            builder.setRadiusRightTopX(res.getDimension(R.styleable.RoundCornerAttribute_radiusRightTopX, 0));
-            builder.setRadiusRightTopY(res.getDimension(R.styleable.RoundCornerAttribute_radiusRightTopY, 0));
-            builder.setRadiusLeftBottomX(res.getDimension(R.styleable.RoundCornerAttribute_radiusLeftBottomX, 0));
-            builder.setRadiusLeftBottomY(res.getDimension(R.styleable.RoundCornerAttribute_radiusLeftBottomY, 0));
-            builder.setRadiusRightBottomX(res.getDimension(R.styleable.RoundCornerAttribute_radiusRightBottomX, 0));
-            builder.setRadiusRightBottomY(res.getDimension(R.styleable.RoundCornerAttribute_radiusRightBottomY, 0));
+            builder.setRadiusLeftTopX(res.getDimension(R.styleable.RoundAttribute_radiusLeftTopX, 0));
+            builder.setRadiusLeftTopY(res.getDimension(R.styleable.RoundAttribute_radiusLeftTopY, 0));
+            builder.setRadiusRightTopX(res.getDimension(R.styleable.RoundAttribute_radiusRightTopX, 0));
+            builder.setRadiusRightTopY(res.getDimension(R.styleable.RoundAttribute_radiusRightTopY, 0));
+            builder.setRadiusLeftBottomX(res.getDimension(R.styleable.RoundAttribute_radiusLeftBottomX, 0));
+            builder.setRadiusLeftBottomY(res.getDimension(R.styleable.RoundAttribute_radiusLeftBottomY, 0));
+            builder.setRadiusRightBottomX(res.getDimension(R.styleable.RoundAttribute_radiusRightBottomX, 0));
+            builder.setRadiusRightBottomY(res.getDimension(R.styleable.RoundAttribute_radiusRightBottomY, 0));
             return builder.build();
         } finally {
             res.recycle();

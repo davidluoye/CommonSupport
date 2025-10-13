@@ -7,28 +7,31 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.DrawableWrapper;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class RoundDrawable extends DrawableWrapper {
 
     private final RectF mTempRect = new RectF();
     private final Path mClipPath = new Path();
     private final RoundAttribute mRoundAttribute;
 
-    public RoundDrawable(Drawable drawable) {
+    public RoundDrawable(@Nullable Drawable drawable) {
         this(drawable, 0);
     }
 
-    public RoundDrawable(Drawable drawable, float radius) {
+    public RoundDrawable(@Nullable Drawable drawable, float radius) {
         this(drawable, radius, radius, radius, radius);
     }
 
-    public RoundDrawable(Drawable drawable,
+    public RoundDrawable(@Nullable Drawable drawable,
                          float radiusLeftTop, float radiusRightTop,
                          float radiusLeftBottom, float radiusRightBottom) {
         this(drawable, radiusLeftTop, radiusLeftTop, radiusRightTop, radiusRightTop,
                 radiusLeftBottom, radiusLeftBottom, radiusRightBottom, radiusRightBottom);
     }
 
-    public RoundDrawable(Drawable drawable,
+    public RoundDrawable(@Nullable Drawable drawable,
                            float radiusLeftTopX, float radiusLeftTopY,
                            float radiusRightTopX, float radiusRightTopY,
                            float radiusLeftBottomX, float radiusLeftBottomY,
@@ -41,7 +44,7 @@ public class RoundDrawable extends DrawableWrapper {
                 .build());
     }
 
-    public RoundDrawable(Drawable drawable, RoundAttribute attribute) {
+    public RoundDrawable(@Nullable Drawable drawable, @NonNull RoundAttribute attribute) {
         super(drawable);
         this.mRoundAttribute = attribute.obtain();
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="RoundCornerAttribute">
+
+    <declare-styleable name="RoundAttribute">
         <attr name="radiusLeftTopX" format="dimension"/>
         <attr name="radiusLeftTopY" format="dimension"/>
         <attr name="radiusRightTopX" format="dimension"/>

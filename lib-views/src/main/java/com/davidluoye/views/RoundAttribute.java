@@ -1,5 +1,8 @@
 package com.davidluoye.views;
 
+
+import androidx.annotation.NonNull;
+
 public class RoundAttribute {
     public final float radiusLeftTopX;
     public final float radiusLeftTopY;
@@ -38,6 +41,7 @@ public class RoundAttribute {
                 this.radiusLeftBottomX, this.radiusLeftBottomY);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return String.format("{%s, %s, %s, %s, %s, %s, %s, %s}",
